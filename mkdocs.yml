@@ -1,5 +1,5 @@
-site_name: AI Doc Sample
-site_description: Sample documentation site for project analysis and architecture artifacts
+site_name: Project H — Sample Documentation
+site_description: Demonstration documentation artifact applying the SourceWare Technical Approach methodology to a precision-psychiatry presale substrate (anonymised as Project H)
 site_url: https://andreidzemianchyk.github.io/ai-doc-sample/
 repo_url: https://github.com/andreidzemianchyk/ai-doc-sample
 repo_name: andreidzemianchyk/ai-doc-sample
@@ -41,9 +41,36 @@ theme:
 
 nav:
   - Home: index.md
-  - Architecture: architecture.md
-  - Technical Approach: technical-approach.md
-  - Methodology: methodology.md
+  - Architecture:
+      - Overview: architecture/overview.md
+      - Integration points: architecture/integration-points.md
+      - Release coexistence: architecture/release-coexistence.md
+      - Data flows:
+          - Patient onboarding: architecture/data-flows/patient-onboarding.md
+          - Report to clinician: architecture/data-flows/report-to-clinician.md
+      - Decisions:
+          - ADR-0001 MyChart as per-clinic SSO: architecture/decisions/0001-mychart-as-per-clinic-sso.md
+          - ADR-0002 Mermaid for inline diagrams: architecture/decisions/0002-mermaid-for-inline-diagrams.md
+  - Schema:
+      - Overview: schema/overview.md
+      - Relationships: schema/relationships.md
+      - Naming inconsistencies: schema/naming-inconsistencies.md
+      - Tables:
+          - Patient profile: schema/tables/patient-profile.md
+  - Modules:
+      - Auth & Authorization:
+          - Overview: modules/auth-authorization/overview.md
+          - Business rules: modules/auth-authorization/business-rules.md
+          - Variations (EPIC vs non-EPIC): modules/auth-authorization/variations.md
+  - Conventions: CONVENTIONS.md
+  - Glossary: GLOSSARY.md
+  - AI entry points:
+      - Root CLAUDE.md: CLAUDE.md
+      - Root AGENTS.md: AGENTS.md
+      - Module CLAUDE.md: modules/auth-authorization/CLAUDE.md
+  - Methodology evidence:
+      - Cross-LLM review log: _review/cross-llm-review.md
+      - AI-readability acceptance test: _review/ai-readability-test.md
 
 markdown_extensions:
   - admonition
@@ -53,7 +80,11 @@ markdown_extensions:
   - toc:
       permalink: true
   - pymdownx.details
-  - pymdownx.superfences
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
   - pymdownx.tabbed:
       alternate_style: true
   - pymdownx.highlight:
