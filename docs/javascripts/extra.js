@@ -1,65 +1,57 @@
 // Per-diagram "Open full-screen" button.
 //
-// Approach (replaces the previous svg-pan-zoom integration):
-//   - The .mermaid container is scrollable (CSS extra.css overflow:auto +
-//     max-height); browser-native Ctrl+wheel zoom works inside it.
-//   - This script injects a single button below each rendered Mermaid SVG
-//     that opens the SVG in a new browser tab when clicked. The new tab
-//     fills the viewport with the SVG, giving the user browser-native
-//     zoom (Ctrl+wheel), pan (scrollbars), and "Save image as" / "Open
-//     image in new tab" affordances.
+// Mermaid renders client-side, asynchronously, after the page DOM is
+// ready. MkDocs Material also uses instant navigation, which rebuilds
+// the page DOM without a full reload. Both make timing-based hooks
+// (DOMContentLoaded + setTimeout) fragile.
 //
-// Mermaid renders asynchronously after the page loads, and MkDocs
-// Material rebuilds the DOM during instant navigation, so we poll for
-// new diagrams briefly and re-attach on document$ events.
+// This script uses a MutationObserver on document.body so it picks up
+// rendered Mermaid SVGs whenever they appear — first load, instant
+// nav, late re-renders. Idempotent: each .mermaid container gets at
+// most one button.
 
 (function () {
-  var BTN_LABEL = "⛶ Open full-screen";
+  console.log("[project-h-docs] extra.js loaded");
 
-  function addFullscreenButton(svg) {
-    if (svg.dataset.fullscreenBtn === "true") return;
-    var container = svg.parentElement;
-    if (!container || !container.classList.contains("mermaid")) return;
-    svg.dataset.fullscreenBtn = "true";
+  function addFullscreenButton(mermaidContainer) {
+    if (mermaidContainer.querySelector(".mermaid-fullscreen-btn")) return;
+    var svg = mermaidContainer.querySelector("svg");
+    if (!svg) return;
 
     var btn = document.createElement("button");
     btn.className = "mermaid-fullscreen-btn";
     btn.type = "button";
-    btn.textContent = BTN_LABEL;
+    btn.textContent = "\u26F6 Full-screen";
+    btn.title = "Open this diagram in a new tab (full-screen)";
     btn.addEventListener("click", function (e) {
       e.preventDefault();
       e.stopPropagation();
       openInNewTab(svg);
     });
-
-    container.appendChild(btn);
+    mermaidContainer.appendChild(btn);
   }
 
   function openInNewTab(svg) {
-    // Serialize a clean copy of the SVG (no inline event handlers, no
-    // svg-pan-zoom artefacts).
     var clone = svg.cloneNode(true);
-    // Make the clone fill the viewport when opened standalone.
     clone.removeAttribute("width");
     clone.removeAttribute("height");
     clone.setAttribute("preserveAspectRatio", "xMidYMid meet");
     clone.style.width = "100vw";
     clone.style.height = "100vh";
 
-    var serializer = new XMLSerializer();
-    var svgXml = serializer.serializeToString(clone);
+    var svgXml = new XMLSerializer().serializeToString(clone);
 
     var html =
       "<!doctype html>" +
       "<html><head>" +
       "<meta charset='utf-8'>" +
-      "<title>Project H diagram — full-screen</title>" +
+      "<title>Project H diagram</title>" +
       "<style>" +
       "  html, body { margin: 0; padding: 0; height: 100%; background: #fff; }" +
       "  svg { display: block; width: 100vw; height: 100vh; }" +
       "  .hint { position: fixed; top: 8px; right: 12px;" +
-      "          font-family: -apple-system, system-ui, sans-serif;" +
-      "          font-size: 12px; color: #666; background: rgba(255,255,255,0.85);" +
+      "          font: 12px/1 -apple-system, system-ui, sans-serif;" +
+      "          color: #666; background: rgba(255,255,255,0.85);" +
       "          padding: 4px 8px; border-radius: 3px; pointer-events: none; }" +
       "</style>" +
       "</head><body>" +
@@ -69,10 +61,8 @@
 
     var win = window.open("", "_blank");
     if (!win) {
-      // Popup blocked — fall back to data URI in the same tab.
-      var dataUri =
+      window.location.href =
         "data:text/html;charset=utf-8," + encodeURIComponent(html);
-      window.location.href = dataUri;
       return;
     }
     win.document.open();
@@ -80,35 +70,41 @@
     win.document.close();
   }
 
-  function attachAll() {
-    document.querySelectorAll(".mermaid svg").forEach(addFullscreenButton);
+  function scanAndAttach() {
+    document.querySelectorAll(".mermaid").forEach(addFullscreenButton);
   }
 
-  function pollAndAttach() {
-    var attempts = 0;
-    var maxAttempts = 40; // ~10 s of polling at 250 ms
-    var interval = setInterval(function () {
-      attempts++;
-      attachAll();
-      var pending = document.querySelectorAll(
-        ".mermaid svg:not([data-fullscreen-btn])"
-      ).length;
-      if (attempts >= maxAttempts || pending === 0) {
-        clearInterval(interval);
+  // Initial scan in case Mermaid is already rendered
+  scanAndAttach();
+
+  // Watch for Mermaid SVGs being inserted asynchronously
+  var observer = new MutationObserver(function (mutations) {
+    var shouldScan = false;
+    for (var i = 0; i < mutations.length; i++) {
+      var m = mutations[i];
+      if (m.type === "childList" && m.addedNodes.length) {
+        shouldScan = true;
+        break;
       }
-    }, 250);
-  }
+    }
+    if (shouldScan) scanAndAttach();
+  });
 
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", pollAndAttach);
-  } else {
-    pollAndAttach();
-  }
+  observer.observe(document.body, {
+    childList: true,
+    subtree: true
+  });
 
   // MkDocs Material instant navigation
   if (typeof document$ !== "undefined" && typeof document$.subscribe === "function") {
-    document$.subscribe(function () {
-      pollAndAttach();
-    });
+    document$.subscribe(scanAndAttach);
   }
+
+  // Belt-and-suspenders fallback: poll for the first few seconds
+  var pollCount = 0;
+  var pollInterval = setInterval(function () {
+    pollCount++;
+    scanAndAttach();
+    if (pollCount > 20) clearInterval(pollInterval); // 5 s
+  }, 250);
 })();
