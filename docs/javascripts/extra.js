@@ -1,22 +1,36 @@
-// Per-diagram "Open full-screen" button.
+// Per-diagram "Open full-screen" button + remove Mermaid's inline
+// max-width / max-height so the SVG renders at natural size and the
+// .mermaid container can scroll.
 //
-// Mermaid renders client-side, asynchronously, after the page DOM is
-// ready. MkDocs Material also uses instant navigation, which rebuilds
-// the page DOM without a full reload. Both make timing-based hooks
-// (DOMContentLoaded + setTimeout) fragile.
-//
-// This script uses a MutationObserver on document.body so it picks up
-// rendered Mermaid SVGs whenever they appear — first load, instant
-// nav, late re-renders. Idempotent: each .mermaid container gets at
-// most one button.
+// MkDocs Material renders Mermaid client-side; SVG appears
+// asynchronously after the page DOM is ready. Material's instant
+// navigation rebuilds the DOM in-place. A MutationObserver on
+// document.body catches every insertion without timing assumptions.
 
 (function () {
   console.log("[project-h-docs] extra.js loaded");
+
+  function unconstrainSvg(svg) {
+    // Mermaid sets style="max-width: NNNpx; max-height: NNNpx;" on the
+    // root SVG when useMaxWidth: true (default). Strip those so the
+    // SVG renders at its natural pixel size and the parent container
+    // scrolls instead of squeezing the diagram. CSS rules with
+    // !important don't always beat inline styles on every renderer,
+    // so we clear them directly.
+    if (svg.dataset.unconstrained === "true") return;
+    svg.style.maxWidth = "none";
+    svg.style.maxHeight = "none";
+    svg.style.width = "auto";
+    svg.style.height = "auto";
+    svg.dataset.unconstrained = "true";
+  }
 
   function addFullscreenButton(mermaidContainer) {
     if (mermaidContainer.querySelector(".mermaid-fullscreen-btn")) return;
     var svg = mermaidContainer.querySelector("svg");
     if (!svg) return;
+
+    unconstrainSvg(svg);
 
     var btn = document.createElement("button");
     btn.className = "mermaid-fullscreen-btn";
@@ -35,6 +49,8 @@
     var clone = svg.cloneNode(true);
     clone.removeAttribute("width");
     clone.removeAttribute("height");
+    clone.style.maxWidth = "none";
+    clone.style.maxHeight = "none";
     clone.setAttribute("preserveAspectRatio", "xMidYMid meet");
     clone.style.width = "100vw";
     clone.style.height = "100vh";
@@ -71,40 +87,45 @@
   }
 
   function scanAndAttach() {
-    document.querySelectorAll(".mermaid").forEach(addFullscreenButton);
+    // Cover both shapes pymdownx + Mermaid can produce: <pre class="mermaid">
+    // and <div class="mermaid">. Some Mermaid versions wrap the SVG in
+    // <pre>, some in <div>.
+    var containers = document.querySelectorAll(".mermaid, pre.mermaid, div.mermaid");
+    if (containers.length) {
+      console.log("[project-h-docs] scan: " + containers.length + " .mermaid containers");
+    }
+    containers.forEach(function (c) {
+      var svg = c.querySelector("svg");
+      if (!svg) return;
+      addFullscreenButton(c);
+    });
   }
 
-  // Initial scan in case Mermaid is already rendered
+  // Run once now in case Mermaid is already rendered
   scanAndAttach();
 
-  // Watch for Mermaid SVGs being inserted asynchronously
+  // Watch for late SVG insertion
   var observer = new MutationObserver(function (mutations) {
-    var shouldScan = false;
     for (var i = 0; i < mutations.length; i++) {
       var m = mutations[i];
       if (m.type === "childList" && m.addedNodes.length) {
-        shouldScan = true;
-        break;
+        scanAndAttach();
+        return;
       }
     }
-    if (shouldScan) scanAndAttach();
   });
-
-  observer.observe(document.body, {
-    childList: true,
-    subtree: true
-  });
+  observer.observe(document.body, { childList: true, subtree: true });
 
   // MkDocs Material instant navigation
   if (typeof document$ !== "undefined" && typeof document$.subscribe === "function") {
     document$.subscribe(scanAndAttach);
   }
 
-  // Belt-and-suspenders fallback: poll for the first few seconds
+  // Belt-and-suspenders poll for 5 s in case the observer is late
   var pollCount = 0;
   var pollInterval = setInterval(function () {
     pollCount++;
     scanAndAttach();
-    if (pollCount > 20) clearInterval(pollInterval); // 5 s
+    if (pollCount > 20) clearInterval(pollInterval);
   }, 250);
 })();

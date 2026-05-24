@@ -36,18 +36,25 @@
   max-height: 85vh;
 }
 
-/* Force readable text contrast inside Mermaid HTML labels (Mermaid
-   uses <foreignObject> for node labels). Without this override the
-   page's typography cascade can wash out the white-on-dark text. */
+/* Force readable text inside Mermaid HTML labels. Mermaid uses
+   <foreignObject> for flowchart node labels and inline classDef color
+   doesn't always reach the inner <p>/<span> reliably. Forcing
+   font-weight + line-height bumps perceived contrast against the
+   dark-blue C4 node fills. */
 .md-typeset .mermaid foreignObject,
 .md-typeset .mermaid foreignObject *,
 .md-typeset .mermaid .nodeLabel,
 .md-typeset .mermaid .nodeLabel * {
-  /* Inherit color from the SVG node's explicit fill (set by classDef
-     color:#fff etc.) — without this, MkDocs Material's text color
-     cascade can leak in. */
-  font-weight: 500;
+  font-weight: 700 !important;
   line-height: 1.3;
+  text-rendering: geometricPrecision;
+}
+
+/* Suppress the page text-color cascade leak inside Mermaid nodes —
+   colors should come from the classDef. */
+.md-typeset .mermaid .node foreignObject .nodeLabel p,
+.md-typeset .mermaid .node foreignObject .nodeLabel span {
+  color: inherit !important;
 }
 
 /* svg-pan-zoom is no longer used. Kept hooks commented for traceability:
@@ -56,25 +63,23 @@
 
 /* "Open full-screen" button injected by extra.js below each diagram */
 .md-typeset .mermaid-fullscreen-btn {
-  position: sticky;
-  bottom: 8px;
-  right: 8px;
-  float: right;
-  display: inline-block;
-  padding: 6px 12px;
+  display: block;
+  margin: 12px 0 4px auto;
+  padding: 8px 14px;
   background: var(--md-primary-fg-color);
-  color: #fff;
+  color: #fff !important;
   border: none;
   border-radius: 4px;
-  font-size: 0.8em;
+  font-size: 0.85em;
+  font-weight: 500;
   cursor: pointer;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
-  z-index: 10;
   font-family: var(--md-text-font);
 }
 
 .md-typeset .mermaid-fullscreen-btn:hover {
   background: var(--md-accent-fg-color);
+  color: #fff !important;
 }
 
 /* Diagram link cards — used in overview.md in place of inline diagrams */
