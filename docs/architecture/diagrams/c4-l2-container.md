@@ -1,6 +1,6 @@
 # C4 L2 — Container view
 
-The single Project H box from the [System Context](c4-l1-system-context.md) opened up. Persons on top; external systems around the periphery; the Project H system boundary is the dashed area in the centre. **Interact with the diagram:** scroll inside the frame to pan; **Ctrl + wheel** to zoom (browser-native); click the **⛶ Open full-screen** button below the diagram for an SVG-in-new-tab view.
+The single Project H box from the [System Context](c4-l1-system-context.md) opened up. Persons on top; external systems around the periphery; the Project H system boundary is the dashed area in the centre.
 
 <div class="diagram-frame" markdown>
 

@@ -1,6 +1,6 @@
 # Deployment view — MVP
 
-AWS deployment for the MVP release. Region us-east-2 with Multi-AZ primary→read-replica replication; ECS Cluster with Docker workloads across three availability zones; AWS managed services rail on the right (Cognito, KMS, CloudWatch, ElastiCache, WAF, Shield, Certificate Manager, S3, SageMaker, Secrets Manager, SES, SNS). **Interact with the diagram:** scroll inside the frame to pan; **Ctrl + wheel** to zoom (browser-native); click the **⛶ Open full-screen** button below the diagram for an SVG-in-new-tab view.
+AWS deployment for the MVP release. Region us-east-2 with Multi-AZ primary→read-replica replication; ECS Cluster with Docker workloads across three availability zones; AWS managed services rail on the right (Cognito, KMS, CloudWatch, ElastiCache, WAF, Shield, Certificate Manager, S3, SageMaker, Secrets Manager, SES, SNS).
 
 <div class="diagram-frame" markdown>
 

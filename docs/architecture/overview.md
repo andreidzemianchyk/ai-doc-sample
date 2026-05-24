@@ -80,7 +80,7 @@ Pulled from Vision & Scope `Key non-functional requirements` (Confluence page `4
 
 ## System Context view (C4 L1)
 
-[Open the C4 L1 System Context diagram on its own page (zoomable, pan)](diagrams/c4-l1-system-context.md){ .diagram-card }
+[Open the C4 L1 System Context diagram](diagrams/c4-l1-system-context.md){ .diagram-card }
 
 ### Components in this view
 
@@ -103,7 +103,7 @@ Source: AVD 4.1 System Context View / Business Flow (Confluence page `420911679`
 
 ## Container view (C4 L2)
 
-[Open the C4 L2 Container diagram on its own page (zoomable, pan)](diagrams/c4-l2-container.md){ .diagram-card }
+[Open the C4 L2 Container diagram](diagrams/c4-l2-container.md){ .diagram-card }
 
 ### Components in this view
 
@@ -156,7 +156,7 @@ Per TA §2, C4 L3 is applied **selectively** — only to containers whose intern
 
 ### Patient Mobile App Backend (L3)
 
-[Open the Mobile App Backend L3 diagram on its own page (zoomable, pan)](diagrams/c4-l3-mobile-backend.md){ .diagram-card }
+[Open the Mobile App Backend L3 diagram](diagrams/c4-l3-mobile-backend.md){ .diagram-card }
 
 ### Components in this view
 
@@ -171,7 +171,7 @@ Why L3 here: the Backend is where cross-system orchestration happens. Without L3
 
 ### Authorization Service (L3)
 
-[Open the Authorization Service L3 diagram on its own page (zoomable, pan)](diagrams/c4-l3-authorization-service.md){ .diagram-card }
+[Open the Authorization Service L3 diagram](diagrams/c4-l3-authorization-service.md){ .diagram-card }
 
 ### Components in this view
 
@@ -193,7 +193,7 @@ The explicit skip is itself a methodology beat (TA §2: *"we use C4's levels **s
 
 ## Deployment view
 
-[Open the MVP Deployment diagram on its own page (zoomable, pan)](diagrams/deployment-mvp.md){ .diagram-card }
+[Open the MVP Deployment diagram](diagrams/deployment-mvp.md){ .diagram-card }
 
 ### Layers in this view
 

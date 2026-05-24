@@ -1,6 +1,6 @@
 # C4 L1 — System Context
 
-Project H sits at the centre of the diagram; the four persons and four external systems surround it. **Interact with the diagram:** scroll inside the frame to pan; **Ctrl + wheel** to zoom (browser-native); click the **⛶ Open full-screen** button below the diagram for an SVG-in-new-tab view where Ctrl+wheel and "Save image as" work naturally.
+Project H sits at the centre of the diagram; the four persons and four external systems surround it.
 
 <div class="diagram-frame" markdown>
 

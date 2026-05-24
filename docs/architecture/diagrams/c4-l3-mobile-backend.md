@@ -1,6 +1,6 @@
 # C4 L3 — Patient Mobile App Backend
 
-Internal decomposition of the **Patient Mobile App Backend** container from the [C4 L2 view](c4-l2-container.md). This is where the cross-system orchestration happens — EPIC FHIR exchange, FDB queries, report assembly, recommendation invocation. **Interact with the diagram:** scroll inside the frame to pan; **Ctrl + wheel** to zoom (browser-native); click the **⛶ Open full-screen** button below the diagram for an SVG-in-new-tab view.
+Internal decomposition of the **Patient Mobile App Backend** container from the [C4 L2 view](c4-l2-container.md). This is where the cross-system orchestration happens — EPIC FHIR exchange, FDB queries, report assembly, recommendation invocation.
 
 <div class="diagram-frame" markdown>
 
