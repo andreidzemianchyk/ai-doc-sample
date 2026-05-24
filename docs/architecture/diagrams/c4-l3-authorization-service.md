@@ -1,6 +1,6 @@
 # C4 L3 — Authorization Service
 
-Internal decomposition of the **Authorization Service** (AWS Cognito + Project H glue) container from the [C4 L2 view](c4-l2-container.md). This view exposes the **Per-clinic Config Resolver** as the extraction surface called out in the [per-clinic EPIC integration cost architectural assessment](../overview.md#architectural-assessments). **Interact with the diagram:** scroll-wheel zoom, double-click, drag to pan, controls top-left.
+Internal decomposition of the **Authorization Service** (AWS Cognito + Project H glue) container from the [C4 L2 view](c4-l2-container.md). This view exposes the **Per-clinic Config Resolver** as the extraction surface called out in the [per-clinic EPIC integration cost architectural assessment](../overview.md#architectural-assessments). **Interact with the diagram:** scroll inside the frame to pan; **Ctrl + wheel** to zoom (browser-native); click the **⛶ Open full-screen** button below the diagram for an SVG-in-new-tab view.
 
 <div class="diagram-frame" markdown>
 

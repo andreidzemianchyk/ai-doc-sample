@@ -112,7 +112,6 @@ extra_css:
   - stylesheets/extra.css
 
 extra_javascript:
-  - https://cdn.jsdelivr.net/npm/svg-pan-zoom@3.6.1/dist/svg-pan-zoom.min.js
   - javascripts/extra.js
 
 extra:

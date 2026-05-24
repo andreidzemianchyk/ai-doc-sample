@@ -1,73 +1,104 @@
-// Attach svg-pan-zoom to every Mermaid SVG on the page.
-// svg-pan-zoom is loaded via extra_javascript in mkdocs.yml.
+// Per-diagram "Open full-screen" button.
 //
-// Mermaid renders asynchronously after page load, and MkDocs Material's
-// "instant" navigation rebuilds the DOM in-place — so we poll for SVGs
-// briefly and also subscribe to Material's document$ reactive subject
-// if it's available.
+// Approach (replaces the previous svg-pan-zoom integration):
+//   - The .mermaid container is scrollable (CSS extra.css overflow:auto +
+//     max-height); browser-native Ctrl+wheel zoom works inside it.
+//   - This script injects a single button below each rendered Mermaid SVG
+//     that opens the SVG in a new browser tab when clicked. The new tab
+//     fills the viewport with the SVG, giving the user browser-native
+//     zoom (Ctrl+wheel), pan (scrollbars), and "Save image as" / "Open
+//     image in new tab" affordances.
+//
+// Mermaid renders asynchronously after the page loads, and MkDocs
+// Material rebuilds the DOM during instant navigation, so we poll for
+// new diagrams briefly and re-attach on document$ events.
 
 (function () {
-  function attachPanZoom() {
-    if (typeof svgPanZoom !== "function") return false;
-    var svgs = document.querySelectorAll(".mermaid svg");
-    var attached = false;
-    svgs.forEach(function (svg) {
-      if (svg.dataset.panZoomAttached === "true") return;
-      // Ensure the SVG has a viewBox; svg-pan-zoom needs one.
-      if (!svg.getAttribute("viewBox")) {
-        var bbox = svg.getBBox && svg.getBBox();
-        if (bbox && bbox.width && bbox.height) {
-          svg.setAttribute(
-            "viewBox",
-            bbox.x + " " + bbox.y + " " + bbox.width + " " + bbox.height
-          );
-        }
-      }
-      // Set responsive width/height before attaching pan-zoom.
-      svg.style.width = "100%";
-      svg.style.height = "100%";
-      svg.style.maxWidth = "100%";
-      try {
-        svgPanZoom(svg, {
-          zoomEnabled: true,
-          controlIconsEnabled: true,
-          fit: true,
-          center: true,
-          minZoom: 0.3,
-          maxZoom: 20,
-          mouseWheelZoomEnabled: false, // don't hijack page scroll
-          dblClickZoomEnabled: true,
-          panEnabled: true
-        });
-        svg.parentElement.dataset.panZoomAttached = "true";
-        svg.dataset.panZoomAttached = "true";
-        attached = true;
-      } catch (e) {
-        // svg-pan-zoom occasionally throws on diagrams that aren't laid
-        // out yet — retry on the next tick.
-        console.warn("svg-pan-zoom not ready yet:", e.message);
-      }
+  var BTN_LABEL = "⛶ Open full-screen";
+
+  function addFullscreenButton(svg) {
+    if (svg.dataset.fullscreenBtn === "true") return;
+    var container = svg.parentElement;
+    if (!container || !container.classList.contains("mermaid")) return;
+    svg.dataset.fullscreenBtn = "true";
+
+    var btn = document.createElement("button");
+    btn.className = "mermaid-fullscreen-btn";
+    btn.type = "button";
+    btn.textContent = BTN_LABEL;
+    btn.addEventListener("click", function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      openInNewTab(svg);
     });
-    return attached;
+
+    container.appendChild(btn);
+  }
+
+  function openInNewTab(svg) {
+    // Serialize a clean copy of the SVG (no inline event handlers, no
+    // svg-pan-zoom artefacts).
+    var clone = svg.cloneNode(true);
+    // Make the clone fill the viewport when opened standalone.
+    clone.removeAttribute("width");
+    clone.removeAttribute("height");
+    clone.setAttribute("preserveAspectRatio", "xMidYMid meet");
+    clone.style.width = "100vw";
+    clone.style.height = "100vh";
+
+    var serializer = new XMLSerializer();
+    var svgXml = serializer.serializeToString(clone);
+
+    var html =
+      "<!doctype html>" +
+      "<html><head>" +
+      "<meta charset='utf-8'>" +
+      "<title>Project H diagram — full-screen</title>" +
+      "<style>" +
+      "  html, body { margin: 0; padding: 0; height: 100%; background: #fff; }" +
+      "  svg { display: block; width: 100vw; height: 100vh; }" +
+      "  .hint { position: fixed; top: 8px; right: 12px;" +
+      "          font-family: -apple-system, system-ui, sans-serif;" +
+      "          font-size: 12px; color: #666; background: rgba(255,255,255,0.85);" +
+      "          padding: 4px 8px; border-radius: 3px; pointer-events: none; }" +
+      "</style>" +
+      "</head><body>" +
+      "<div class='hint'>Ctrl + wheel = zoom · scroll = pan · Ctrl+0 = reset</div>" +
+      svgXml +
+      "</body></html>";
+
+    var win = window.open("", "_blank");
+    if (!win) {
+      // Popup blocked — fall back to data URI in the same tab.
+      var dataUri =
+        "data:text/html;charset=utf-8," + encodeURIComponent(html);
+      window.location.href = dataUri;
+      return;
+    }
+    win.document.open();
+    win.document.write(html);
+    win.document.close();
+  }
+
+  function attachAll() {
+    document.querySelectorAll(".mermaid svg").forEach(addFullscreenButton);
   }
 
   function pollAndAttach() {
     var attempts = 0;
-    var maxAttempts = 30;
+    var maxAttempts = 40; // ~10 s of polling at 250 ms
     var interval = setInterval(function () {
       attempts++;
-      attachPanZoom();
-      if (
-        attempts >= maxAttempts ||
-        document.querySelectorAll(".mermaid svg:not([data-pan-zoom-attached])")
-          .length === 0
-      ) {
+      attachAll();
+      var pending = document.querySelectorAll(
+        ".mermaid svg:not([data-fullscreen-btn])"
+      ).length;
+      if (attempts >= maxAttempts || pending === 0) {
         clearInterval(interval);
       }
     }, 250);
   }
 
-  // First page load
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", pollAndAttach);
   } else {
