@@ -120,15 +120,15 @@ The doc-gen session should treat `project-h-initial-phase-deliverables.md` as th
 The doc-gen session must demonstrate the following methodology beats. Adaptations for Project H's presale substrate are noted in italic.
 
 1. **Architecture-document template — legacy-system variant** (TA §2, sections list).
-   *Adapt:* re-label *Key historical decisions* → *Key design decisions* and *Living risks* → *Living risks (identified in discovery)*. Keep Architectural drivers / Quality attribute scenarios / C4 views / Deployment view / Decision view / Operations.
+   *Adapt:* re-label *Key historical decisions* → *Key design decisions* and *Living risks* → *Living risks (identified in discovery)*. Keep Architectural drivers / Quality attribute scenarios / **C4 L1 + L2 + L3** views (L3 selectively per TA §2 — see §5.3 Component view) / Deployment view / Decision view / Operations.
 2. **Wide-table schema doc via iterative column-classification** (TA §5.1).
    *Adapt:* Project H has no committed code yet. Apply the column-classification methodology to the **Patient Profile composite** (demographics + clinical fields + FDB-coded fields specified in Epic 2 Feature 1 + Feature 3 + Feature 4 of the Mobile App). Treat the spec/Confluence pages as the source of truth in place of code. `VALIDATE:` flags work the same way — they call out where the source pages disagree, where a field is mentioned but not specified, or where downstream consumption is unclear.
 3. **Per-module documentation** (TA §3 structure; §5.5 for business-rule catalog).
    *Adapt:* Best Project H "module" candidate for the sample is **Mobile App · Authentication / Authorization** (Epic-1 Mobile, 2 features, 9 user stories with scenarios and acceptance criteria). Rich enough for business-rule catalog with stable IDs. Alternative: Epic-2 Intake & Screener (heavier on FHIR/FDB integration).
 4. **AI-native entry points + repo-root conventions** (TA §6 for AI entries; TA §3 for root files).
    Root `CLAUDE.md` + root `AGENTS.md` (cross-tool overlay; CLAUDE.md @-imports it per TA §6 — single source of truth). Module-level `CLAUDE.md` per module. Root `CONVENTIONS.md` (annotation legend + validate-flag syntax + doc structure rules — required by TA §3 / §8 week-1 deliverable). Root `GLOSSARY.md` (domain terminology — Project H already has 24+ acronyms enumerated in AVD §1.3, directly transposable). `llms.txt` is optional in TA §6 ("preferred default where toolchain supports it cleanly") — mention in CLAUDE.md and defer authoring to a follow-up.
-5. **MADR Architecture Decision Records** (TA §2).
-   *Adapt:* ADRs are *retrospective* for SourceWare. For Project H presale they are *retrospective on discovery-phase decisions* — pick a decision visible in the AVD (D-codes) and recover the rationale from the Confluence content. Best candidates listed in §5.4 below.
+5. **MADR Architecture Decision Records — retrospective AND forward** (TA §2).
+   *Adapt:* TA §2 names two uses — *retrospective* (historical decisions discovered in interviews) and *forward* (decisions made during the engagement itself). The sample covers **both**: §5.4 plans ADR-0001 retrospective (Project H's per-clinic MyChart SSO decision D3, recovered from Confluence); §5.4-forward plans ADR-0002 forward (Mermaid-as-default-inline-diagrams, decided while authoring this sample). Best candidates for further ADRs listed in §5.4.
 6. **Explicit uncertainty handling** (TA §4 Stage 3).
    `> [!validate]` callouts inline, `<!-- VALIDATE: ... -->` comments, `## Open questions` section per doc. Plenty of natural candidates in Project H docs — many "TBD" strings explicit in user stories.
 7. **Architect-level analysis embedded in docs** (Prompt §3 item 7).
@@ -140,7 +140,7 @@ The doc-gen session must demonstrate the following methodology beats. Adaptation
 
 The sample mirrors the **full engagement layout from `SourceWare_Technical_Approach.md` §3** so that a client reviewing it recognises the shape they would receive in a real engagement. We expand beyond `Prompt_Build_SampleWork.md` §5's minimum 8-file demo because the user's stated intent is "сделать сампл такой же как будет новая документация в запросе заказчика" — the sample should foreshadow the real deliverable, not just hit the demo floor.
 
-What stays: each file is kept lean (½ – 3 pages). Total volume targets ~22 pages across 17 files. Folders that TA §3 lists but that don't apply to a presale/discovery substrate (`business-logic/`, `process/`) are noted in §10 with a clear rationale rather than stubbed out.
+What stays: each file is kept lean (½ – 3 pages). Total volume targets ~25 pages across 19 markdown files (plus 2 review-log files under `_review/`). Folders that TA §3 lists but that don't apply to a presale/discovery substrate (`business-logic/`, `process/`) are noted in §10 with a clear rationale rather than stubbed out.
 
 ```
 sample-work/
@@ -148,30 +148,35 @@ sample-work/
   docs/
     CLAUDE.md                                          Root AI entry point (1 pg) — TA §6
     AGENTS.md                                          Cross-tool overlay (½ pg) — TA §6
-    CONVENTIONS.md                                     Annotation legend + validate-flag syntax (1 pg) — TA §3 / §8 wk-1
-    GLOSSARY.md                                        Domain terminology, sourced from AVD §1.3 (1 pg) — TA §3
+    CONVENTIONS.md                                     Annotation legend + validate-flag syntax + reader modes + tooling (1 pg) — TA §3 / §8 wk-1
+    GLOSSARY.md                                        Domain terminology, sourced from AVD §1.3, source-cited per term (1 pg) — TA §3 / §2 DDD
     architecture/
-      overview.md                                      Full arch doc, C4 L1+L2 in Mermaid (3 pg) — TA §2 template
+      overview.md                                      Full arch doc, C4 L1+L2+L3 in Mermaid + architect notes (3 pg) — TA §2 template
       integration-points.md                            External-systems catalog (1.5 pg) — TA §3
       release-coexistence.md                           MVP / 2nd / 3rd release feature coexistence (1 pg) — analog of TA §3 legacy-2.0-coexistence.md
       data-flows/                                      One file per high-stakes flow — TA §3
         patient-onboarding.md                          Onboarding flow incl. invite, consent, MyChart, first-time fetch (1 pg)
         report-to-clinician.md                         Intake → FDB → report → EPIC Inbound queue → clinician PDF download (1 pg)
       decisions/
-        0001-mychart-as-per-clinic-sso.md              Retrospective MADR — D3 (1 pg) — TA §2 / Prompt §5
+        0001-mychart-as-per-clinic-sso.md              Retrospective MADR — D3 (1 pg) — TA §2 retrospective
+        0002-mermaid-for-inline-diagrams.md            Forward MADR — sample-authoring decision (1 pg) — TA §2 forward
     schema/
       overview.md                                      Schema-layer "how to read" + naming conventions (1 pg) — TA §3
       relationships.md                                 Implicit FK / cross-resource relationships catalog (1 pg) — TA §3 / §5.2
+      naming-inconsistencies.md                        Spec-level naming gaps and TBD-resolutions (½ pg) — TA §3
       tables/
         patient-profile.md                             Wide-"table" doc with column classification (3 pg) — TA §5.1
     modules/auth-authorization/
       CLAUDE.md                                        Module-level AI entry (½ pg) — TA §6
-      overview.md                                      Module overview + primary workflows (2 pg) — TA §3
+      overview.md                                      Module overview + primary workflows + flowchart + state diagram (2 pg) — TA §3 / §2 UML
       business-rules.md                                Named rules BR-001..BR-010+ (2 pg) — TA §5.5
       variations.md                                    EPIC vs non-EPIC fork (1 pg) — stand-in for TA §3 legacy-vs-2.0.md
+  _review/                                             Methodology evidence (out of the published nav, in repo only)
+    cross-llm-review.md                                Cross-LLM peer-review log (Prompt §10 / brief §9) — TA §4 Stage 4a
+    ai-readability-test.md                             Scripted AI-test prompts + transcripts (TA §6 / §7 / §9 / brief §9)
 ```
 
-**Counting.** 17 files. The `legacy-vs-2.0.md` slot is filled at the module level by `variations.md` (per Prompt §5 fallback wording — Project H has no legacy implementation). Per-doc `## Open questions` sections in each major artifact replace the per-folder `open-questions.md` files from TA §3 — same content, half the file count, no demo value lost. README §"Future expansion" lists the TA §3 folders intentionally omitted from this slice (`business-logic/`, `process/`, full `data-flows/` coverage, rolled-up `open-questions.md` files).
+**Counting.** 19 markdown deliverables + 2 review-log files = 21 total. The `legacy-vs-2.0.md` slot is filled at the module level by `variations.md` (per Prompt §5 fallback wording — Project H has no legacy implementation). Per-doc `## Open questions` sections in each major artifact replace the per-folder `open-questions.md` files from TA §3 — same content, half the file count, no demo value lost. README §"Future expansion" lists the TA §3 folders intentionally omitted from this slice (`business-logic/`, `process/`, full `data-flows/` coverage, rolled-up `open-questions.md` files).
 
 ---
 
@@ -194,8 +199,9 @@ sample-work/
 | `architecture/integration-points.md` | External-systems catalog with consistent per-system contract shape | §3 |
 | `architecture/data-flows/*.md` | High-stakes flows surfaced as standalone artifacts | §3 |
 | `architecture/release-coexistence.md` | Cross-cutting coexistence view (analog of legacy-2.0-coexistence) | §3, §5.3 |
-| `architecture/decisions/0001-…md` | MADR retrospective ADR | §2 |
-| `schema/overview.md` + `schema/relationships.md` | Schema-layer framing + implicit FK catalog | §3, §5.2 |
+| `architecture/decisions/0001-…md` | MADR **retrospective** ADR (historical decision discovered in source) | §2 |
+| `architecture/decisions/0002-…md` | MADR **forward** ADR (methodology decision made during sample authoring) | §2 |
+| `schema/overview.md` + `schema/relationships.md` + `schema/naming-inconsistencies.md` | Schema-layer framing + implicit FK catalog + spec-level naming gaps | §3, §5.2 |
 | `schema/tables/patient-profile.md` | Wide-table iterative column-classification process — the highest-leverage artifact | §5.1 |
 | `modules/auth-authorization/overview.md` | Per-module documentation template | §3, §5.5 |
 | `modules/auth-authorization/business-rules.md` | Catalog-first business-rule documentation with stable IDs | §5.5 |
@@ -205,6 +211,7 @@ sample-work/
 | `docs/GLOSSARY.md` | Domain ubiquitous language | §3 (DDD ubiquitous language) |
 
 - **Future expansion** paragraph naming the TA §3 folders intentionally omitted from this slice (`business-logic/` analog, `process/`, extended `data-flows/`, per-folder `open-questions.md` rollups, `llms.txt`, additional ADRs).
+- **How this sample was produced** paragraph (TA §4 5-stage authoring loop, made visible to the client): Stage 1 — corpus ingestion of the source Confluence space (54 pages, 9 draw.io diagrams, Vision&Scope artifacts) into a single context bundle (`context/project-h/`). Stage 2 — draft generation against the combined corpus, citing source page IDs and US IDs in every substantive claim. Stage 3 — explicit-uncertainty flagging with `> [!validate]` callouts and per-doc `## Open questions` sections (full list in `context/project-h/project-h-doc-generation-brief.md` §7). Stage 4a — cross-LLM peer review on the three high-stakes documents (`architecture/overview.md`, `schema/tables/patient-profile.md`, `modules/auth-authorization/business-rules.md`); the review log is committed as `sample-work/_review/cross-llm-review.md`. Stage 4b — embedded architect-grade analysis as `> [!note] Architectural assessment` callouts in `architecture/overview.md` (≥ 2 per Prompt §3 item 7); no live architect-review session in this sample. Stage 5 — resolution and merge; unresolved items remain in per-doc `## Open questions`.
 - Closing paragraph: "this is the methodology and quality bar we would apply to a real engagement". AndersenLab branding (no Innowise).
 
 ### 5.2 `sample-work/docs/CLAUDE.md` (≤ 1 page)
@@ -231,13 +238,20 @@ sample-work/
 
 **Why it exists.** TA §6 mandates AGENTS.md as the cross-tool overlay for non-Claude agents (Cursor, Copilot, Codex CLI). TA §6 says "CLAUDE.md can reference AGENTS.md via `@import` to avoid duplication". Approach for the sample: AGENTS.md is the canonical file; root CLAUDE.md @-imports it. This keeps the convention testable and demonstrates the "canonical content lives in one place" decision from TA §6.
 
+**Rationale for the canonical-in-AGENTS.md choice** (TA §6 explicitly says "either mirrors CLAUDE.md content or is referenced from it; the choice depends on how the team's tools resolve includes; locked in week 1"). Two reasons the sample picks @-import:
+
+1. **Proves the convention to a scanning reader.** Anyone opening CLAUDE.md sees `@import AGENTS.md` at the top and immediately understands AGENTS.md is the source of truth — no risk of two files drifting silently.
+2. **Easier to extend the AI-readability test (§9 quality bar)** when other agents are added later. Cursor, Copilot, or Codex CLI read AGENTS.md directly without needing to know CLAUDE.md exists; if they routed via CLAUDE.md, the test surface would double.
+
+In a real engagement the choice is revisited in week 1 against the actual agent set in use.
+
 **Outline.**
 
 - 2-paragraph note: this is the canonical AI-agent contract; the same content is referenced from `CLAUDE.md` for Claude-specific tooling. Lists which agents the team uses (or anticipates) — Claude Code primary, Cursor and Copilot supported.
 - *Read these before doing anything substantive* — same list as CLAUDE.md.
 - *Task routing* — same as CLAUDE.md.
 - *Known gotchas* — pointer to CLAUDE.md (don't duplicate).
-- Closing note: drift between AGENTS.md and CLAUDE.md is a defect; the acceptance test (TA §6, "Testing the AI entry points") catches it.
+- Closing note: drift between AGENTS.md and CLAUDE.md is a defect; the AI-readability acceptance test (TA §6, "Testing the AI entry points"; see brief §9 quality bar) catches it.
 
 ### 5.2b `sample-work/docs/CONVENTIONS.md` (1 page)
 
@@ -253,18 +267,26 @@ sample-work/
    - `> [!deprecated] …` — content kept for traceability but no longer authoritative.
 3. **Open-questions sections.** Mandatory at the bottom of every major doc unless the doc is trivially short. Each entry must be specific and named; no generic "needs review" filler. 3–5 entries is typical for the sample's doc sizes.
 4. **MADR ADR convention.** Stored under `architecture/decisions/`. File pattern `NNNN-short-slug.md`. Status / Context / Decision / Alternatives considered / Consequences / Notes.
-5. **Diagram-tool decision rule** — replicate the table from TA §7 (Mermaid as default for C4 L1/L2/L3 + most UML; PlantUML for complex sequences; drawio reserved for visual-match-to-existing-artifact cases).
+5. **Diagram-tool decision rule** — replicate the table from TA §7 (Mermaid as default for C4 L1/L2/L3 + most UML; PlantUML for complex sequences; drawio reserved for visual-match-to-existing-artifact cases). Cross-link to ADR-0002 in `architecture/decisions/0002-mermaid-for-inline-diagrams.md` which captures the forward MADR for this sample.
 6. **Validation flag triage** — `VALIDATE:` flags expire when a workshop or code reference resolves them. Unresolved flags graduate to a `## Open questions` entry. Resolved ones are silently removed.
+7. **Reader mode by document** (TA §2). Each doc declares its mode in the frontmatter or first paragraph: *reference* (look something up — `schema/tables/`, `modules/.../overview.md`, integration-points), *explanation* (build a mental model — `architecture/overview.md`, `business-rules.md`, `variations.md`, data-flows, ADRs), *tutorial* (onboarding walkthrough — not in this sample; would be added in the integration-plan phase per TA §3 `process/` folder). The mode dictates writing style: reference docs are scan-friendly tables and lists; explanation docs are narrative with diagrams; tutorial docs are sequenced steps.
+8. **Tooling expectations** (TA §7). For the sample we use `mermaid-cli` to render-check every diagram before delivery (run during self-review per §11 hand-off step 6). For a real engagement, CONVENTIONS.md should additionally cite the future-CI tooling: **Vale** prose linter (consistent terminology + banned-phrase enforcement), **markdown-link-check** (cross-reference validation in CI), **mermaid-cli** in CI for render-on-PR, and a **custom schema-sync check** comparing documented columns against staging DDL (the analog for Project H would be a check against the FHIR-resource list once schema is committed). The sample names these as "future setup" but does not wire CI for the sample itself.
 
 ### 5.2c `sample-work/docs/GLOSSARY.md` (1 page)
 
 **Why it exists.** TA §3 root-level file. Project H's AVD §1.3 already enumerates 24+ acronyms — directly transposable, no invention.
 
+**Citation discipline (TA §2 DDD ubiquitous-language rule).** Every term is defined once, and **every definition cites where the term first appears in the source corpus** — Confluence page ID, US ID, or AVD section. Agents and humans resolving a term land here and can immediately hop to the source if needed. Example formatting:
+
+> **App Orchard** — EPIC's marketplace for third-party SMART on FHIR apps; registration is the gating requirement for Project H's invite-link plugin (ADR-0001 dependency). *Source:* Epic-1 WebApp F2 (Confluence page 424478678); AVD 4.4 Integration concerns (page 420906849).
+
+Terms transposed verbatim from AVD §1.3 cite the AVD page ID; Project-H-specific terms cite the US or AVD page where they first surface.
+
 **Outline.**
 
-- One-paragraph framing: domain vocabulary used across the docs; agents and humans should resolve here before re-defining inline.
-- Term table (alphabetised). Direct copy from AVD §1.3 (`project-h-initial-phase-deliverables.md` §3.1.3 in the consolidated file) of: ADHD, AWS, CDSS, CIDI, CPT Codes, D.O.B., DSM, EHR, EPIC, ERT, FDA, FDB, FHIR, GAD, HIPAA, JSPsych, MAUs, MCI, MDD, ML, MVP, OCD, PHI, PTSD, SLA, TBI, WCST.
-- Plus 5–8 Project H specific terms inferred from the docs but not in the AVD glossary (with `> [!validate]` if the spec is silent on the precise meaning):
+- One-paragraph framing: domain vocabulary used across the docs; agents and humans should resolve here before re-defining inline. Each term cites its source per TA §2 DDD discipline.
+- Term table (alphabetised). Direct copy from AVD §1.3 (`project-h-initial-phase-deliverables.md` §3.1.3 in the consolidated file) of: ADHD, AWS, CDSS, CIDI, CPT Codes, D.O.B., DSM, EHR, EPIC, ERT, FDA, FDB, FHIR, GAD, HIPAA, JSPsych, MAUs, MCI, MDD, ML, MVP, OCD, PHI, PTSD, SLA, TBI, WCST. **Each row has a *Source* column citing AVD §1.3 page ID 420911659.**
+- Plus 5–8 Project H specific terms inferred from the docs but not in the AVD glossary (with `> [!validate]` if the spec is silent on the precise meaning) **— each with a Source citation to its primary appearance in the source pages**:
   - **App Orchard** — EPIC's marketplace for third-party SMART on FHIR apps; registration is the gating requirement for Project H's invite-link plugin (ADR-0001 dependency).
   - **PGHD** — Patient-Generated Health Data; flagging Observation/Condition/DocumentReference as PGHD triggers the EPIC clinician In Basket notification.
   - **SMART on FHIR** — the OAuth2-based framework Project H uses to embed in EPIC and authenticate via MyChart.
@@ -288,9 +310,13 @@ sample-work/
 7. **Quality attribute scenarios** — pull from Vision&Scope `Key non-functional requirements` page: Security (RBAC + OAuth2/PKCE + audit logs), Availability (Multi-AZ + offline fallback; RPO 5–10 min, RTO 15–30 min from AVD §5.5), Performance (response-time TBD; autoscaling), Compliance (HIPAA 10+ year retention, SOC 2 Type II, OWASP ASVS, WCAG 2.1 AA), Interoperability (FHIR/HL7 bidirectional).
 8. **System Context view (C4 L1)** — paste Mermaid block from `project-h-diagrams-mermaid.md` §2.
 9. **Container view (C4 L2)** — paste Mermaid block from `project-h-diagrams-mermaid.md` §3.
-10. **Deployment view** — paste Mermaid block from `project-h-diagrams-mermaid.md` §5 (MVP deployment). The "final product" version (§4) can be referenced as "post-MVP".
-11. **Decision view** — short prose summary referencing the ADR in `decisions/0001-*.md`; note that 7+ additional ADRs are "to be authored from D-list".
-12. **Operations** — backup (RDS automated daily snapshots, 1–35 day retention, transaction-log replay), DR (Multi-AZ + ALB + autoscaling + drill cadence), CI/CD (GitHub Actions + TestFlight, Terraform/Pulumi IaC), monitoring (CloudWatch metrics + logs; per-request unique IDs; tamper-resistant audit log).
+10. **Component view (C4 L3)** — required by TA §2 architecture template ("Component view — C4 L3 for selected containers"). Drill into the two containers whose internal structure is non-trivial:
+    - **Patient Mobile App Backend** — decomposition into Auth Handler · FHIR Adapter · FDB Adapter · Report Assembler · Recommendation Invoker · Audit Logger. This is where most cross-system orchestration happens; the L3 view explains why a single Container view is insufficient for understanding the report-to-clinician flow.
+    - **Authorization Service** — decomposition into MyChart Token Store · Cognito Provider · Per-clinic Config Resolver · Refresh Loop · Biometric Gate. Supports the architectural-assessment note on per-clinic EPIC integration cost (the per-clinic config resolver is the proposed extraction surface).
+    Author the L3 view as a Mermaid `C4Component` block per the diagram-tool decision rule in TA §7. Containers intentionally **not** decomposed at L3 — single-purpose libraries (Recommendation, Games), SaaS-template containers (Kivira/Project H Admin Web App, Clinic Admin Web App = Django Admin) — should be named in a "L3 deferred" subsection with rationale ("nothing the reader couldn't infer from the Container view"). This explicit skip is the methodology beat from TA §2 ("we use C4's levels **selectively**, not exhaustively").
+11. **Deployment view** — paste Mermaid block from `project-h-diagrams-mermaid.md` §5 (MVP deployment). The "final product" version (§4) can be referenced as "post-MVP".
+12. **Decision view** — short prose summary referencing both ADRs in `decisions/` (retrospective ADR-0001 + forward ADR-0002, see §5.4 and §5.4-forward); note that 7+ additional ADRs are "to be authored from D-list".
+13. **Operations** — backup (RDS automated daily snapshots, 1–35 day retention, transaction-log replay), DR (Multi-AZ + ALB + autoscaling + drill cadence), CI/CD (GitHub Actions + TestFlight, Terraform/Pulumi IaC), monitoring (CloudWatch metrics + logs; per-request unique IDs; tamper-resistant audit log).
 
 **Architectural assessment notes (≥ 2 required).** Embed inline as `> [!note] Architectural assessment` callouts:
 
@@ -402,6 +428,24 @@ sample-work/
   - *Open:* If a clinic transitions to a non-Epic EHR, the architecture has a parallel Cognito-based path (D-implicit; see `modules/auth-authorization/variations.md`), but the operational handover model is undocumented.
 - **Notes.** Discovered in the User invitation links page (419469068) which explicitly captured a 5-option comparison; the decision is approved per the page footer. The MyChart token-storage rule (D9) cross-references this ADR.
 
+### 5.4-forward `sample-work/docs/architecture/decisions/0002-mermaid-for-inline-diagrams.md` (1 page, MADR format)
+
+**Why it exists.** TA §2 explicitly names two MADR uses: *retrospective* (historical) and *forward* (methodology decisions made during the engagement itself). Section 5.4 covers the retrospective half. This section adds one **forward** ADR so the sample demonstrates both halves of TA §2's MADR discipline — not just "we documented their decisions" but also "we documented our own".
+
+**Recommended pick: ADR-0002 — Use Mermaid for all inline diagrams in this sample.**
+
+**MADR section content.**
+
+- **Status.** Accepted (forward — methodology decision made while authoring this sample).
+- **Context.** TA §2 lists Mermaid as the preferred default for C4 + UML where the toolchain supports it; PlantUML as fallback for complex sequences; drawio when matching existing visual styles. TA §7 makes this a per-diagram-type table. For a sample whose purpose is to demonstrate the methodology on a real substrate, picking one in-text tool reduces friction for the reader and lets the sample be read entirely in markdown without an external rendering step.
+- **Decision.** All diagrams embedded in `sample-work/` are authored in Mermaid (C4Context, C4Container, C4Component, sequenceDiagram, stateDiagram-v2, flowchart). Source-substrate draw.io PNGs are referenced (via `project-h-diagrams-index.md` URLs in `context/`) but not embedded in the sample — instead, faithful Mermaid reconstructions from `project-h-diagrams-mermaid.md` are pasted in.
+- **Alternatives considered.** PlantUML (more expressive for complex sequences but adds a build step and a `.puml` source file per diagram), drawio (matches the AVD-style source artifacts but binary + heavier maintenance), tldraw / Excalidraw (hand-drawn aesthetics — different methodology direction, out of scope).
+- **Consequences.**
+  - *Positive:* every diagram is editable by an agent in a single tool, single render path, no binary blobs in the sample, the convention is uniformly testable.
+  - *Negative:* a few complex sequences (the 22-step login flow from the source) push Mermaid's flowchart readability limits — flagged in `data-flows/patient-onboarding.md` as `> [!validate]` Diagram complexity, with a note that in a real engagement this is the trigger to escalate to PlantUML per the TA §7 decision rule.
+  - *Open:* if MkDocs Material's Mermaid plugin doesn't render `C4Component` cleanly in the published site, fall back to a `flowchart` representation of the L3 view (not to drawio — drawio binary in a methodology-demo sample is the wrong signal).
+- **Notes.** This ADR is itself the worked example of "forward MADR" — it captures a decision made during sample authoring, not a discovered legacy one. In a real engagement, week-1 toolchain verification (TA §8 must-have) would re-confirm Mermaid rendering before locking this convention.
+
 ### 5.4a `sample-work/docs/schema/overview.md` (1 page)
 
 **Why it exists.** TA §3 prescribes a schema-layer overview that explains "how to read" the per-table docs. For the sample it carries extra weight because the wide-table methodology is the highest-stakes artifact (Prompt §5.3 — "the most important artifact in the sample").
@@ -441,6 +485,27 @@ Suggested initial entries:
 - **Cross-system relationships callout.** EPIC FHIR resource references are not FK constraints inside Project H's DB but must be treated as load-bearing — patient_profile changes that drop `epic_patient_id` would break the report-to-clinician flow.
 - **`> [!validate]`** for any row whose target table isn't yet named in the specs.
 - **`## Open questions`** (2–3). Suggested: are consents stored per-version (immutable) or per-patient-current (mutable); how does the `mychart_tokens` table reconcile with the AWS Cognito non-EPIC path; whether `invites` is a separate table or a state machine inside `patient_profile`.
+
+### 5.4c `sample-work/docs/schema/naming-inconsistencies.md` (½ page)
+
+**Why it exists.** TA §3 enumerates this as a schema-layer file ("WebQuery vs SWSoft and other known gaps"). For Project H the analog is **spec-level naming inconsistencies** discovered while applying the column-classification methodology — each entry is a candidate for a `> [!validate]` callout in `tables/patient-profile.md` and a workshop topic before code is written.
+
+**Content.**
+
+- One-paragraph framing: catalog of naming inconsistencies found between source pages; each is a load-bearing decision that has not been made yet. Lower-cost to surface here than to discover at PR-review time.
+- Table of entries:
+
+| Inconsistency | Location in source | Effect | Suggested resolution |
+| --- | --- | --- | --- |
+| `race` and `ethnicity` sometimes collapsed, sometimes separate | Epic-2 F1 US-1.1 lists "race / ethnicity" as one bullet; AVD §1.2 enumeration treats them separately | Ambiguous storage shape — single column with concatenated value or two columns? | Workshop with compliance engineer; align to OMB-1997 categories (most common US healthcare standard). |
+| `height` unit unspecified | Epic-2 F1 US-1.1 lists "height" with no unit; EPIC FHIR Observation supports both cm and inches | Conversion code locality not pinned (frontend vs backend); display unit not pinned | Decide unit at storage layer (metric, per FHIR-best-practice); convert at presentation. |
+| AVD §3 "Architecture Drivers" has §§3.1, 3.2, 3.4 — no §3.3 | Confluence parent 420911666 | Either a published page is missing or the numbering was renumbered without resequencing — readers of AVD will second-guess whether they have the full set | Verify with Architect; either author missing page or renumber. |
+| AVD §5 "Operation Plan" has §§5.1–5.3, 5.5 — no §5.4 | Confluence parent 420911711 | Same as above | Same. |
+| `mychart_token_ref` vs `refresh_token_ref` vs `access_token_ref` | Brief §5.5 column reference proposal | Three nearby columns with different suffixes for the same kind of opaque reference | Workshop: pick one suffix convention (`_ref` only, or `_id` only) and lock in `schema/overview.md` §Naming conventions. |
+| `consents_catalog.version` table not yet named | §5.4b relationships row | Implicit FK target without committed table — affects whether ADR-0001's "consent timestamp + version" rule is implementable | Author a one-row `schema/tables/consents-catalog.md` stub in the next iteration. |
+
+- **Cross-references.** `tables/patient-profile.md`, `schema/relationships.md`, `architecture/overview.md` Key design decisions.
+- **`## Open questions`** (2–3). Suggested: AVD section-numbering gaps audit (sweep all parent pages for missing children); ethnicity-coding-standard adoption (OMB-1997 vs US Census 2020 vs free-text); plural-vs-singular table naming convention (`consents_catalog` vs `consent_catalog`).
 
 ### 5.5 `sample-work/docs/schema/tables/patient-profile.md` (2–3 pages)
 
@@ -517,6 +582,26 @@ Suggested initial entries:
 - *Integration points.* MyChart (per-clinic OAuth2 + PKCE), Cognito (non-EPIC fallback), Project H backend (token storage + invite validation + consent capture), Project H Patient Profile (first-login data fetch from EPIC).
 - *Cross-references.* Link to `architecture/overview.md` §4.5 (Patient Auth Flow diagram), `schema/tables/patient-profile.md` (consents, token refs, last_login_at fields), `architecture/decisions/0001-…`.
 - Embedded **flowchart Mermaid** — paste the login flow from `project-h-diagrams-mermaid.md` §7. This *is* the architectural anchor for the module.
+- Embedded **state diagram (Mermaid)** — session lifecycle as a state machine. Demonstrates TA §2 UML "State" coverage in the sample (the flow diagram + EPIC integration sequence cover flowchart and sequence; this adds the third UML type). States and transitions sourced from Epic-1 F2 US-2.1 (logout) and US-2.2 (auto logout):
+
+  ````
+  ```mermaid
+  stateDiagram-v2
+      [*] --> SignedOut
+      SignedOut --> Active: full MyChart OAuth2 + PKCE
+      Active --> Locked: inactivity / app background / "Lock app" (US-2.2)
+      Locked --> Active: Face ID / passcode succeeds
+      Locked --> SignedOut: passcode fails N times (TBD)
+      Active --> Refreshing: access token expires
+      Refreshing --> Active: refresh token still valid
+      Refreshing --> ExpiredRefresh: refresh token invalid (BR-006)
+      ExpiredRefresh --> SignedOut: clear local PHI
+      Active --> SignedOut: explicit "Sign out" (US-2.1)
+      Active --> SignedOut: auto-logout threshold (TBD per BR-010)
+  ```
+  ````
+
+  Five reachable states; one `[*]` initial; two `(TBD)` annotations that should be linked to the corresponding `> [!validate]` callouts in `business-rules.md` (BR-006 refresh-token policy, BR-010 inactivity threshold).
 
 ### 5.8 `sample-work/docs/modules/auth-authorization/business-rules.md` (1–2 pages)
 
@@ -640,14 +725,17 @@ Mapped from Prompt §7:
 
 | Criterion | How it's satisfied for Project H sample |
 | --- | --- |
-| Mermaid diagrams render | Use blocks from `project-h-diagrams-mermaid.md` verbatim; render-test in MkDocs Material before delivery. |
+| Mermaid diagrams render | Use blocks from `project-h-diagrams-mermaid.md` verbatim; render-test in MkDocs Material before delivery. C4 L1 / L2 / L3 + sequenceDiagram + stateDiagram-v2 + flowchart all covered (per ADR-0002). |
 | File paths / function names cited exist | Substrate is pre-code → cite Confluence page IDs and US numbers instead; spot-check ≥ 5 citations against `project-h-initial-phase-deliverables.md`. |
 | Cross-references resolve | Every `../decisions/`, `../tables/`, `../modules/` link must point to a real file/heading in the sample. |
 | `> [!validate]` callouts are credible | Pull from §7 of this brief — each is a real TBD in the source. No invented ambiguities. |
 | Open-questions sections non-empty / non-fluff | Pull from §7 of this brief. Cap at 3–5 per doc. |
-| Cross-LLM peer review pass | Run on `architecture/overview.md` and `schema/tables/patient-profile.md` before delivery. Findings → resolved or moved to open questions. |
+| Cross-LLM peer review pass | Run on the **three** high-stakes docs per TA §2 (architecture overview + wide-table schema + **business-rules.md**): `architecture/overview.md`, `schema/tables/patient-profile.md`, `modules/auth-authorization/business-rules.md`. Findings → resolved or moved to open questions. |
+| **Cross-LLM peer review log committed** (Prompt §10 deliverable) | Save the reviewer-model output + per-finding resolution to `sample-work/_review/cross-llm-review.md`. Per finding: original flag · was it accepted (doc updated) / rejected (with rationale) / converted to an open question. Empty or missing log fails this criterion. |
+| **AI-readability acceptance test** (TA §6 "Testing the AI entry points" + TA §7 + TA §9) | A scripted Claude Code session is run against a predefined task list — e.g., "add a new column for `pregnancy_status` enum to `patient_profile`", "explain why MyChart auth ships before non-EPIC Cognito", "find the rule that limits self-started follow-ups". **Pass** = the agent routes to the correct files (`schema/tables/patient-profile.md`, `architecture/decisions/0001-…`, `modules/auth-authorization/variations.md`, `business-rules.md` BR-…) and quotes the right US IDs / D-codes / BR-IDs. The task prompts and the resulting transcripts are committed under `sample-work/_review/ai-readability-test.md` so Informediate can re-run the same battery anytime. Optional but recommended: same test against Cursor or Copilot (validates the AGENTS.md @-import path). |
+| **Onboarding readability test** (TA §9 engagement-level "Onboarding test") | A reader new to Project H reads README → CLAUDE.md → `architecture/overview.md` → 1 data-flow → `modules/auth-authorization/overview.md` → can correctly summarise (a) the three apps in scope, (b) the EPIC vs non-EPIC auth fork, (c) where to find any specific business rule. Self-administered for the sample; in a real engagement this is the Tech Lead's pilot acceptance criterion. |
 | No Innowise | `grep -ri innowise sample-work/` returns nothing. |
-| Volume ≈ 15–20 pages of markdown | Expanded to ~22 pages across **17 files** to faithfully mirror TA §3 (root conventions + integration-points + data-flows + schema overview + relationships). Each new file is kept lean (½–1.5 pg). Breakdown: README 1 + CLAUDE.md 1 + AGENTS.md ½ + CONVENTIONS.md 1 + GLOSSARY.md 1 + arch overview 3 + integration-points 1.5 + data-flows ×2 = 2 + release-coexistence 1 + ADR 1 + schema overview 1 + relationships 1 + patient-profile 3 + module CLAUDE.md ½ + module overview 2 + business-rules 2 + variations 1 ≈ **22.5 pages**. Above the Prompt §5 floor; justified by the user's explicit instruction to mirror the engagement shape, not just hit the demo minimum. |
+| Volume ≈ 15–20 pages of markdown | Expanded to ~25 pages across **19 files** to faithfully mirror TA §3 (root conventions + integration-points + data-flows + schema overview + relationships + naming-inconsistencies + forward ADR). Each new file is kept lean (½–1.5 pg). Breakdown: README 1 + CLAUDE.md 1 + AGENTS.md ½ + CONVENTIONS.md 1 + GLOSSARY.md 1 + arch overview 3 + integration-points 1.5 + data-flows ×2 = 2 + release-coexistence 1 + ADR-0001 1 + **ADR-0002 1** + schema overview 1 + relationships 1 + **naming-inconsistencies ½** + patient-profile 3 + module CLAUDE.md ½ + module overview 2 + business-rules 2 + variations 1 ≈ **25 pages**. Above the Prompt §5 floor; justified by the user's explicit instruction to mirror the engagement shape and by the added quality-bar items (AI-readability test, forward ADR). |
 
 ---
 
@@ -682,18 +770,19 @@ These appear in the source but should not be expanded into sample artifacts (wou
 5. Generate the 17 files in this order (anchors first, leaves last):
    1. `architecture/overview.md` — anchors everything else.
    2. `schema/tables/patient-profile.md` — highest-leverage artifact; demonstrates wide-table methodology.
-   3. `schema/overview.md` + `schema/relationships.md` — frame the patient-profile doc.
+   3. `schema/overview.md` + `schema/relationships.md` + `schema/naming-inconsistencies.md` — frame the patient-profile doc.
    4. `architecture/integration-points.md` + `architecture/data-flows/*` — external surface and high-stakes flows.
    5. `architecture/release-coexistence.md` — cross-cutting view.
-   6. `modules/auth-authorization/{overview, business-rules, variations}.md` — module deep-dive.
+   6. `modules/auth-authorization/{overview, business-rules, variations}.md` — module deep-dive (overview includes flowchart + state diagram for session lifecycle).
    7. AI entry points (`docs/CLAUDE.md`, `docs/AGENTS.md`, module-level `CLAUDE.md`) — verify task-routing paths actually exist in the sample.
-   8. `CONVENTIONS.md` + `GLOSSARY.md` — capture the working agreement and vocabulary.
-   9. `architecture/decisions/0001-mychart-as-per-clinic-sso.md` — anchor the most cross-referenced decision.
-   10. `README.md` — written last, now that you know what the sample actually contains.
-6. Self-review pass: render-test all Mermaid blocks, verify cross-references resolve, spot-check ≥ 5 Confluence-page / US-ID citations against `project-h-initial-phase-deliverables.md`.
-7. Cross-LLM peer review on `architecture/overview.md` and `schema/tables/patient-profile.md` (minimum). Findings → resolved or surfaced as open questions.
-8. Grep for "Innowise" — must return zero (Andersen branding throughout).
-9. Render in MkDocs Material or push to a preview branch; verify the layout reads cleanly.
-10. Deliver the `sample-work/` folder + cover note + cross-LLM review log + a Compromises section flagging anything that needed to be deferred.
+   8. `CONVENTIONS.md` + `GLOSSARY.md` — capture the working agreement and vocabulary (GLOSSARY cites source pages per TA §2 DDD discipline).
+   9. `architecture/decisions/0001-mychart-as-per-clinic-sso.md` (retrospective) + `architecture/decisions/0002-mermaid-for-inline-diagrams.md` (forward) — anchor the most cross-referenced decision and the worked-example forward MADR.
+   10. `README.md` — written last, now that you know what the sample actually contains. Include the TA §4 5-stage "How this sample was produced" paragraph.
+6. Self-review pass: render-test all Mermaid blocks with `mermaid-cli`, verify cross-references resolve, spot-check ≥ 5 Confluence-page / US-ID citations against `project-h-initial-phase-deliverables.md`.
+7. **Cross-LLM peer review** on the three high-stakes docs (TA §2 cross-LLM scope): `architecture/overview.md`, `schema/tables/patient-profile.md`, **and** `modules/auth-authorization/business-rules.md`. Findings → resolved or surfaced as open questions. **Save the reviewer transcript + per-finding resolution to `sample-work/_review/cross-llm-review.md`** (Prompt §10 deliverable + brief §9 quality bar item).
+8. **AI-readability acceptance test** (TA §6 / brief §9): run the predefined task battery against Claude Code (and optionally Cursor / Copilot for the AGENTS.md @-import path); commit prompts and transcripts to `sample-work/_review/ai-readability-test.md`.
+9. Grep for "Innowise" — must return zero (Andersen branding throughout).
+10. Render in MkDocs Material or push to a preview branch; verify the layout reads cleanly.
+11. Deliver the `sample-work/` folder + cover note + **`_review/cross-llm-review.md`** + **`_review/ai-readability-test.md`** + a Compromises section flagging anything that needed to be deferred.
 
 Everything above is sufficient input — no further Confluence fetch should be necessary.
