@@ -114,6 +114,25 @@ flowchart TB
     K <-- "EPIC FHIR API (read/write)<br/>embedding as SMART FHIR app" --> EP
 ```
 
+### Components in this view
+
+**Actors (persons).**
+
+- **Patient [Person]** — uses the Project H mobile app. Authenticates via MyChart SSO to access services. Can access MyChart for medical records. Handles subscription payments via Stripe (rare — most billing is clinic-side). Can interact with the Intercom support widget.
+- **Clinic Admin [Person]** — uses the browser-based Clinic Admin Web App. Manages clinic operations and patient onboarding through Project H. Handles clinic-level subscription / billing via Stripe.
+- **Project H Admin [Person]** — uses the browser-based Project H Admin Web App (out of Andersen delivery scope). Oversees system-level operations and supports clinics.
+- **Clinician [Person]** — uses the Clinic EHR system (EPIC Hyperspace / Hyperdrive). Accesses patient information and interacts with Project H through embedded SMART on FHIR apps.
+
+**Software systems.**
+
+- **Project H [Software System]** — the central system containing all components (Patient Mobile App, Clinic Web App, backend, Project H Admin Web App, embedded libraries). Manages auth via MyChart, integrates with Stripe for payments and Intercom for support, embeds into Clinic EHR via SMART FHIR.
+- **MyChart application [Patient Portal — EPIC]** — Web interface of EPIC for patients. Used as the SSO provider for Project H. Issues refresh / access tokens that Project H uses to read patient data and to write Observation / Condition / DocumentReference resources.
+- **Stripe [Payment System]** — manages clinic subscriptions for the Clinic Web App. Provides webhooks back to Project H for subscription lifecycle events.
+- **Intercom [Customer Service System]** — AI chat / ticketing widget embedded into the Patient Mobile App and the Clinic Web App. Provides patient and clinic-admin support.
+- **Clinic EHR [EPIC EHR]** — Desktop or web interface for clinicians (Hyperspace / Hyperdrive). Integrated with Project H via SMART FHIR API (read/write).
+
+Source: AVD 4.1 System Context View / Business Flow (Confluence page `420911679`).
+
 ## Container view (C4 L2)
 
 ```mermaid
@@ -195,6 +214,51 @@ flowchart TB
     PMB -- "Admin REST API" --> IC
 ```
 
+### Components in this view
+
+**Persons.** Same four roles as in the System Context view above (Patient, Project H Admin, Clinic Admin, Clinician).
+
+**External software systems** (grey in the diagram).
+
+- **MyChart** — external patient portal, one instance per clinic, based on EPIC MyChart. Project H opens an embedded MyChart login WebView; receives email / SMS for code delivery.
+- **EPIC EHR** — clinical EHR system. Integrated via SMART on FHIR. FHIR API exchange handled by the Patient Mobile App Backend.
+- **Stripe** — payment system. Subscription billing for clinics; webhook integration with the Clinic Admin Web App.
+- **FDB (Medical Database)** — First DataBank. Provides drug information, medication-condition mapping, drug-drug / drug-food / drug-allergy / drug-disease / duplicate-therapy / side-effect screening.
+- **Intercom** — embedded support widget. Frontend-only integration in MVP.
+- **Apple Push Notification Service (APNS)** — Apple's notification fabric. Used by the Notification Service to deliver push notifications to iOS devices.
+
+**Containers implemented by Andersen** (blue in the diagram).
+
+- **Patient Mobile App [iOS · React Native · TypeScript]** — iOS-only MVP. Hosts the SurveyJS WebView, includes the Project H Games library, calls the Patient Mobile App Backend via HTTPS / REST.
+- **Patient Mobile App Backend [Python · FastAPI]** — server-side orchestration for the mobile app. Owns EPIC FHIR exchange, FDB queries, report assembly, recommendation invocation, and audit logging. Decomposed at L3 below.
+- **Project H Admin Web App [Python · Django Admin]** — internal administrative portal. Out of Andersen delivery scope; included in the L2 view for completeness of the system boundary.
+- **Clinic Admin Web App [Python · Django Admin]** — clinic-facing administrative portal. Owns the EPIC SMART FHIR plugin for invite-link generation, the clinician PDF download module, and the Stripe subscription integration.
+
+**Containers implemented by Project H** (purple in the diagram; black-box from Andersen's perspective per D30).
+
+- **Project H Games [React Native library]** — embedded cognitive games (WCST, ERT, Trail Making). Ships as an npm package bundled into the Patient Mobile App; results are emitted via callback and persisted by the backend.
+- **Project H Recommendation [Python library — rules engine]** — diagnostic and treatment-plan rules engine. Invoked by the Patient Mobile App Backend during report assembly. Black box from Andersen's side.
+- **Project H ML Environment [SageMaker — set of cloud-managed components]** — machine-learning training environment for adaptive recommendations (post-MVP). Loads data from S3.
+
+**AWS managed services** (green in the diagram).
+
+- **Authorization Service [AWS Cognito]** — non-EPIC patient authentication provider (Amplify Authenticator path). Decomposed at L3 below.
+- **Load Balancing [AWS ALB]** — distributes incoming HTTPS traffic across backend services based on path / host rules.
+- **Notification Service [AWS SNS / SES / EventBridge]** — outbound notification fabric. Sends emails (SES), push notifications via APNS (SNS), and event-routed integrations (EventBridge).
+- **Logging & Monitoring [AWS CloudWatch]** — metrics, logs, alerting. Per-request correlation IDs surface in CloudWatch Logs.
+
+**Data layer.**
+
+- **Relational Database [AWS RDS PostgreSQL]** — primary relational store. Multi-AZ in production (primary + read replica). Holds `patient_profile`, `consents`, `intake_responses`, `reports`, `subscriptions`, etc. See [Schema overview](../schema/overview.md).
+- **Caching Service [AWS ElastiCache]** — Redis cache for hot lookups (FDB weekly cache, session metadata).
+- **File Storage / Datalake [AWS S3]** — stores generated PDF reports (linked from FHIR `DocumentReference`) and ML artefacts.
+
+**External library.**
+
+- **SurveyJS** — frontend questionnaire renderer. Bundled into the Patient Mobile App as an npm package and rendered inside a WebView. The Project H Admin App uses SurveyJS Creator for authoring (out of Andersen scope).
+
+Source: AVD 4.2 Container View (Confluence page `420911687`).
+
 ## Component view (C4 L3 — selected containers)
 
 Per TA §2, C4 L3 is applied **selectively** — only to containers whose internal structure is non-trivial. Two containers are decomposed at L3 here; the rest are intentionally skipped (rationale below).
@@ -226,6 +290,15 @@ flowchart TB
     RI -- "invoke" --> KR
 ```
 
+### Components in this view
+
+- **Auth Handler** — validates incoming access tokens on every authenticated request; orchestrates refresh-token rotation against MyChart (EPIC path) or Cognito (non-EPIC path); enforces the BR-005 / BR-006 token-handling rules. Reads `patient_profile.refresh_token_ref` and `mychart_token_ref`.
+- **FHIR Adapter** — assembles outbound FHIR Bundles (Observation + Condition + DocumentReference per D23) and parses inbound FHIR resources (the 15-resource set from AVD 4.4.1). Owns the PGHD-flagging discipline so the EPIC In Basket / Inbound Queue notification fires correctly.
+- **FDB Adapter** — wraps the six FDB screening endpoints (DDI / DFI / DA / DDC / DPT / SIDE) and the patient-education endpoints. Caches the weekly drugs-by-disorder list in ElastiCache; calls the real-time screens during report assembly.
+- **Report Assembler** — renders the Project H-supplied HTML template (D8) with the recommendation outputs, converts to PDF, stores it in S3, and produces the SMART FHIR-gated download URL used in the outbound DocumentReference.
+- **Recommendation Invoker** — calls the Project H Recommendation Python library (D30 black-box) with the assembled patient profile, intake answers, and (where available) game results. Treats the library as a black box; never reaches into its logic. The Invoker is the architectural seam that lets Project H replace the rules engine with an ML-driven variant in the future without changing the Backend's contract.
+- **Audit Logger** — per-request unique-ID assignment + structured audit trail to CloudWatch (tamper-resistant archive). Every PHI access carries an entry; logs are reviewed quarterly by the Compliance Engineer.
+
 Why L3 here: the Backend is where cross-system orchestration happens. Without L3, a reader cannot see that the report flow has six internal components and that the Recommendation Invoker treats the recommendation library as a black box (D30).
 
 ### Authorization Service (L3)
@@ -255,6 +328,14 @@ flowchart TB
     BG -- "gates" --> MCT
     BG -- "gates" --> CP
 ```
+
+### Components in this view
+
+- **MyChart Token Store** — encrypted, per-patient storage of MyChart OAuth2 access + refresh tokens. Backed by KMS-encrypted RDS columns (`patient_profile.mychart_token_ref` resolves to a row in this store). One row per EPIC-flow patient; nullable for non-EPIC patients.
+- **Cognito Provider** — wraps AWS Cognito + Amplify Authenticator for non-EPIC clinics. Maintains the parallel-path identity provider. See [variations](../modules/auth-authorization/variations.md) for the EPIC vs non-EPIC fork.
+- **Per-clinic Config Resolver** — resolves the MyChart URL, App Orchard client ID, FHIR endpoint base, OAuth2 redirect URI, and sandbox-vs-prod flag for a given `clinic_id`. **Today implemented as scattered configuration literals**, which is the architectural surface called out in the [Architectural assessment](#architectural-assessments) below as the proposed extraction target.
+- **Refresh Loop** — orchestrates the access-token ↔ refresh-token dance per BR-006. Runs on every authenticated request; rotates tokens when the access token is near expiry; falls back to full re-auth when the refresh token itself is invalid.
+- **Biometric Gate** — Face ID / passcode lock that sits in front of token reads (per BR-008). Gates both the MyChart Token Store (EPIC patients) and the Cognito Provider (non-EPIC patients).
 
 Why L3 here: this view exposes the **Per-clinic Config Resolver** as the extraction surface called out in the Architectural assessment below. It also disambiguates EPIC vs non-EPIC paths at the component level — see [variations](../modules/auth-authorization/variations.md).
 
@@ -334,6 +415,68 @@ flowchart TB
     GH -. GitHub actions .-> AMP
     SAGE -- load --> S3
 ```
+
+### Layers in this view
+
+**User and mobile-application entry.**
+
+- **User** — end-user (Patient) accessing the system via the Project H mobile app.
+- **Mobile Application** — distributed through the App Store; beta builds via TestFlight; CI/CD via GitHub Actions.
+- **Web Browser (Swagger)** — used for Clinic Admin Web App and the API documentation surface.
+
+**DNS layer.**
+
+- **AWS Route 53** — DNS resolution and traffic routing from the public internet to the AWS cloud environment.
+
+**Load-balancing layer (public subnet).**
+
+- **Application Load Balancer (ALB)** — distributes incoming requests across ECS services running in the private subnet.
+- **NAT Gateway** — allows instances in the private subnet to reach the public internet for outbound calls (Stripe webhooks ack, FDB queries, EPIC FHIR API, etc.) without exposing them inbound.
+
+**Compute layer (private subnet, autoscaling).**
+
+- **ECS Cluster** — manages Dockerized workloads across three Availability Zones (us-east-2a, us-east-2b, us-east-2c).
+- **ECS Nodes** — compute instances running containerised services. Autoscaling ensures high availability and fault tolerance.
+
+**Networking (VPC).**
+
+- **VPC** — isolated network environment within the AWS account.
+- **Public subnet** — hosts ALB and NAT Gateway; reachable from the internet.
+- **Private subnet** — hosts ECS nodes and databases; not reachable from the internet except through the ALB.
+
+**Database layer.**
+
+- **Amazon RDS for PostgreSQL (Primary)** — primary relational instance in us-east-2a.
+- **Amazon RDS for PostgreSQL (Read Replica)** — in us-east-2b; serves read workloads and improves availability.
+- **Multi-AZ setup** — redundancy across availability zones; RPO 5–10 min, RTO 15–30 min per AVD §5.5.
+
+**Machine learning and storage.**
+
+- **Amazon S3** — object storage for PDF reports, ML training data, ML model artefacts.
+- **Amazon SageMaker** — training, deploying, and managing ML models for the recommendation refinement (post-MVP).
+
+**Monitoring, security, and operations.**
+
+- **CloudWatch** — metrics, logs, alarms on application + ECS services + databases.
+- **AWS Cognito** — non-EPIC identity provider (see L3 component view of the Authorization Service).
+- **AWS KMS** — encryption keys for data at rest (RDS, S3) and for transit (ALB SSL termination).
+- **AWS Certificate Manager (ACM)** — TLS certificate issuance and rotation.
+- **AWS WAF** — application-layer firewall protecting against OWASP top-10 attacks.
+- **AWS Shield** — DDoS protection at the edge.
+- **AWS Secrets Manager** — vendor API keys (Stripe, FDB), database credentials, JWT signing keys; rotated quarterly.
+- **AWS EventBridge** — event bus for inter-service event routing.
+- **AWS Simple Email Service (SES)** — outbound transactional email (consent confirmations, password resets for the Clinic Admin Web App).
+- **AWS Simple Notification Service (SNS)** — push notifications routed via APNS to the iOS Project H app.
+
+**CI/CD and development integration.**
+
+- **GitHub Actions** — CI/CD pipeline for building, testing, and deploying the application.
+- **TestFlight** — beta distribution channel for the iOS Project H app.
+- **AWS Amplify** — glue between GitHub Actions and AWS for mobile-app build pipelines.
+
+**Environments.** Dev (latest changes, least stable, all new development), Stage (features for the next planned release), Prod (only fully provisioned environment). Dev and Stage are not provisioned for production load.
+
+Source: AVD 4.3 Deployment view (Confluence page `420911696`).
 
 This is the MVP deployment. A larger "final product" topology (with full HW provisioning, additional managed services) is referenced in [release-coexistence](release-coexistence.md) as post-MVP infrastructure.
 
