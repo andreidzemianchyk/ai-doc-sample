@@ -1,6 +1,6 @@
 # Cross-LLM peer review log
 
-Mandatory deliverable per Prompt §10 and quality bar in [`context/project-h/project-h-doc-generation-brief.md`](../../context/project-h/project-h-doc-generation-brief.md) §9. Records the cross-LLM review pass on the three high-stakes documents (TA §2 scope): [architecture/overview.md](../architecture/overview.md), [schema/tables/patient-profile.md](../schema/tables/patient-profile.md), and [modules/auth-authorization/business-rules.md](../modules/auth-authorization/business-rules.md).
+Mandatory deliverable per Prompt §10 and quality bar in [`context/project-h/project-h-doc-generation-brief.md`](https://github.com/andreidzemianchyk/ai-doc-sample/blob/main/context/project-h/project-h-doc-generation-brief.md) §9. Records the cross-LLM review pass on the three high-stakes documents (TA §2 scope): [architecture/overview.md](../architecture/overview.md), [schema/tables/patient-profile.md](../schema/tables/patient-profile.md), and [modules/auth-authorization/business-rules.md](../modules/auth-authorization/business-rules.md).
 
 The log captures, per finding: original flag · was it accepted (doc updated) / rejected (with rationale) / converted to an open question.
 

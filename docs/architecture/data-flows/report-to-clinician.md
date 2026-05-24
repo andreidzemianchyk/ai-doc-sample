@@ -58,7 +58,7 @@ sequenceDiagram
 ## Cross-references
 
 - [Architecture overview — Backend L3](../overview.md#patient-mobile-app-backend-l3) — the components that orchestrate this flow.
-- [Integration points — EPIC EHR / MyChart](../integration-points.md#epic-ehr--mychart) — the contract this flow depends on.
+- [Integration points — EPIC EHR / MyChart](../integration-points.md#epic-ehr-mychart) — the contract this flow depends on.
 - [Architecture overview — CDSS Class I architectural assessment](../overview.md#architectural-assessments) — why the report shape matters beyond engineering.
 - AVD 4.4 EPIC EHR Integration View (page `420906849`) and AVD 4.4.2 Outbound messages (page `420906856`) — the source diagrams.
 

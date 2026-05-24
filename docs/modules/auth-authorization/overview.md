@@ -97,7 +97,7 @@ Five reachable states; two `(TBD)` transitions whose thresholds are open questio
 
 ## Integration points
 
-- **MyChart per clinic** — see [`../../architecture/integration-points.md#epic-ehr--mychart`](../../architecture/integration-points.md#epic-ehr--mychart) for the contract. SMART on FHIR OAuth2 + PKCE.
+- **MyChart per clinic** — see [`../../architecture/integration-points.md#epic-ehr-mychart`](../../architecture/integration-points.md#epic-ehr-mychart) for the contract. SMART on FHIR OAuth2 + PKCE.
 - **Cognito (non-EPIC fallback)** — see [`variations.md`](variations.md). AWS Cognito + Amplify Authenticator.
 - **Project H Patient Mobile App Backend** — owns token storage, invite-token validation, consent capture. Internal HTTP API.
 - **Project H Patient Profile** — first-login data fetch from EPIC populates this composite. See [`../../schema/tables/patient-profile.md`](../../schema/tables/patient-profile.md).

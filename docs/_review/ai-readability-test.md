@@ -1,6 +1,6 @@
 # AI-readability acceptance test
 
-Mandatory deliverable per [`context/project-h/project-h-doc-generation-brief.md`](../../context/project-h/project-h-doc-generation-brief.md) §9 (TA §6 "Testing the AI entry points" + TA §7 + TA §9). The test grades whether the documentation's AI entry points ([CLAUDE.md](../CLAUDE.md), [AGENTS.md](../AGENTS.md), [module CLAUDE.md](../modules/auth-authorization/CLAUDE.md)) route an agent to the correct files and let the agent produce **Project H-specific output** when given a task — not generic suggestions.
+Mandatory deliverable per [`context/project-h/project-h-doc-generation-brief.md`](https://github.com/andreidzemianchyk/ai-doc-sample/blob/main/context/project-h/project-h-doc-generation-brief.md) §9 (TA §6 "Testing the AI entry points" + TA §7 + TA §9). The test grades whether the documentation's AI entry points ([CLAUDE.md](../CLAUDE.md), [AGENTS.md](../AGENTS.md), [module CLAUDE.md](../modules/auth-authorization/CLAUDE.md)) route an agent to the correct files and let the agent produce **Project H-specific output** when given a task — not generic suggestions.
 
 ## Methodology
 
