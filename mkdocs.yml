@@ -43,6 +43,12 @@ nav:
   - Home: index.md
   - Architecture:
       - Overview: architecture/overview.md
+      - Diagrams:
+          - C4 L1 — System Context: architecture/diagrams/c4-l1-system-context.md
+          - C4 L2 — Container view: architecture/diagrams/c4-l2-container.md
+          - C4 L3 — Mobile App Backend: architecture/diagrams/c4-l3-mobile-backend.md
+          - C4 L3 — Authorization Service: architecture/diagrams/c4-l3-authorization-service.md
+          - Deployment view (MVP): architecture/diagrams/deployment-mvp.md
       - Integration points: architecture/integration-points.md
       - Release coexistence: architecture/release-coexistence.md
       - Data flows:
@@ -101,6 +107,13 @@ markdown_extensions:
 
 plugins:
   - search
+
+extra_css:
+  - stylesheets/extra.css
+
+extra_javascript:
+  - https://cdn.jsdelivr.net/npm/svg-pan-zoom@3.6.1/dist/svg-pan-zoom.min.js
+  - javascripts/extra.js
 
 extra:
   social:

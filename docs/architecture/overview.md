@@ -80,39 +80,7 @@ Pulled from Vision & Scope `Key non-functional requirements` (Confluence page `4
 
 ## System Context view (C4 L1)
 
-```mermaid
-flowchart TB
-    classDef person fill:#08427b,stroke:#073B6F,color:#fff
-    classDef system fill:#1168bd,stroke:#0E5DAA,color:#fff
-    classDef external fill:#999,stroke:#6B6B6B,color:#fff
-
-    P["<b>Patient</b><br/><i>Person</i>"]:::person
-    CA["<b>Clinic Admin</b><br/><i>Person</i>"]:::person
-    KA["<b>Project H Admin</b><br/><i>Person</i>"]:::person
-    CL["<b>Clinician</b><br/><i>Person</i>"]:::person
-
-    K["<b>Project H</b><br/><i>Software System</i><br/>The entire system with all components"]:::system
-
-    MC["<b>MyChart application</b><br/><i>Patient Portal</i><br/>Web interface of EPIC"]:::external
-    ST["<b>Stripe</b><br/><i>Payment System</i><br/>Subscription mgmt for Clinic Web App"]:::external
-    IC["<b>Intercom</b><br/><i>Customer Service System</i><br/>AI chat/ticketing"]:::external
-    EP["<b>Clinic EHR</b><br/><i>EPIC EHR</i><br/>Desktop/web for Clinicians"]:::external
-
-    P -- "Mobile App" --> K
-    CA -- "Browser · Clinic Admin Web App" --> K
-    KA -- "Browser · Project H Admin Web App" --> K
-    CL -- "using as EHR system" --> EP
-
-    P -- "uses as Patient Portal · login" --> MC
-    P -- "payment" --> ST
-    CA -- "accounting" --> ST
-    CL -- "customer support" --> IC
-
-    K <-- "refresh/access tokens<br/>redirect for auth" --> MC
-    K <-- "embedding · payment webhook" --> ST
-    K -- "embedding into web and mobile apps" --> IC
-    K <-- "EPIC FHIR API (read/write)<br/>embedding as SMART FHIR app" --> EP
-```
+[Open the C4 L1 System Context diagram on its own page (zoomable, pan)](diagrams/c4-l1-system-context.md){ .diagram-card }
 
 ### Components in this view
 
@@ -135,84 +103,7 @@ Source: AVD 4.1 System Context View / Business Flow (Confluence page `420911679`
 
 ## Container view (C4 L2)
 
-```mermaid
-flowchart TB
-    classDef person fill:#08427b,stroke:#073B6F,color:#fff
-    classDef andersen fill:#1168bd,stroke:#0E5DAA,color:#fff
-    classDef kivira fill:#a855f7,stroke:#7C3AED,color:#fff
-    classDef cloud fill:#a7e1ad,stroke:#73B27B,color:#000
-    classDef ext fill:#999,stroke:#6B6B6B,color:#fff
-
-    P[Patient]:::person
-    KA[Project H Admin]:::person
-    CA[Clinic Admin]:::person
-    CL[Clinician]:::person
-
-    subgraph PrjH["Project H [System]"]
-        direction TB
-        PMA["Patient Mobile App<br/>iOS · React Native · TS"]:::andersen
-        PMB["Patient Mobile App Backend<br/>Python · FastAPI"]:::andersen
-        KAW["Project H Admin Web App<br/>Python · Django Admin"]:::andersen
-        CAW["Clinic Admin Web App<br/>Python · Django Admin"]:::andersen
-
-        KG["Project H Games<br/>React Native lib<br/>(cognitive games)"]:::kivira
-        KR["Project H Recommendation<br/>Python lib · Rules Engine"]:::kivira
-        KML["Project H ML Environment<br/>SageMaker"]:::kivira
-
-        AUTH["Authorization Service<br/>AWS Cognito"]:::cloud
-        LB["Load Balancing<br/>AWS ALB"]:::cloud
-        NS["Notification Service<br/>AWS SNS / SES / EventBridge"]:::cloud
-        LM["Logging & Monitoring<br/>AWS CloudWatch"]:::cloud
-
-        subgraph Data["Data layer"]
-            RDS[("Relational DB<br/>AWS RDS PostgreSQL")]:::cloud
-            EC[("Caching Service<br/>AWS ElastiCache")]:::cloud
-            S3[("File Storage / Datalake<br/>AWS S3")]:::cloud
-        end
-    end
-
-    SJ["SurveyJS<br/>External library"]:::ext
-    MC["MyChart<br/>Patient portal per clinic"]:::ext
-    EP["EPIC EHR"]:::ext
-    ST["Stripe<br/>Payment System"]:::ext
-    FDB["FDB<br/>Medical Database"]:::ext
-    IC["Intercom"]:::ext
-    APNS["Apple Push Notification Service"]:::ext
-
-    P -- "Mobile App" --> PMA
-    KA -- "Browser" --> KAW
-    CA -- "Browser" --> CAW
-    CL -- "SMART FHIR" --> CAW
-
-    PMA -- "includes as package" --> KG
-    PMA -- "includes as package · WebView" --> SJ
-    PMA -- "https · REST API" --> LB
-    LB --> PMB
-    LB --> KAW
-    LB --> CAW
-
-    PMA -- "credentials" --> MC
-    MC -- "login page WebView · email/sms" --> PMA
-    PMA -- "Amplify Authenticator" --> AUTH
-
-    PMB -- "includes as package" --> KR
-    PMB -- "AWS SDK" --> NS
-    NS -- "push" --> APNS
-    NS -- "email" --> IC
-
-    PMB -- "FHIR API" --> EP
-    CAW -- "embedding · WebHook" --> ST
-
-    KR -- "request" --> KML
-    KML -- "load" --> S3
-
-    PMB -- "read/write" --> RDS
-    KAW -- "read/write" --> RDS
-    CAW -- "read/write · metadata" --> RDS
-
-    PMB -- "API" --> FDB
-    PMB -- "Admin REST API" --> IC
-```
+[Open the C4 L2 Container diagram on its own page (zoomable, pan)](diagrams/c4-l2-container.md){ .diagram-card }
 
 ### Components in this view
 
@@ -265,30 +156,7 @@ Per TA §2, C4 L3 is applied **selectively** — only to containers whose intern
 
 ### Patient Mobile App Backend (L3)
 
-```mermaid
-flowchart TB
-    classDef component fill:#85bbf0,stroke:#5d99c6,color:#000
-    classDef ext fill:#999,stroke:#6B6B6B,color:#fff
-
-    subgraph PMB["Patient Mobile App Backend [Container: Python · FastAPI]"]
-        AH["Auth Handler<br/>token validate / refresh"]:::component
-        FA["FHIR Adapter<br/>EPIC Bundle assembly/parsing"]:::component
-        FDA["FDB Adapter<br/>DDI / DFI / DA / DDC / DPT / SIDE"]:::component
-        RA["Report Assembler<br/>HTML template → PDF"]:::component
-        RI["Recommendation Invoker<br/>Python lib black-box"]:::component
-        AL["Audit Logger<br/>per-request UID"]:::component
-    end
-
-    EP[EPIC FHIR API]:::ext
-    FDB[FDB endpoints]:::ext
-    KR["Project H Recommendation [Library]"]:::ext
-
-    AH -- "refresh via MyChart" --> EP
-    FA -- "Patient / Observation / Condition / DocumentReference" --> EP
-    FDA -- "real-time + weekly-cached" --> FDB
-    RA --> RI
-    RI -- "invoke" --> KR
-```
+[Open the Mobile App Backend L3 diagram on its own page (zoomable, pan)](diagrams/c4-l3-mobile-backend.md){ .diagram-card }
 
 ### Components in this view
 
@@ -303,31 +171,7 @@ Why L3 here: the Backend is where cross-system orchestration happens. Without L3
 
 ### Authorization Service (L3)
 
-```mermaid
-flowchart TB
-    classDef component fill:#a7e1ad,stroke:#73B27B,color:#000
-    classDef ext fill:#999,stroke:#6B6B6B,color:#fff
-
-    subgraph AUTH["Authorization Service [AWS Cognito + Project H glue]"]
-        MCT["MyChart Token Store<br/>encrypted, per-patient"]:::component
-        CP["Cognito Provider<br/>non-EPIC fallback path"]:::component
-        PCR["Per-clinic Config Resolver<br/>(today: scattered literals)"]:::component
-        RL["Refresh Loop<br/>access ↔ refresh dance"]:::component
-        BG["Biometric Gate<br/>Face ID / passcode"]:::component
-    end
-
-    MC["MyChart per clinic"]:::ext
-    Patient[Patient via app]
-
-    Patient -- "EPIC flow" --> MCT
-    Patient -- "non-EPIC flow" --> CP
-    MCT -- "PKCE" --> MC
-    PCR -- "resolves URL for" --> MCT
-    PCR -- "resolves IdP for" --> CP
-    MCT --> RL
-    BG -- "gates" --> MCT
-    BG -- "gates" --> CP
-```
+[Open the Authorization Service L3 diagram on its own page (zoomable, pan)](diagrams/c4-l3-authorization-service.md){ .diagram-card }
 
 ### Components in this view
 
@@ -349,72 +193,7 @@ The explicit skip is itself a methodology beat (TA §2: *"we use C4's levels **s
 
 ## Deployment view
 
-```mermaid
-flowchart TB
-    U((User))
-    APP[Mobile Application]
-    BR[Web Browser]
-    AS[App Store]
-    TF[TestFlight]
-    GH[GitHub]
-    INT((Internet))
-
-    U --> APP
-    U --> BR
-    APP -- install --> AS
-    AS -- publish --> TF
-    TF -- GitHub actions --> GH
-    APP --> INT
-    BR --> INT
-
-    subgraph AWS["AWS Cloud · Region us-east-2"]
-        R53[AWS Route 53]
-
-        subgraph VPC["VPC"]
-            subgraph PUB["Public subnet · Load balancing"]
-                ALB[Application Load Balancer]
-                NAT[NAT Gateway]
-            end
-
-            subgraph PRIV["Private subnet · Compute + autoscaling"]
-                subgraph ECS["ECS Cluster"]
-                    N1[Node<br/>us-east-2a]
-                    N2[Node<br/>us-east-2b]
-                    N3[Node<br/>us-east-2c]
-                end
-                RDSP[("RDS PostgreSQL<br/>Primary · us-east-2a")]
-                RDSR[("RDS PostgreSQL<br/>Read Replica · us-east-2b")]
-                RDSP -- replication --> RDSR
-            end
-        end
-
-        subgraph SVC["AWS managed services"]
-            AMP[Amplify]
-            COG[Cognito]
-            EB[EventBridge]
-            CW[CloudWatch]
-            KMS[KMS]
-            EC[(ElastiCache)]
-            SH[Shield]
-            WAF[WAF]
-            ACM[Certificate Manager]
-            S3[(S3 File Storage)]
-            SAGE[Sagemaker]
-            SM[Secrets Manager]
-            SES[Simple Email Service]
-            SNS[Simple Notification Service]
-        end
-    end
-
-    INT --> R53
-    R53 --> ALB
-    ALB --> N1 & N2 & N3
-    N1 & N2 & N3 --> RDSP
-    N1 & N2 & N3 -.-> NAT
-    NAT -.-> INT
-    GH -. GitHub actions .-> AMP
-    SAGE -- load --> S3
-```
+[Open the MVP Deployment diagram on its own page (zoomable, pan)](diagrams/deployment-mvp.md){ .diagram-card }
 
 ### Layers in this view
 
