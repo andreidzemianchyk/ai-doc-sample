@@ -10,7 +10,43 @@
 
 (function () {
   var FULLSCREEN_THEME_CSS =
-    ".nodeLabel p,.nodeLabel span{color:#fff !important;font-weight:700;line-height:1.3;}";
+    ".nodeLabel p,.nodeLabel span,.label text,.cluster-label text,.stateLabel text{color:#f8fafc !important;fill:#f8fafc !important;font-weight:700;line-height:1.3;}" +
+    ".edgeLabel,.labelBkg{background:#0f172a !important;fill:#0f172a !important;color:#f8fafc !important;}" +
+    ".edgeLabel p{color:#f8fafc !important;}";
+
+  var FULLSCREEN_THEME_VARIABLES = {
+    theme: "base",
+    themeVariables: {
+      primaryColor: "#334155",
+      primaryTextColor: "#f8fafc",
+      primaryBorderColor: "#0f172a",
+      lineColor: "#334155",
+      secondaryColor: "#1e293b",
+      tertiaryColor: "#475569",
+      clusterBkg: "#1e293b",
+      clusterBorder: "#0f172a",
+      mainBkg: "#334155",
+      secondBkg: "#1e293b",
+      tertiaryBkg: "#475569",
+      background: "#f8fafc",
+      edgeLabelBackground: "#0f172a",
+      actorBkg: "#334155",
+      actorBorder: "#0f172a",
+      actorTextColor: "#f8fafc",
+      labelBoxBkgColor: "#334155",
+      labelBoxBorderColor: "#0f172a",
+      labelTextColor: "#f8fafc",
+      nodeBorder: "#0f172a",
+      nodeTextColor: "#f8fafc",
+      textColor: "#0f172a",
+      cScale0: "#334155",
+      cScale1: "#1e293b",
+      cScale2: "#475569",
+      cScaleLabel0: "#f8fafc",
+      cScaleLabel1: "#f8fafc",
+      cScaleLabel2: "#f8fafc"
+    }
+  };
 
   function escapeHtml(value) {
     return value
@@ -19,13 +55,27 @@
       .replace(/>/g, "&gt;");
   }
 
+  function ensureDiagramFrame(node) {
+    var frame = node.closest(".diagram-frame");
+    if (frame) return frame;
+
+    var parent = node.parentElement;
+    if (!parent) return null;
+
+    frame = document.createElement("div");
+    frame.className = "diagram-frame diagram-frame--auto";
+    parent.insertBefore(frame, node);
+    frame.appendChild(node);
+    return frame;
+  }
+
   function diagramFrameFor(node) {
     return node.closest(".diagram-frame") || node.parentElement;
   }
 
   function captureSources() {
     document.querySelectorAll("pre.mermaid").forEach(function (pre) {
-      var frame = diagramFrameFor(pre);
+      var frame = ensureDiagramFrame(pre);
       if (!frame || frame.dataset.mermaidSource) return;
 
       var code = pre.querySelector("code");
@@ -37,7 +87,7 @@
   }
 
   function addFullscreenButton(mermaidContainer) {
-    var frame = diagramFrameFor(mermaidContainer);
+    var frame = ensureDiagramFrame(mermaidContainer);
     if (!frame || !frame.dataset.mermaidSource) return;
     if (frame.querySelector(".mermaid-fullscreen-btn")) return;
 
@@ -52,6 +102,38 @@
       openInNewTab(frame.dataset.mermaidSource);
     });
     frame.appendChild(btn);
+  }
+
+  function addDiagramClickTarget(mermaidContainer) {
+    var frame = ensureDiagramFrame(mermaidContainer);
+    if (!frame || !frame.dataset.mermaidSource) return;
+    if (mermaidContainer.dataset.fullscreenBound) return;
+
+    function openDiagram(e) {
+      if (
+        e.target &&
+        (e.target.closest(".mermaid-fullscreen-btn") ||
+          e.target.closest("a") ||
+          e.target.closest("button"))
+      ) {
+        return;
+      }
+
+      e.preventDefault();
+      openInNewTab(frame.dataset.mermaidSource);
+    }
+
+    mermaidContainer.classList.add("is-fullscreenable");
+    mermaidContainer.title = "Click to open this diagram in a new tab";
+    mermaidContainer.tabIndex = 0;
+    mermaidContainer.addEventListener("click", openDiagram);
+    mermaidContainer.addEventListener("keydown", function (e) {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        openInNewTab(frame.dataset.mermaidSource);
+      }
+    });
+    mermaidContainer.dataset.fullscreenBound = "true";
   }
 
   function openInNewTab(source) {
@@ -78,10 +160,14 @@
       "<pre id='source' hidden>" +
       escapedSource +
       "</pre>" +
+      "<script id='mermaid-config' type='application/json'>" +
+      escapeHtml(JSON.stringify(FULLSCREEN_THEME_VARIABLES)) +
+      "<\/script>" +
       "<script type='module'>" +
       "  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';" +
       "  const source = document.getElementById('source').textContent;" +
       "  mermaid.initialize({" +
+      "    ...JSON.parse(document.getElementById('mermaid-config').textContent)," +
       "    startOnLoad: false," +
       "    securityLevel: 'loose'," +
       "    flowchart: { useMaxWidth: false }," +
@@ -113,6 +199,7 @@
     var containers = document.querySelectorAll("div.mermaid");
     containers.forEach(function (c) {
       addFullscreenButton(c);
+      addDiagramClickTarget(c);
     });
   }
 

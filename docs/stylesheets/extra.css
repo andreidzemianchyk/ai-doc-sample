@@ -6,8 +6,8 @@
 .md-typeset .mermaid {
   overflow: auto;
   max-height: 85vh;
-  background: var(--md-default-bg-color);
-  border: 1px solid var(--md-default-fg-color--lightest);
+  background: #e2e8f0;
+  border: 1px solid #94a3b8;
   border-radius: 4px;
   padding: 12px;
   margin: 1em 0;
@@ -21,9 +21,21 @@
 }
 
 .md-typeset .diagram-frame .mermaid {
+  cursor: zoom-in;
+}
+
+.md-typeset .diagram-frame:not(.diagram-frame--auto) .mermaid {
   min-height: 60vh;
   max-height: 85vh;
-  cursor: zoom-in;
+}
+
+.md-typeset .diagram-frame--auto .mermaid {
+  min-height: 0;
+}
+
+.md-typeset .mermaid.is-fullscreenable:focus {
+  outline: 2px solid var(--md-accent-fg-color);
+  outline-offset: 2px;
 }
 
 /* "Open full-screen" button injected by extra.js below each diagram */
