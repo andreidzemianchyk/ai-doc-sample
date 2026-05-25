@@ -1,5 +1,5 @@
-site_name: Project H — Sample Documentation
-site_description: Demonstration documentation artifact applying the SourceWare Technical Approach methodology to a precision-psychiatry presale substrate (anonymised as Project H)
+site_name: Project H — Documentation
+site_description: Engineering documentation for Project H, a precision-psychiatry SaaS platform integrating with EPIC EHR
 site_url: https://andreidzemianchyk.github.io/ai-doc-sample/
 repo_url: https://github.com/andreidzemianchyk/ai-doc-sample
 repo_name: andreidzemianchyk/ai-doc-sample
@@ -56,6 +56,28 @@ nav:
           - Report to clinician: architecture/data-flows/report-to-clinician.md
       - Decisions:
           - ADR-0001 MyChart as per-clinic SSO: architecture/decisions/0001-mychart-as-per-clinic-sso.md
+          - ADR-0002 Components initialization (dev): architecture/decisions/0002-components-initialization-dev-environment.md
+          - ADR-0003 Backup code validation endpoint: architecture/decisions/0003-backup-code-validation-endpoint.md
+          - ADR-0004 Tokens management: architecture/decisions/0004-tokens-management.md
+          - ADR-0005 Biometric login: architecture/decisions/0005-biometric-login.md
+          - ADR-0006 Dashboard endpoint: architecture/decisions/0006-dashboard-endpoint.md
+          - ADR-0007 FDB integration: architecture/decisions/0007-fdb-integration.md
+          - ADR-0008 Legacy assessment template uploading: architecture/decisions/0008-legacy-assessment-template-uploading.md
+          - ADR-0009 Reference data: architecture/decisions/0009-reference-data.md
+          - ADR-0010 Backend logging convention: architecture/decisions/0010-logging.md
+          - ADR-0012 Data retention: architecture/decisions/0012-data-retention.md
+          - ADR-0013 PDF report → EPIC HL7: architecture/decisions/0013-pdf-report-to-epic-hl7.md
+          - ADR-0014 Mirth Connect deployment: architecture/decisions/0014-mirth-connect-deployment.md
+          - ADR-0015 Sentry mobile error logging: architecture/decisions/0015-sentry-mobile-error-logging.md
+          - ADR-0016 Audit log: architecture/decisions/0016-audit-log.md
+          - ADR-0017 EPIC SMART FHIR production config: architecture/decisions/0017-epic-smart-fhir-production-config.md
+          - ADR-0018 Consistency of production releases: architecture/decisions/0018-consistency-of-production-releases.md
+          - ADR-0019 Internal token for EPIC flow: architecture/decisions/0019-internal-token-epic-flow.md
+          - ADR-0020 Clinician management: architecture/decisions/0020-clinician-management.md
+          - ADR-0021 Deferred Deep Link: architecture/decisions/0021-deferred-deep-link.md
+          - ADR-0022 Follow-up flow: architecture/decisions/0022-follow-up-flow.md
+          - ADR-0023 Django static → S3 + CloudFront: architecture/decisions/0023-django-static-s3-cloudfront.md
+          - ADR-0024 Merge policies: architecture/decisions/0024-merge-policies.md
   - Schema:
       - Overview: schema/overview.md
       - Relationships: schema/relationships.md

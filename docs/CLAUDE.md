@@ -21,7 +21,7 @@ Code is not yet committed for the MVP. The architecture and business rules are s
 | Touch the architecture, system shape, integration boundaries | [architecture/overview.md](architecture/overview.md) → [integration-points.md](architecture/integration-points.md) |
 | Work on patient sign-up / MyChart / invite link / backup code / biometric | [modules/auth-authorization/overview.md](modules/auth-authorization/overview.md) → [business-rules.md](modules/auth-authorization/business-rules.md) → [variations.md](modules/auth-authorization/variations.md) |
 | Touch the patient data model, FHIR mapping, FDB-coded fields | [schema/overview.md](schema/overview.md) → [tables/patient-profile.md](schema/tables/patient-profile.md) → [relationships.md](schema/relationships.md) |
-| Add or evaluate a design decision | [architecture/decisions/](architecture/decisions/0001-mychart-as-per-clinic-sso.md) (MADR; see [CONVENTIONS.md](CONVENTIONS.md) for the format) |
+| Add or evaluate a design decision | [Decision log](architecture/decisions/0001-mychart-as-per-clinic-sso.md) — 23 MADR ADRs covering auth/SSO, tokens, biometric, FDB integration, logging, audit, retention, HL7 / FHIR delivery to EPIC, release coordination, branch policy. See [CONVENTIONS.md](CONVENTIONS.md) for the MADR format. |
 | Work on a high-stakes flow (onboarding, report exchange) | [architecture/data-flows/](architecture/data-flows/patient-onboarding.md) |
 
 ## Known gotchas
