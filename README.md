@@ -8,7 +8,7 @@ A demonstration documentation artifact authored by AndersenLab. Applies the meth
 
 | Path | What it shows |
 | --- | --- |
-| `docs/` | The published sample site — 19 markdown deliverables + 2 methodology-evidence logs arranged in the full engagement layout from *SourceWare Technical Approach* §3 (root AI conventions, `architecture/`, `schema/`, `modules/<module>/`). |
+| `docs/` | The published sample site — 19 markdown deliverables arranged in the full engagement layout from *SourceWare Technical Approach* §3 (root AI conventions, `architecture/`, `schema/`, `modules/<module>/`, `companion/`). Methodology-evidence logs live separately under `internal/review/` and are excluded from the published site. |
 | `docs/architecture/overview.md` | The architecture document, with C4 L1/L2/L3 in Mermaid and two embedded architect-grade analysis callouts. |
 | `docs/architecture/diagrams/` | Five standalone diagram pages (C4 L1, C4 L2, two L3 component views, MVP deployment) with full-screen viewer support. |
 | `docs/schema/tables/patient-profile.md` | The worked example of the wide-table iterative column-classification methodology (TA §5.1). Highest-leverage artifact in the sample. |

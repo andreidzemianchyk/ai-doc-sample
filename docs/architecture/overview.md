@@ -52,7 +52,7 @@ Each row is a candidate for its own ADR. ADR-0001 (D3) is authored end-to-end as
 | R11 | Payment-integration errors (Stripe) | Medium | Stripe webhooks signed; idempotency keys on every POST. |
 | R8 | Patient data loss in DB | Low | RDS automated backups + Multi-AZ; restore-drill on cadence. |
 
-Each entry has an *Owner: TBD* in the source — assigning owners is a Stage-4c Tech Lead validation task per TA §4.
+Each entry carries an *Owner: TBD* placeholder — ownership assignment is a follow-up architect / tech-lead review task before the risk register lands in delivery scope.
 
 ## Architectural drivers
 

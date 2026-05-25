@@ -1,8 +1,6 @@
 # Project H — AI Agent Entry Point
 
-> Canonical AI instructions for any agent (Claude Code primary; Cursor, Copilot, Codex CLI supported) operating in this repository. CLAUDE.md @-imports [AGENTS.md](AGENTS.md) so the substantive content lives in one place; this file is the Claude-named entry that lets Claude Code discover the routing rules first.
-
-`@import AGENTS.md`
+> **Canonical AI instructions for every agent** operating in this repository — Claude Code primary; Cursor, GitHub Copilot, Codex CLI, OpenHands, and other AGENTS.md-aware tools read the same content via the [AGENTS.md](AGENTS.md) filename alias. **This file is the single source of truth.**
 
 ## What this system is
 
@@ -45,5 +43,5 @@ The substrate is **pre-implementation**. There is no committed code at the time 
 
 ## Notes
 
-- **AGENTS.md @-import.** This file is short by design; the substantive entry-point content is in [AGENTS.md](AGENTS.md). Drift between the two files is a defect — a scripted AI-readability task battery is the discipline that catches it (process artefact, not part of the published site).
+- **Filename alias.** [AGENTS.md](AGENTS.md) at the repository root is a thin pointer back to this file. Some agent runtimes (Cursor, Copilot, Codex CLI, OpenHands) discover their entry point by the filename `AGENTS.md` rather than `CLAUDE.md`; the alias makes the same canonical content reachable under both names without duplicating the routing table or the gotcha list. Drift between the two would be a defect — a scripted AI-readability task battery catches it (process artefact, kept outside the published site).
 - This is a presale-substrate sample. In a real engagement, this file gets refined in week 1 against the actual codebase and team-validated routing rules.
