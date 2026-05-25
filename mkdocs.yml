@@ -112,6 +112,7 @@ extra_css:
   - stylesheets/extra.css
 
 extra_javascript:
+  - javascripts/mermaid.mjs
   - javascripts/extra.js
 
 extra:

@@ -1,6 +1,7 @@
-// Per-diagram "Open full-screen" button + remove Mermaid's inline
-// max-width / max-height so the SVG renders at natural size and the
-// .mermaid container can scroll.
+// Per-diagram "Open full-screen" button driven from the Mermaid source
+// text, rather than the rendered SVG. Material for MkDocs renders
+// Mermaid into a closed shadow root, so post-processing the inner SVG
+// from page JS is not reliable.
 //
 // MkDocs Material renders Mermaid client-side; SVG appears
 // asynchronously after the page DOM is ready. Material's instant
@@ -10,27 +11,34 @@
 (function () {
   console.log("[project-h-docs] extra.js loaded");
 
-  function unconstrainSvg(svg) {
-    // Mermaid sets style="max-width: NNNpx; max-height: NNNpx;" on the
-    // root SVG when useMaxWidth: true (default). Strip those so the
-    // SVG renders at its natural pixel size and the parent container
-    // scrolls instead of squeezing the diagram. CSS rules with
-    // !important don't always beat inline styles on every renderer,
-    // so we clear them directly.
-    if (svg.dataset.unconstrained === "true") return;
-    svg.style.maxWidth = "none";
-    svg.style.maxHeight = "none";
-    svg.style.width = "auto";
-    svg.style.height = "auto";
-    svg.dataset.unconstrained = "true";
+  function escapeHtml(value) {
+    return value
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;");
+  }
+
+  function diagramFrameFor(node) {
+    return node.closest(".diagram-frame") || node.parentElement;
+  }
+
+  function captureSources() {
+    document.querySelectorAll("pre.mermaid").forEach(function (pre) {
+      var frame = diagramFrameFor(pre);
+      if (!frame || frame.dataset.mermaidSource) return;
+
+      var code = pre.querySelector("code");
+      var source = code ? code.textContent : pre.textContent;
+      if (!source) return;
+
+      frame.dataset.mermaidSource = source.trim();
+    });
   }
 
   function addFullscreenButton(mermaidContainer) {
-    if (mermaidContainer.querySelector(".mermaid-fullscreen-btn")) return;
-    var svg = mermaidContainer.querySelector("svg");
-    if (!svg) return;
-
-    unconstrainSvg(svg);
+    var frame = diagramFrameFor(mermaidContainer);
+    if (!frame || !frame.dataset.mermaidSource) return;
+    if (frame.querySelector(".mermaid-fullscreen-btn")) return;
 
     var btn = document.createElement("button");
     btn.className = "mermaid-fullscreen-btn";
@@ -40,22 +48,13 @@
     btn.addEventListener("click", function (e) {
       e.preventDefault();
       e.stopPropagation();
-      openInNewTab(svg);
+      openInNewTab(frame.dataset.mermaidSource);
     });
-    mermaidContainer.appendChild(btn);
+    frame.appendChild(btn);
   }
 
-  function openInNewTab(svg) {
-    var clone = svg.cloneNode(true);
-    clone.removeAttribute("width");
-    clone.removeAttribute("height");
-    clone.style.maxWidth = "none";
-    clone.style.maxHeight = "none";
-    clone.setAttribute("preserveAspectRatio", "xMidYMid meet");
-    clone.style.width = "100vw";
-    clone.style.height = "100vh";
-
-    var svgXml = new XMLSerializer().serializeToString(clone);
+  function openInNewTab(source) {
+    var escapedSource = escapeHtml(source);
 
     var html =
       "<!doctype html>" +
@@ -63,8 +62,10 @@
       "<meta charset='utf-8'>" +
       "<title>Project H diagram</title>" +
       "<style>" +
-      "  html, body { margin: 0; padding: 0; height: 100%; background: #fff; }" +
-      "  svg { display: block; width: 100vw; height: 100vh; }" +
+      "  html, body { margin: 0; padding: 0; height: 100%; background: #fff; overflow: auto; }" +
+      "  body { font-family: -apple-system, system-ui, sans-serif; }" +
+      "  #diagram { min-width: max-content; min-height: 100vh; padding: 24px; box-sizing: border-box; }" +
+      "  #diagram svg { display: block; }" +
       "  .hint { position: fixed; top: 8px; right: 12px;" +
       "          font: 12px/1 -apple-system, system-ui, sans-serif;" +
       "          color: #666; background: rgba(255,255,255,0.85);" +
@@ -72,7 +73,22 @@
       "</style>" +
       "</head><body>" +
       "<div class='hint'>Ctrl + wheel = zoom · scroll = pan · Ctrl+0 = reset</div>" +
-      svgXml +
+      "<div id='diagram'></div>" +
+      "<pre id='source' hidden>" +
+      escapedSource +
+      "</pre>" +
+      "<script type='module'>" +
+      "  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';" +
+      "  const source = document.getElementById('source').textContent;" +
+      "  mermaid.initialize({" +
+      "    startOnLoad: false," +
+      "    securityLevel: 'loose'," +
+      "    flowchart: { useMaxWidth: false }," +
+      "    themeCSS: '.nodeLabel p,.nodeLabel span{color:#fff !important;font-weight:700;line-height:1.3;}'" +
+      "  });" +
+      "  const { svg } = await mermaid.render('fullscreen-diagram', source);" +
+      "  document.getElementById('diagram').innerHTML = svg;" +
+      "<\/script>" +
       "</body></html>";
 
     var win = window.open("", "_blank");
@@ -87,16 +103,16 @@
   }
 
   function scanAndAttach() {
-    // Cover both shapes pymdownx + Mermaid can produce: <pre class="mermaid">
-    // and <div class="mermaid">. Some Mermaid versions wrap the SVG in
-    // <pre>, some in <div>.
-    var containers = document.querySelectorAll(".mermaid, pre.mermaid, div.mermaid");
+    captureSources();
+
+    // Material replaces <pre class="mermaid"> with <div class="mermaid">.
+    // The rendered SVG lives in a closed shadow root, so we attach the
+    // button to the outer host once it appears.
+    var containers = document.querySelectorAll("div.mermaid");
     if (containers.length) {
       console.log("[project-h-docs] scan: " + containers.length + " .mermaid containers");
     }
     containers.forEach(function (c) {
-      var svg = c.querySelector("svg");
-      if (!svg) return;
       addFullscreenButton(c);
     });
   }
