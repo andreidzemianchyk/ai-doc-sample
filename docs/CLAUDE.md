@@ -33,7 +33,7 @@ The substrate is **pre-implementation**. There is no committed code at the time 
 - **Reports are clinician-facing by default.** Patients can request them via HIPAA, never automatically pushed back into MyChart.
 - **FHIR Observation is mandatory for clinician notification.** Sending Condition + DocumentReference without Observation does NOT trigger the EPIC Inbound Queue / In Basket notification — the clinician never sees the report. See AVD 4.4 EPIC EHR Integration View and the [report-to-clinician data flow](architecture/data-flows/report-to-clinician.md).
 - **CDSS Class I boundary.** Recommendations live inside the PDF (via DocumentReference link), not as structured FHIR (MedicationRequest / CarePlan). Pushing recommendations through structured resources would cross into Class II territory — the architectural-assessment callout in [overview.md](architecture/overview.md) flags this as a future-feature gate.
-- **Per-clinic config not abstracted.** OAuth2 redirect URIs, App Orchard client IDs, FHIR endpoint bases, sandbox-vs-prod flags are currently per-clinic literals scattered across the design. The architectural-assessment note proposes a config-store extraction. Until that lands, any new clinic onboarding is linear-cost.
+- **Per-clinic config not abstracted in the discovery design.** OAuth2 redirect URIs, App Orchard client IDs, FHIR endpoint bases, sandbox-vs-prod flags are spec'd as per-clinic literals with no central store. The architectural-assessment note proposes a config-store extraction. Under the design as-is, every new clinic onboarding is linear-cost.
 
 ## Conventions you must follow
 

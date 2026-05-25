@@ -1,54 +1,47 @@
-# ai-doc-sample
+# Project H — Sample Documentation
 
-Sample documentation site built with [MkDocs Material](https://squidfunk.github.io/mkdocs-material/) and deployed to GitHub Pages via GitHub Actions.
+A demonstration documentation artifact authored by AndersenLab. Applies the methodology described in *SourceWare Technical Approach* to a real anonymised healthcare presale substrate (anonymised as *Project H*). The artifact is honest demonstration work, not redacted client documentation.
 
-Live site: **https://andreidzemianchyk.github.io/ai-doc-sample/** (available after the first successful deploy)
+**Live site:** https://andreidzemianchyk.github.io/ai-doc-sample/
+
+## What's here
+
+| Path | What it shows |
+| --- | --- |
+| `docs/` | The published sample site — 19 markdown deliverables + 2 methodology-evidence logs arranged in the full engagement layout from *SourceWare Technical Approach* §3 (root AI conventions, `architecture/`, `schema/`, `modules/<module>/`). |
+| `docs/architecture/overview.md` | The architecture document, with C4 L1/L2/L3 in Mermaid and two embedded architect-grade analysis callouts. |
+| `docs/architecture/diagrams/` | Five standalone diagram pages (C4 L1, C4 L2, two L3 component views, MVP deployment) with full-screen viewer support. |
+| `docs/schema/tables/patient-profile.md` | The worked example of the wide-table iterative column-classification methodology (TA §5.1). Highest-leverage artifact in the sample. |
+| `docs/modules/auth-authorization/` | Per-module documentation set: overview with flowchart + state diagram, business-rule catalog with stable IDs, EPIC vs non-EPIC variations doc. |
+| `docs/architecture/decisions/` | MADR ADRs in both modes per TA §2 — ADR-0001 retrospective (MyChart as per-clinic SSO), ADR-0002 forward (Mermaid for inline diagrams). |
+| `docs/_review/` | Methodology-evidence logs — cross-LLM peer review template and the AI-readability acceptance test battery. |
+| `context/project-h/` | Source-of-truth context bundle used to author the sample. The doc-generation brief here is the substrate-adaptation contract; the diagrams index and Mermaid reconstructions are the raw inputs. |
+
+## How to read it
+
+- **First-time visitor (15 min):** [architecture overview](https://andreidzemianchyk.github.io/ai-doc-sample/architecture/overview/) → [patient-profile table](https://andreidzemianchyk.github.io/ai-doc-sample/schema/tables/patient-profile/) → [business rules](https://andreidzemianchyk.github.io/ai-doc-sample/modules/auth-authorization/business-rules/).
+- **AI agent:** start at [CLAUDE.md](https://andreidzemianchyk.github.io/ai-doc-sample/CLAUDE/).
+- **Methodology reviewer:** [ADR-0001](https://andreidzemianchyk.github.io/ai-doc-sample/architecture/decisions/0001-mychart-as-per-clinic-sso/) → architectural-assessment callouts in [overview](https://andreidzemianchyk.github.io/ai-doc-sample/architecture/overview/#architectural-assessments) → per-doc `## Open questions` sections.
+
+## Substrate note for the presale reader
+
+The sample demonstrates **method and quality bar**. The substrate (Project H, healthcare presale) differs from a legacy commercial-system substrate like SourceWare: there is no committed code, so the column-classification methodology in `schema/tables/patient-profile.md` cites Confluence page IDs and user-story IDs in place of `file_path:line` references. The methodology and discipline transfer; the *citation surface* differs by substrate. A companion artifact at [`companion/erpnext-tab-sales-invoice/`](companion/erpnext-tab-sales-invoice/) applies the same methodology to a real open-source legacy substrate (ERPNext's `tabSales Invoice`) so the reader sees the citation-against-real-code variant of the same beats.
 
 ## Local development
 
 ```bash
-# 1. Create a virtual environment (optional but recommended)
 python3 -m venv .venv
 source .venv/bin/activate
-
-# 2. Install dependencies
 pip install -r requirements.txt
-
-# 3. Start the local dev server with hot reload
 mkdocs serve
 ```
 
-The site will be available at `http://127.0.0.1:8000`.
-
-## Project layout
-
-```
-.
-├── mkdocs.yml              # site configuration
-├── requirements.txt        # Python dependencies
-├── docs/                   # documentation sources (Markdown)
-│   ├── index.md
-│   ├── architecture.md
-│   ├── technical-approach.md
-│   └── methodology.md
-└── .github/workflows/
-    └── deploy.yml          # CI: build and deploy to GitHub Pages
-```
+Site available at `http://127.0.0.1:8000`.
 
 ## Deployment
 
-Deployment is automatic. Every push to `main` triggers the workflow in `.github/workflows/deploy.yml`, which:
+Every push to `main` triggers `.github/workflows/deploy.yml`, which installs MkDocs Material, builds with `mkdocs build --strict`, and publishes to GitHub Pages.
 
-1. Installs Python and `mkdocs-material`.
-2. Builds the site with `mkdocs build --strict`.
-3. Publishes the artifact to GitHub Pages via `actions/deploy-pages`.
+## Branding
 
-### One-time GitHub Pages setup
-
-After the first push, go to the repository once: **Settings → Pages → Build and deployment → Source: GitHub Actions**.
-
-## Adding a new page
-
-1. Create a `.md` file under `docs/` (or in a subdirectory).
-2. Add it to the `nav:` section in `mkdocs.yml`.
-3. Commit and push — deployment runs automatically.
+This is AndersenLab work. Grep for "Innowise" must return zero before any delivery push.

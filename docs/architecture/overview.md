@@ -37,7 +37,7 @@ Surfaced from the discovery-phase Confluence corpus (AVD §2.2 D1–D40, page `4
 | D23 | Only Observation, Condition, DocumentReference FHIR resources sent to EPIC. Recommendations live inside the PDF. | Keeps the system inside Class I CDSS. See Architectural assessment below. |
 | D32 | Each clinic has its own EPIC / MyChart instance — per-clinic integration subprojects. | Reality of US healthcare estate. See Architectural assessment below. |
 
-Each row is a candidate for a future ADR. Only ADR-0001 (D3) is authored in this sample; the rest are listed as "to be authored" in [decisions/](decisions/0001-mychart-as-per-clinic-sso.md).
+Each row is a candidate for its own ADR. ADR-0001 (D3) is authored end-to-end as the worked retrospective example, ADR-0002 as the worked forward example; the remaining D-codes are shown as an **extension path for the full engagement** — same MADR template, one decision per file, ~1 page each.
 
 ## Living risks (identified in discovery)
 
@@ -177,7 +177,7 @@ Why L3 here: the Backend is where cross-system orchestration happens. Without L3
 
 - **MyChart Token Store** — encrypted, per-patient storage of MyChart OAuth2 access + refresh tokens. Backed by KMS-encrypted RDS columns (`patient_profile.mychart_token_ref` resolves to a row in this store). One row per EPIC-flow patient; nullable for non-EPIC patients.
 - **Cognito Provider** — wraps AWS Cognito + Amplify Authenticator for non-EPIC clinics. Maintains the parallel-path identity provider. See [variations](../modules/auth-authorization/variations.md) for the EPIC vs non-EPIC fork.
-- **Per-clinic Config Resolver** — resolves the MyChart URL, App Orchard client ID, FHIR endpoint base, OAuth2 redirect URI, and sandbox-vs-prod flag for a given `clinic_id`. **Today implemented as scattered configuration literals**, which is the architectural surface called out in the [Architectural assessment](#architectural-assessments) below as the proposed extraction target.
+- **Per-clinic Config Resolver** — resolves the MyChart URL, App Orchard client ID, FHIR endpoint base, OAuth2 redirect URI, and sandbox-vs-prod flag for a given `clinic_id`. **Current design assumption from the discovery corpus:** the per-clinic configuration is enumerated as inline literals per clinic across the spec, with no central store. This is the architectural surface called out in the [Architectural assessment](#architectural-assessments) below as the proposed extraction target.
 - **Refresh Loop** — orchestrates the access-token ↔ refresh-token dance per BR-006. Runs on every authenticated request; rotates tokens when the access token is near expiry; falls back to full re-auth when the refresh token itself is invalid.
 - **Biometric Gate** — Face ID / passcode lock that sits in front of token reads (per BR-008). Gates both the MyChart Token Store (EPIC patients) and the Cognito Provider (non-EPIC patients).
 
@@ -286,7 +286,7 @@ Two embedded notes calling out weak spots / refactor surfaces discovered during 
 >
 > The decision in D32 (per-clinic EPIC integration) combined with the Living Risk R3 (cost scales linearly with clinic count) means MVP launch with *N* clinics is not a constant-cost activity. Each new clinic implies a new App Orchard configuration entry, OAuth2 redirect URI registration, FHIR endpoint base, sandbox setup, and integration-test pass.
 >
-> **Architectural observation.** The integration layer is not abstracted enough in the current design to absorb the per-clinic delta. OAuth2 redirect URIs, App Orchard client IDs, FHIR endpoint bases, and sandbox-vs-prod flags are scattered as literals across configuration. The L3 view of the Authorization Service (above) calls out the **Per-clinic Config Resolver** as the natural extraction point.
+> **Architectural observation.** The current design (as captured in the discovery corpus) does not abstract the integration layer enough to absorb the per-clinic delta. OAuth2 redirect URIs, App Orchard client IDs, FHIR endpoint bases, and sandbox-vs-prod flags are enumerated as per-clinic literals throughout the spec. The L3 view of the Authorization Service (above) calls out the **Per-clinic Config Resolver** as the natural extraction point.
 >
 > **Proposed surface.** Extract a per-clinic configuration object — `{clinic_id, app_orchard_client_id, fhir_endpoint_base, redirect_uri, environment}` — into a single configuration store (DynamoDB or a Postgres `clinic_configs` table). Both the Authorization Service and the Patient Mobile App Backend read from this store. New-clinic onboarding becomes O(1) configuration writes, not O(N) code touches. This is a refactor, not a redesign — but the document should call it out before code is written, not after.
 

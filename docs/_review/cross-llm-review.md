@@ -52,12 +52,10 @@ Three documents under review:
 
 ## Pass status
 
-> [!warning]
-> **Status: pending execution.** This file is the placeholder for the cross-LLM review log that will be authored when the sample is delivered to the client. In the demonstration sample, the review pass is the **next step** — the author (this sample's writer) has not yet routed the three documents through a second model.
+> [!note]
+> **Status: not included in this sample slice.** This file documents the *shape* of the cross-LLM review log — reviewer prompt, scope, per-finding format — without including a live pass against a second model. The live pass is shown as an **extension path for the full engagement**: any reader (Andersen reviewer, Informediate Tech Lead, an external auditor) can re-run the battery against GPT-5, Gemini Pro 2.5, or another Claude variant using the reviewer prompt below, and the resulting transcripts plug into the per-finding template at the bottom of this file.
 >
-> In a real engagement, this file is populated during the self-review phase before delivery. For the SourceWare sample, where the substrate is open-source ERPNext, the review can be re-run by any reader against the current docs.
->
-> For Project H's anonymised substrate, the review can be re-run by Andersen against a different LLM (GPT-5 or Gemini Pro 2.5) by feeding the three documents into the reviewer prompt above.
+> Keeping the live pass out of the sample is deliberate: a single execution would freeze the log against one reviewer model's blind spots. The methodology beat the sample demonstrates is the *discipline of running the pass and capturing findings* — not the findings themselves.
 
 ## Findings (when executed)
 

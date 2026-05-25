@@ -77,6 +77,8 @@ nav:
   - Methodology evidence:
       - Cross-LLM review log: _review/cross-llm-review.md
       - AI-readability acceptance test: _review/ai-readability-test.md
+  - Companion artifact:
+      - ERPNext tabSales Invoice (legacy-substrate variant): companion/erpnext-tab-sales-invoice.md
 
 markdown_extensions:
   - admonition

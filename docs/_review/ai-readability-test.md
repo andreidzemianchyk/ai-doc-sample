@@ -113,10 +113,10 @@ The battery is committed in this file so it is repeatable. Re-run against any ag
 
 ## Pass status
 
-> [!warning]
-> **Status: pending execution.** This file is the placeholder for the AI-readability test log that will be authored when the sample is delivered to the client. The task battery above is committed and re-runnable; the execution is the next step.
+> [!note]
+> **Status: not included in this sample slice.** This file documents the *shape* of the AI-readability test — the 10-task battery, the four scoring criteria, the transcript layout — without freezing it against one specific agent execution. The live run is shown as an **extension path for the full engagement**: any reader can re-run the battery against Claude Code, Cursor, Copilot, or Codex CLI and the transcripts plug into the per-task transcript layout at the bottom of this file.
 >
-> In a real engagement, the test is part of the self-review pass (TA §8 week-2 acceptance criterion). The Informediate Tech Lead (or any reader picking up the sample) can re-run it any time to verify the docs haven't drifted.
+> In a real engagement the test is part of the self-review pass (TA §8 week-2 acceptance criterion); the Informediate Tech Lead (or any reader picking up the sample) re-runs it any time to verify the docs haven't drifted.
 
 ## Transcripts (when executed)
 

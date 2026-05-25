@@ -12,7 +12,7 @@ flowchart TB
     subgraph AUTH["Authorization Service [AWS Cognito + Project H glue]"]
         MCT["MyChart Token Store<br/>encrypted, per-patient"]:::component
         CP["Cognito Provider<br/>non-EPIC fallback path"]:::component
-        PCR["Per-clinic Config Resolver<br/>(today: scattered literals)"]:::component
+        PCR["Per-clinic Config Resolver<br/>(discovery: per-clinic literals)"]:::component
         RL["Refresh Loop<br/>access ↔ refresh dance"]:::component
         BG["Biometric Gate<br/>Face ID / passcode"]:::component
     end

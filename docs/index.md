@@ -11,6 +11,8 @@ Project H is a precision-psychiatry SaaS platform targeting US primary-care prov
 
 This sample mirrors the **full engagement repository layout** from *SourceWare Technical Approach* §3 so the reader sees the same shape a real engagement would deliver. We expand beyond the demo minimum (8 files) to 19 markdown deliverables + 2 methodology-evidence logs because the goal is to foreshadow the real deliverable, not to hit the demo floor.
 
+> **Substrate note.** The sample demonstrates *method and quality bar*. The substrate here (Project H, healthcare presale, discovery-phase) differs from a legacy commercial-system substrate like the one in the original *SourceWare Technical Approach* §5.1 examples: there is no committed code, so the column-classification methodology in [`schema/tables/patient-profile.md`](schema/tables/patient-profile.md) cites Confluence page IDs and user-story IDs in place of `file_path:line` references. **The methodology and discipline transfer; the citation surface differs by substrate.** A companion artifact under [`companion/erpnext-tab-sales-invoice/`](companion/erpnext-tab-sales-invoice.md) applies the same column-classification beats to a real open-source legacy substrate (ERPNext's `tabSales Invoice`, ~150 columns, real code-citable references) so the reader sees the citation-against-real-code variant alongside the discovery-phase variant.
+
 | Section | What it demonstrates |
 | --- | --- |
 | [Architecture overview](architecture/overview.md) | Standing legacy-system architecture template + C4 L1/L2/L3 in Mermaid + embedded architect-grade analysis notes |

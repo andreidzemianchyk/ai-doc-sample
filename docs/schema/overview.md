@@ -16,9 +16,9 @@ Tables in scope (the canonical list — only the asterisked one has a full doc i
 - `follow_up_attempts` — counter store for the 3rd-release rate-limiting feature.
 - `subscriptions` — Stripe subscription state per clinic.
 - `invites` — patient invite-token state.
-- `clinics` — clinic record + per-clinic configuration (today scattered as literals; see the [Architectural assessment in overview](../architecture/overview.md#architectural-assessments)).
+- `clinics` — clinic record + per-clinic configuration (in the discovery design, the per-clinic configuration is enumerated as inline literals across the spec rather than centralised; see the [Architectural assessment in overview](../architecture/overview.md#architectural-assessments)).
 
-A real engagement would have a `tables/[name].md` document per table; this sample documents only `patient_profile` end-to-end, with the rest listed as "to be authored".
+A real engagement would have a `tables/[name].md` document per table. This sample documents `patient_profile` end-to-end as the worked example; the rest are shown as an **extension path for the full engagement** rather than authored here — the same methodology applies row by row, only the volume grows.
 
 ## How to read a table doc
 
@@ -71,5 +71,5 @@ Per [CONVENTIONS](../CONVENTIONS.md) substrate-adaptation note, schema documenta
 ## Open questions
 
 - **Postgres extensions.** `uuid-ossp` (for UUID generation) and `pgcrypto` (for column-level encryption of e.g. token references) are likely needed. Are they on the AWS RDS pre-approved list? *Owner:* DevOps. *Outcome:* check in week 1.
-- **Row-level security.** Per-clinic data partitioning today is application-enforced (queries filter by `clinic_id`). Should RLS be configured at the Postgres level as a defence-in-depth measure? *Owner:* Architect + DevOps. *Outcome:* policy decision before any prod data lands.
+- **Row-level security.** The discovery design assumes per-clinic data partitioning enforced at the application layer (queries filter by `clinic_id`). Should RLS be configured at the Postgres level as a defence-in-depth measure? *Owner:* Architect + DevOps. *Outcome:* policy decision before any prod data lands.
 - **Intake answers — relational or JSON columns?** SurveyJS produces a JSON answer set; storing it as a JSON column simplifies schema but complicates indexing for downstream reporting. *Owner:* Architect + Tech Lead. *Outcome:* design spike before Epic-2 F2 ships.

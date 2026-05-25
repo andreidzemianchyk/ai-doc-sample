@@ -26,7 +26,7 @@ Patient onboarding kicks off via either of two paths:
 - **Universal Link.** Clinician generates the link in EPIC via the Project H Custom Action button; patient taps the link, which opens the installed app with the invite token in the URL (or routes to the App Store first).
 - **Backup code.** 6-character single-use code (length TBD per US-1.4); patient enters it in the app manually if the link mechanism fails. Retry-limited.
 
-The MyChart URL is resolved from the per-clinic configuration on the backend. Today that configuration is a set of literals scattered across the codebase — see the [Architectural assessment](../overview.md#architectural-assessments) callout for the proposed extraction.
+The MyChart URL is resolved from the per-clinic configuration on the backend. In the discovery corpus that configuration is described as a set of per-clinic inline literals with no central store — see the [Architectural assessment](../overview.md#architectural-assessments) callout for the proposed extraction.
 
 ## Alternatives considered
 

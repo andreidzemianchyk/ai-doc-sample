@@ -36,10 +36,11 @@ The session locks after <!-- VALIDATE: threshold TBD per BR-010 --> minutes of i
 
 ```markdown
 > [!note] Architectural assessment
-> Per-clinic EPIC integration cost: each new clinic onboarding is currently linear-cost
-> because OAuth2 redirect URIs, App Orchard client IDs, FHIR endpoint bases are scattered
-> across configuration. Proposed surface: extract a per-clinic config-store the
-> Authorization Service and Patient Mobile App Backend both read from.
+> Per-clinic EPIC integration cost: every new clinic onboarding is linear-cost under
+> the discovery-design assumption that OAuth2 redirect URIs, App Orchard client IDs,
+> and FHIR endpoint bases are enumerated as per-clinic literals with no central
+> store. Proposed surface: extract a per-clinic config-store the Authorization
+> Service and Patient Mobile App Backend both read from.
 ```
 
 `> [!deprecated]` — content kept for traceability but no longer authoritative. Use sparingly — when a column / rule / decision is being phased out but cross-references still exist.
