@@ -114,8 +114,8 @@
       "<style>" +
       "  html, body { margin: 0; padding: 0; height: 100%; background: #fff; overflow: auto; }" +
       "  body { font-family: -apple-system, system-ui, sans-serif; }" +
-      "  #diagram { min-width: max-content; min-height: 100vh; padding: 24px; box-sizing: border-box; }" +
-      "  #diagram svg { display: block; }" +
+      "  #diagram { min-width: max-content; min-height: 100vh; padding: 40px 24px 24px; box-sizing: border-box; }" +
+      "  #diagram svg { display: block; overflow: visible; }" +
       "  .hint { position: fixed; top: 8px; right: 12px;" +
       "          font: 12px/1 -apple-system, system-ui, sans-serif;" +
       "          color: #666; background: rgba(255,255,255,0.85);" +
