@@ -6,7 +6,7 @@
 
 Project H is a precision-psychiatry SaaS platform targeting US primary-care providers. Three apps in delivery scope: a React Native iOS-only MVP **Patient Mobile App**; a Python/Django Admin **Clinic Web App** with an EPIC plugin for patient onboarding; and a **Clinician Report** assembled server-side and delivered into EPIC via three FHIR resources (Observation, Condition, DocumentReference). A fourth app — the Project H Admin Web App — is explicitly out of Andersen's delivery scope.
 
-The substrate is **pre-implementation**. There is no committed code at the time of this documentation; the architecture and business rules are sourced from a discovery-phase Confluence corpus. Citations through the docs point to Confluence page IDs and user-story IDs (e.g., `Epic-1 Mobile US-1.5 Scenario 2`) rather than to `file_path:line` — a documented substrate adaptation explained in [Conventions](CONVENTIONS.md).
+Code is not yet committed for the MVP. The architecture and business rules are sourced from the project's Confluence specs; citations through the docs point to Confluence page IDs and user-story IDs (e.g., `Epic-1 Mobile US-1.5 Scenario 2`). Once code lands, `file_path:line` references are added alongside the existing citations — see [Conventions](CONVENTIONS.md).
 
 ## Read these before doing anything substantive
 
@@ -38,10 +38,10 @@ The substrate is **pre-implementation**. There is no committed code at the time 
 - **`> [!warning]` callouts** for paragraph-level uncertainty visible in the rendered docs site; **`<!-- VALIDATE: … -->`** inline comments for line-level uncertainty (invisible to humans, visible to agents). Both are catalogued in [CONVENTIONS.md](CONVENTIONS.md).
 - **`## Open questions` section at the bottom of every major doc.** Never silently complete a doc with guessed information — the open-questions section is a first-class artefact, not a footnote.
 - **MADR ADR** for any new design decision. File pattern `architecture/decisions/NNNN-short-slug.md`. Sections: Status / Context / Decision / Alternatives considered / Consequences / Notes.
-- **Diagrams in Mermaid by default.** ADR-0002 ([0002-mermaid-for-inline-diagrams.md](architecture/decisions/0002-mermaid-for-inline-diagrams.md)) captures the rationale and the fallback rule (PlantUML for complex sequences only).
+- **Diagrams in Mermaid by default.** See the diagram-tool decision rule in [CONVENTIONS](CONVENTIONS.md) for the per-diagram-type rule (PlantUML is the escalation target for complex sequences).
 - **Andersen branding only.** Never "Innowise". Grep before delivery.
 
 ## Notes
 
-- **Filename alias.** [AGENTS.md](AGENTS.md) at the repository root is a thin pointer back to this file. Some agent runtimes (Cursor, Copilot, Codex CLI, OpenHands) discover their entry point by the filename `AGENTS.md` rather than `CLAUDE.md`; the alias makes the same canonical content reachable under both names without duplicating the routing table or the gotcha list. Drift between the two would be a defect — a scripted AI-readability task battery catches it (process artefact, kept outside the published site).
-- This is a presale-substrate sample. In a real engagement, this file gets refined in week 1 against the actual codebase and team-validated routing rules.
+- **Filename alias.** [AGENTS.md](AGENTS.md) at the repository root is a thin pointer back to this file. Some agent runtimes (Cursor, Copilot, Codex CLI, OpenHands) discover their entry point by the filename `AGENTS.md` rather than `CLAUDE.md`; the alias makes the same canonical content reachable under both names without duplicating the routing table or the gotcha list.
+- The routing rules and gotchas here are refined as the codebase grows — anything that surprises a new agent or a new engineer should be added to the gotchas list.

@@ -2,9 +2,9 @@
 
 ## Status
 
-**Accepted** (retrospective — surfaced from discovery).
+**Accepted.**
 
-Date of original decision: documented in AVD §2.2 D3 (Confluence page `420911663`) and the User invitation links comparison page (page `419469068`). This ADR captures that decision in MADR form so it is searchable, citable, and reviewable in the same shape as forward decisions.
+Date of original decision: documented in AVD §2.2 D3 (Confluence page `420911663`) and the User invitation links comparison page (page `419469068`). This ADR captures the decision in MADR form so it is searchable, citable, and reviewable.
 
 ## Context
 
@@ -66,6 +66,6 @@ Approaches #4 and #5 were rejected because they leak access (anyone with the lin
 
 ## Notes
 
-- **Provenance.** The decision was discovered in the User invitation links comparison page (`419469068`), which explicitly captured the 5-option table and marked approach #1 as approved. AVD §2.2 D3 records the resulting key decision.
-- **Cross-references.** Token-storage rule D9 (AVD §2.2) operationalises the encryption requirement. ADR-0002 — forward — records the diagram-tooling decision used to render the C4 views and the auth flow.
+- **Provenance.** Sourced from the User invitation links comparison page (`419469068`), which captures the 5-option table and marks approach #1 as approved. AVD §2.2 D3 records the resulting key decision.
+- **Cross-references.** Token-storage rule D9 (AVD §2.2) operationalises the encryption requirement.
 - **Downstream rules.** BR-005 (MyChart OAuth2 + PKCE), BR-006 (token refresh on expiry), BR-007 (EPIC data fetch on each authenticated login), BR-008 (biometric gate) all derive from this decision. See [business-rules](../../modules/auth-authorization/business-rules.md).

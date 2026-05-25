@@ -1,6 +1,6 @@
 # Naming inconsistencies
 
-Spec-level naming inconsistencies discovered while applying the column-classification methodology of TA §5.1 to the [`patient_profile`](tables/patient-profile.md) wide-table doc. Each entry is a candidate for a `> [!warning]` callout in the relevant table doc, and a workshop topic for week 1 of implementation. Surfacing them here is lower-cost than discovering them at PR-review time.
+Naming inconsistencies discovered while column-classifying the [`patient_profile`](tables/patient-profile.md) composite. Each entry is a candidate for a `> [!warning]` callout in the relevant table doc, and a workshop topic before DDL commit. Surfacing them here is lower-cost than discovering them at PR-review time.
 
 ## Catalogue
 
@@ -16,13 +16,13 @@ Spec-level naming inconsistencies discovered while applying the column-classific
 
 ## Process anchor
 
-This file is the **output of the column-classification methodology** described in TA §5.1, applied to Project H. The methodology surfaces three kinds of artefact:
+This file is one of the three kinds of artefact the column-classification process produces:
 
 1. Per-column `VALIDATE:` flags in the table doc → workshop topics → resolved into rules or open questions.
 2. Implicit FK candidates → cross-referenced in [relationships.md](relationships.md).
 3. **Naming inconsistencies and spec-process artefacts** → this file.
 
-In a real engagement, this file evolves throughout the project — new inconsistencies discovered during ongoing column-classification batches are added here, and resolved ones move to "Resolved" archive at the bottom. For this sample, the seven entries above are the snapshot at discovery.
+The file evolves throughout the project — new inconsistencies discovered during ongoing column-classification batches are added here, and resolved ones move to a "Resolved" archive at the bottom. The seven entries above are the snapshot at discovery.
 
 ## Cross-references
 

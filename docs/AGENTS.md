@@ -14,11 +14,11 @@ Maintaining two parallel files inevitably drifts. Keeping one canonical file (`C
 - There is exactly one routing table, one gotchas list, one conventions section to keep accurate.
 - Agent-readability checks need to verify only one body of content.
 
-In a real engagement the convention is revisited in week 1 against the team's actual agent set; the `single canonical file + filename alias` shape is the lightest-friction default that fits both `CLAUDE.md`-aware and `AGENTS.md`-aware tools without duplication.
+The `single canonical file + filename alias` shape is the lightest-friction default that fits both `CLAUDE.md`-aware and `AGENTS.md`-aware tools without duplication. If the team's agent set changes, the alias direction is revisited then.
 
 ## Agents this contract applies to
 
-- **Claude Code** (Anthropic) — primary author and reviewer in this sample. Reads `CLAUDE.md`.
+- **Claude Code** (Anthropic) — primary author and reviewer. Reads `CLAUDE.md`.
 - **Cursor** (Anysphere) — supported. Reads `AGENTS.md` (this file), follows the pointer.
 - **GitHub Copilot CLI / Copilot in IDE** — supported via `AGENTS.md`.
 - **Codex CLI** (OpenAI) — supported via `AGENTS.md`.

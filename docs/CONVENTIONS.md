@@ -1,6 +1,6 @@
 # Conventions
 
-The doc-set's working agreement. Every author (human or agent) follows these conventions; every reviewer enforces them. Required by *SourceWare Technical Approach* §3 / §8 week-1 deliverable.
+The doc-set's working agreement. Every author (human or agent) follows these conventions; every reviewer enforces them.
 
 ## 1. Document structure rules
 
@@ -53,24 +53,24 @@ Mandatory at the bottom of every major doc unless the doc is trivially short (< 
 - **Owned.** Where possible, name a person or role. "Owner: Architect" / "Owner: Compliance Engineer" / "Owner: Tech Lead".
 - **Outcome-named.** What would resolve it? A workshop, a sandbox test, a regulatory query, a code spike.
 
-3–5 entries is typical for the docs in this sample. An empty `## Open questions` section is a defect.
+3–5 entries is typical for a major doc. An empty `## Open questions` section is a defect.
 
 ## 4. MADR ADR convention
 
 Stored under `architecture/decisions/`. File pattern `NNNN-short-slug.md`. Required sections:
 
-- **Status** — Accepted / Proposed / Superseded by NNNN / Deprecated. State retrospective or forward explicitly: "Accepted (retrospective — surfaced from discovery)" or "Accepted (forward — sample-authoring decision)".
+- **Status** — Accepted / Proposed / Superseded by NNNN / Deprecated. State retrospective or forward explicitly when relevant: "Accepted (retrospective — surfaced from discovery)" or "Accepted (forward — decided now)".
 - **Context** — the business or technical situation that created the decision.
 - **Decision** — what is being decided. One sentence at the top; supporting detail follows.
 - **Alternatives considered** — at least two, with rejection rationale.
 - **Consequences** — *Positive*, *Negative*, *Open*. The Open subsection is what feeds future ADRs.
 - **Notes** — provenance (which Confluence page, which workshop), cross-references to other ADRs and to the rule(s) downstream.
 
-MADR is used in **two modes** per TA §2: *retrospective* (historical decision recovered from source) and *forward* (decision made during the engagement itself). This sample has [ADR-0001](architecture/decisions/0001-mychart-as-per-clinic-sso.md) (retrospective) and [ADR-0002](architecture/decisions/0002-mermaid-for-inline-diagrams.md) (forward).
+MADR is used in two modes: *retrospective* (capturing a decision already made, where the rationale is recovered from earlier specs or discussions) and *forward* (capturing a decision being made now, with alternatives still on the table). The first authored example is [ADR-0001](architecture/decisions/0001-mychart-as-per-clinic-sso.md).
 
 ## 5. Diagram-tool decision rule
 
-Mermaid is the default for all inline diagrams (decided in [ADR-0002](architecture/decisions/0002-mermaid-for-inline-diagrams.md)). The full per-diagram-type rule from TA §7:
+Mermaid is the default for every inline diagram in this doc-set. The per-diagram-type rule:
 
 | Diagram type | Default | Escalate to |
 | --- | --- | --- |
@@ -82,7 +82,7 @@ Mermaid is the default for all inline diagrams (decided in [ADR-0002](architectu
 | UML Activity | Mermaid `flowchart` | PlantUML for swimlanes |
 | UML Use Case | PlantUML | — |
 
-In this sample, every diagram is Mermaid. Source-substrate draw.io PNGs are referenced (in `context/project-h/project-h-diagrams-index.md`) but not embedded.
+Every diagram in this doc-set is currently Mermaid. Source draw.io PNGs are referenced (in `context/project-h/project-h-diagrams-index.md`) but not embedded.
 
 ## 6. Validation flag triage
 
@@ -97,32 +97,30 @@ Unresolved flags older than two iterations are a smell — they usually mean the
 
 ## 7. Reader mode by document
 
-TA §2 distinguishes three reader modes; each doc declares its primary mode (in the first paragraph or implicitly via shape):
+Three reader modes; each doc declares its primary mode (in the first paragraph or implicitly via shape):
 
-- **Reference** — look something up. Scan-friendly tables and lists. Examples in this sample: `schema/tables/patient-profile.md`, `architecture/integration-points.md`, [GLOSSARY](GLOSSARY.md), this file.
+- **Reference** — look something up. Scan-friendly tables and lists. Examples: `schema/tables/patient-profile.md`, `architecture/integration-points.md`, [GLOSSARY](GLOSSARY.md), this file.
 - **Explanation** — build a mental model. Narrative with diagrams. Examples: [architecture/overview.md](architecture/overview.md), [business-rules.md](modules/auth-authorization/business-rules.md), [variations.md](modules/auth-authorization/variations.md), [data-flows/](architecture/data-flows/patient-onboarding.md), ADRs.
-- **Tutorial** — onboarding walkthrough, sequenced steps. Not in this sample — would be added in the integration-plan phase per TA §3 `process/` folder.
+- **Tutorial** — onboarding walkthrough, sequenced steps. Added as the team grows; not yet authored.
 
 The mode dictates writing style: reference docs are scan-friendly; explanation docs are narrative + diagram; tutorial docs are step-by-step.
 
 ## 8. Tooling expectations
 
-For this sample, **`mermaid-cli`** is used to render-check every diagram before delivery as part of the self-review pass.
+**`mermaid-cli`** is used to render-check every diagram before delivery as part of the self-review pass.
 
-In a real engagement, CONVENTIONS.md additionally calls out the CI tooling:
+The following CI tooling is the target setup; not yet wired:
 
 - **Vale** prose linter — terminology consistency + banned-phrase enforcement ("world-class", "best-in-class", "leveraging").
 - **markdown-link-check** — cross-reference validation on every PR.
 - **mermaid-cli** in CI — render-on-PR; broken diagrams fail the build.
-- **Custom schema-sync check** — once a schema is committed, compares the documented column list per table against the live DDL and flags drift. For Project H the analog would be a check against the FHIR-resource declaration set once it is committed.
+- **Custom schema-sync check** — once a schema is committed, compares the documented column list per table against the live DDL and flags drift. For Project H the analog is a check against the FHIR-resource declaration set once it is committed.
 
-The sample names these as "future setup" but does not wire CI for the sample itself.
+## Citation convention
 
-## Substrate-adaptation note
-
-The substrate (Project H) has no committed code yet. Where the SourceWare engagement would cite `file_path:line` or stored-procedure names, this sample cites Confluence page IDs (e.g., "page 420911663") and user-story IDs (e.g., "Epic-1 Mobile US-1.5 Scenario 2"). Both are equally addressable, and both can be re-validated by the reader against the source corpus in `context/project-h/`.
+Citations point to source pages and user-story IDs (e.g., "Confluence page 420911663", "Epic-1 Mobile US-1.5 Scenario 2"). Both are stable, addressable references; once a feature ships, the corresponding code path can be added alongside the existing citation as a `file_path:line` reference.
 
 ## Open questions
 
-- Whether per-folder rolled-up `open-questions.md` files (TA §3 pattern) add value beyond the per-doc `## Open questions` sections in a sample of this size. Owner: methodology lead. *Outcome:* decide in week 1 of the next engagement that uses this sample as input.
+- Whether per-folder rolled-up `open-questions.md` files add value beyond the per-doc `## Open questions` sections at the current doc-set size. Owner: tech lead. *Outcome:* revisit if the open-questions register grows beyond ~20 entries.
 - Whether `> [!warning]` is the right MkDocs Material admonition for "validate" semantics, or whether a custom admonition type would render more clearly. Owner: site maintainer. *Outcome:* spike on a custom admonition; revisit during integration phase.

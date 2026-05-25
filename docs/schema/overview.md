@@ -4,9 +4,9 @@ The data-layer entry point. Frames the per-table docs, names the conventions, an
 
 ## Scope
 
-Project H's data layer is **pre-implementation**. There is no committed DDL yet — the schema described here is the proposed shape derived from the discovery corpus (Confluence pages on user stories, Vision & Scope, AVD §2.2 key decisions, AVD 4.4 EPIC integration views). Each table doc carries an explicit "substrate is pre-code" caveat repeated from [CONVENTIONS](../CONVENTIONS.md).
+Project H's data layer is **pre-implementation**. There is no committed DDL yet — the schema described here is the proposed shape derived from the project's specs (Confluence pages on user stories, Vision & Scope, AVD §2.2 key decisions, AVD 4.4 EPIC integration views). Each table doc carries an explicit "DDL not yet committed" caveat; once DDL lands, `file_path:line` citations are added alongside the existing Confluence citations.
 
-Tables in scope (the canonical list — only the asterisked one has a full doc in this sample slice):
+Tables in scope (only the asterisked one has a full doc so far; the rest follow as the schema firms up):
 
 - **`patient_profile` ★** — composite of demographics + clinical history + FDB-coded fields + consent metadata + token references + audit. [Full doc](tables/patient-profile.md).
 - `consents_catalog` — versioned consent text and metadata; referenced by `patient_profile.consent_version`.
@@ -18,19 +18,19 @@ Tables in scope (the canonical list — only the asterisked one has a full doc i
 - `invites` — patient invite-token state.
 - `clinics` — clinic record + per-clinic configuration (in the discovery design, the per-clinic configuration is enumerated as inline literals across the spec rather than centralised; see the [Architectural assessment in overview](../architecture/overview.md#architectural-assessments)).
 
-A real engagement would have a `tables/[name].md` document per table. This sample documents `patient_profile` end-to-end as the worked example; the rest are shown as an **extension path for the full engagement** rather than authored here — the same methodology applies row by row, only the volume grows.
+The full table set will get a `tables/[name].md` document per table as the schema firms up. `patient_profile` is documented end-to-end first because it's the composite every other table joins against; the rest follow.
 
 ## How to read a table doc
 
-Every table doc follows the same five-section shape, derived from TA §5.1:
+Every table doc follows the same five-section shape:
 
 1. **Business purpose.** One paragraph: what the table represents in the business. Not a column dump.
 2. **Logical groupings.** 8–15 named column clusters with a one-line description of each cluster's role. Wide tables (200+ columns) are *not* 200 independent pieces of information; they are 8–15 logical groupings that historically accumulated. The grouping is the entry point.
 3. **Column reference.** Table with: name · type (proposed) · nullable · business meaning · observed usage / source citation · status (Resolved / `VALIDATE:` / `> [!deprecated]`).
 4. **Implicit relationships.** Columns that reference other tables without an enforced FK. Cross-referenced from [relationships.md](relationships.md).
-5. **Known issues and historical artefacts.** Naming inconsistencies, deprecated columns, columns whose meaning has drifted. For Project H's greenfield substrate, this is the place for spec-process artefacts — cross-referenced from [naming-inconsistencies.md](naming-inconsistencies.md).
+5. **Known issues and historical artefacts.** Naming inconsistencies, deprecated columns, columns whose meaning has drifted. While the schema is pre-implementation this section captures spec-process artefacts — cross-referenced from [naming-inconsistencies.md](naming-inconsistencies.md).
 
-Every column has one of three states, per TA §5.1's column-classification process:
+Every column has one of three states:
 
 - **Resolved** — usage is consistent across sources; business meaning is clear; entry is complete.
 - **`VALIDATE:`** — usage exists but interpretation is unclear, or sources disagree; entry is filled with a `VALIDATE:` flag describing the specific ambiguity. The flag's lifecycle is in [CONVENTIONS §6](../CONVENTIONS.md).
@@ -49,7 +49,7 @@ Workshop topics for column-classification batches: 10–15 ambiguous columns per
 
 ## Source of truth
 
-All current schema documentation is derived from Confluence specs in the absence of committed DDL. Source-of-truth pages:
+Schema documentation is sourced from Confluence specs ahead of DDL commit. Source pages:
 
 - AVD §2.2 D1–D40 key decisions (page `420911663`)
 - AVD 4.4 EPIC EHR Integration View (page `420906849`)
@@ -59,7 +59,7 @@ All current schema documentation is derived from Confluence specs in the absence
 - Epic-2 F3 / F4 user stories — FDB-coded fields
 - Epic-1 Mobile F1 US-1.2 (page `425558346`) — consent storage
 
-Per [CONVENTIONS](../CONVENTIONS.md) substrate-adaptation note, schema documentation will be re-verified against committed DDL in week 1 of implementation.
+Each table doc is re-verified against committed DDL when the schema lands.
 
 ## Cross-references
 

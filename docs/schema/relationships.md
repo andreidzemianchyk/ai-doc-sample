@@ -1,6 +1,6 @@
 # Relationships
 
-Catalogue of implicit FK relationships and cross-system references. Many of these are not yet declared as FK constraints — either because the implementation is pending (greenfield substrate) or because the relationship crosses the system boundary (Project H ↔ EPIC, Project H ↔ S3). Per TA §5.2, every implicit FK is a workshop topic until validated.
+Catalogue of implicit FK relationships and cross-system references. Many are not declared as FK constraints — either because DDL hasn't landed yet, or because the relationship crosses the system boundary (Project H ↔ EPIC, Project H ↔ S3). Every implicit FK is a workshop topic until validated.
 
 ## Catalogue
 

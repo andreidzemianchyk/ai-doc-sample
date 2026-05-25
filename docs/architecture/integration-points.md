@@ -90,7 +90,7 @@ Every system above follows this micro-template:
 - Cross-refs:     where else in the docs this contract is invoked
 ```
 
-A real engagement would lift each system into its own file under `architecture/integrations/<system>.md` once the contract grows beyond a half-page. For the MVP slice, consolidating here is appropriate.
+Each system will get its own file under `architecture/integrations/<system>.md` once the contract grows beyond a half-page. For the MVP slice, consolidating here is appropriate.
 
 ## Open questions
 

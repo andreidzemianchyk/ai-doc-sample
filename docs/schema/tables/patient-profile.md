@@ -1,6 +1,6 @@
 # `patient_profile` — wide-table reference
 
-The single most-important schema doc in this sample. Demonstrates the iterative column-classification methodology of TA §5.1 applied to a real composite specification, even though no DDL is committed yet (substrate adaptation explained below).
+The composite that every other Project H table joins against. One row per patient. Combines EPIC-fetched demographics + clinical history + lab results with patient-supplied intake answers, FDB-coded normalisations, consent metadata, token references, and audit metadata.
 
 ## Business purpose
 
@@ -9,7 +9,7 @@ The single most-important schema doc in this sample. Demonstrates the iterative 
 The table is **logical**, not necessarily physical — at DDL commit time, some clusters may be normalised out into satellite tables (allergies, medications, comorbidities). The doc is structured around the logical composite because that is what a clinician or a developer reasoning about a single patient cares about.
 
 > [!warning]
-> Substrate adaptation: this is a pre-implementation specification. The methodology applied here is the same as TA §5.1 (column population → usage search → classification → workshop escalation → resolve / open-question) but the "usage search" step targets Confluence pages and user-story IDs instead of code. The output shape — `Resolved` / `VALIDATE:` / `> [!deprecated]` — is identical.
+> DDL is not yet committed. The column shape below is sourced from product / engineering specs and is re-verified column-by-column against the committed schema once it lands. Status flags (`Resolved` / `VALIDATE:` / `> [!deprecated]`) follow the convention in [schema/overview.md](../overview.md).
 
 ## Logical groupings
 
@@ -30,7 +30,7 @@ The composite naturally splits into 12 clusters. Each is documented in the colum
 
 ## Column reference
 
-The full table would carry ~50 columns once normalised; this sample documents a representative slice covering each logical grouping. Status column uses the three TA §5.1 states: **Resolved** / **`VALIDATE:` ...** / **`> [!deprecated]` ...** Each `VALIDATE:` row is a workshop topic.
+The full table will carry ~50 columns once normalised; the slice below covers each logical grouping. Status column uses the three states: **Resolved** / **`VALIDATE:` ...** / **`> [!deprecated]` ...** Each `VALIDATE:` row is a workshop topic.
 
 | Column | Type (proposed) | Nullable | Business meaning | Observed usage / source | Status |
 | --- | --- | --- | --- | --- | --- |
@@ -92,7 +92,7 @@ That is ~40 columns in the representative slice. The full DDL once committed is 
 
 ## Known issues and historical artefacts
 
-For Project H's greenfield substrate, this section captures **artefacts of the specification process**, not of accumulated legacy:
+Artefacts of the specification process that surfaced during column classification:
 
 - The source pages collapse `race` and `ethnicity` inconsistently (see [naming-inconsistencies](../naming-inconsistencies.md) #1).
 - The source pages do not pin a unit for `height` (see [naming-inconsistencies](../naming-inconsistencies.md) #2).

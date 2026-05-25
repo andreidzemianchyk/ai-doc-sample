@@ -56,7 +56,6 @@ nav:
           - Report to clinician: architecture/data-flows/report-to-clinician.md
       - Decisions:
           - ADR-0001 MyChart as per-clinic SSO: architecture/decisions/0001-mychart-as-per-clinic-sso.md
-          - ADR-0002 Mermaid for inline diagrams: architecture/decisions/0002-mermaid-for-inline-diagrams.md
   - Schema:
       - Overview: schema/overview.md
       - Relationships: schema/relationships.md
@@ -74,8 +73,6 @@ nav:
       - Root CLAUDE.md: CLAUDE.md
       - Root AGENTS.md: AGENTS.md
       - Module CLAUDE.md: modules/auth-authorization/CLAUDE.md
-  - Companion artifact:
-      - ERPNext tabSales Invoice (legacy-substrate variant): companion/erpnext-tab-sales-invoice.md
 
 # Methodology-evidence logs (cross-LLM review template, AI-readability test
 # battery) live under internal/review/ in the repo. They are process artefacts
@@ -85,6 +82,8 @@ nav:
 # from the working tree.
 exclude_docs: |
   _review/
+  companion/
+  architecture/decisions/0002-mermaid-for-inline-diagrams.md
 
 markdown_extensions:
   - admonition

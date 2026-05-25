@@ -1,8 +1,6 @@
 # Auth & Authorization — variations (EPIC vs non-EPIC)
 
-Stand-in for TA §3 `legacy-vs-2.0.md`. Project H has no legacy implementation — the genuine fork in this module is **EPIC clinic vs non-EPIC clinic** authentication. The two paths diverge significantly before converging at the Post-Login component.
-
-Same 4-question pattern from TA §5.3 is used.
+The module supports two parallel authentication paths — **EPIC clinic** (MyChart SMART OAuth2 + PKCE) and **non-EPIC clinic** (AWS Cognito + Amplify Authenticator) — that diverge significantly before converging at the Post-Login component. This doc walks the fork in four questions: current state, where the paths coexist, known divergences, and migration trajectory.
 
 ## 1. What is the current state?
 

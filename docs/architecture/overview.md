@@ -1,13 +1,11 @@
 # Architecture overview
 
-Authored using the AndersenLab standing architecture description template (legacy-system variant). Sections that don't apply to a presale/discovery substrate are re-labelled ("Key historical decisions" → "Key design decisions"; "Living risks" → "Living risks (identified in discovery)") and the rest of the template is kept intact.
+The architecture of the Project H MVP — system boundaries, key design decisions, living risks, drivers, quality attributes, C4 views, deployment topology, and operations. Architectural assessments and open questions are embedded inline where they surface.
 
 ## Scope
 
-This document covers the **architecture of the MVP delivery** for Project H:
-
 - **In scope.** Patient Mobile App (React Native, iOS-only), Clinic Web App (Python · Django Admin) with its EPIC plugin, Patient Mobile App Backend (Python · FastAPI), shared AWS HIPAA-eligible infrastructure, and integrations with EPIC (FHIR + MyChart SSO), FDB (medication knowledge), Stripe (clinic subscriptions), Intercom (frontend support), AWS managed services for notifications and observability.
-- **Out of scope.** Project H Admin Web App (Project H product-owner's own work, not part of Andersen's delivery). ML training in MVP (SageMaker is present but not exercised). Android (deferred — RN codebase is cross-platform, but only iOS ships in MVP). Non-EPIC EHRs other than the Cognito fallback path (Cerner, Oracle, etc.). FDA Class II+ functionality (the entire system is designed to remain Class I CDSS — see Architectural assessment below).
+- **Out of scope.** Project H Admin Web App (separate workstream, not part of this delivery). ML training in MVP (SageMaker is present but not exercised). Android (deferred — RN codebase is cross-platform, but only iOS ships in MVP). Non-EPIC EHRs other than the Cognito fallback path (Cerner, Oracle, etc.). FDA Class II+ functionality (the entire system is designed to remain Class I CDSS — see Architectural assessment below).
 
 ## Business context
 
@@ -24,7 +22,7 @@ Four sentences:
 
 ## Key design decisions
 
-Surfaced from the discovery-phase Confluence corpus (AVD §2.2 D1–D40, page `420911663`). The full set is listed in `context/project-h/project-h-doc-generation-brief.md`; the eight most cross-referenced ones are summarised here.
+The eight most cross-referenced design decisions, sourced from the architecture-vision document (AVD §2.2 D1–D40, Confluence page `420911663`). Each row links to its full ADR where one exists.
 
 | D-code | Decision | Why |
 | --- | --- | --- |
@@ -37,7 +35,7 @@ Surfaced from the discovery-phase Confluence corpus (AVD §2.2 D1–D40, page `4
 | D23 | Only Observation, Condition, DocumentReference FHIR resources sent to EPIC. Recommendations live inside the PDF. | Keeps the system inside Class I CDSS. See Architectural assessment below. |
 | D32 | Each clinic has its own EPIC / MyChart instance — per-clinic integration subprojects. | Reality of US healthcare estate. See Architectural assessment below. |
 
-Each row is a candidate for its own ADR. ADR-0001 (D3) is authored end-to-end as the worked retrospective example, ADR-0002 as the worked forward example; the remaining D-codes are shown as an **extension path for the full engagement** — same MADR template, one decision per file, ~1 page each.
+Each row is a candidate for its own ADR. ADR-0001 (D3) is the first to be authored end-to-end; the remaining D-codes are tracked for future ADR authoring as the design firms up — one decision per file, ~1 page each, in MADR format ([CONVENTIONS](../CONVENTIONS.md) §4).
 
 ## Living risks (identified in discovery)
 
@@ -70,7 +68,7 @@ Each entry carries an *Owner: TBD* placeholder — ownership assignment is a fol
 
 ## Quality attribute scenarios
 
-Pulled from Vision & Scope `Key non-functional requirements` (Confluence page `420926444`).
+Sourced from the Vision & Scope `Key non-functional requirements` page (Confluence `420926444`).
 
 - **Security.** RBAC; OAuth2 + PKCE for patient auth (via MyChart); tamper-resistant audit logs; secrets in AWS Secrets Manager.
 - **Availability and reliability.** Multi-AZ RDS; ECS autoscaling; offline fallback for assessments. **RPO 5–10 min** (continuous transaction-log backup); **RTO 15–30 min** (DB restore drill cadence, AVD §5.5).
@@ -152,7 +150,7 @@ Source: AVD 4.2 Container View (Confluence page `420911687`).
 
 ## Component view (C4 L3 — selected containers)
 
-Per TA §2, C4 L3 is applied **selectively** — only to containers whose internal structure is non-trivial. Two containers are decomposed at L3 here; the rest are intentionally skipped (rationale below).
+C4 L3 is applied selectively — only to containers whose internal structure is non-trivial. Two containers are decomposed at L3 here; the rest are intentionally skipped (rationale below).
 
 ### Patient Mobile App Backend (L3)
 
@@ -189,7 +187,7 @@ Why L3 here: this view exposes the **Per-clinic Config Resolver** as the extract
 - **Clinic Admin Web App, Project H Admin Web App** — Django Admin scaffolds. L3 would re-derive the Django admin model graph; the reader is better served by [`schema/`](../schema/overview.md).
 - **SurveyJS** — third-party library. Outside the decomposition scope.
 
-The explicit skip is itself a methodology beat (TA §2: *"we use C4's levels **selectively**"*).
+The explicit skip is part of the convention — C4 levels are used selectively, not exhaustively.
 
 ## Deployment view
 
@@ -261,12 +259,9 @@ This is the MVP deployment. A larger "final product" topology (with full HW prov
 
 ## Decision view
 
-Two ADRs are authored as the canonical examples; further D-codes from the source remain candidates.
+- **[ADR-0001](decisions/0001-mychart-as-per-clinic-sso.md)** — MyChart as per-clinic SSO with Universal Links + backup codes (D3). Captures the rationale, alternatives evaluated, and consequences.
 
-- **[ADR-0001](decisions/0001-mychart-as-per-clinic-sso.md)** — *retrospective*. MyChart as per-clinic SSO with Universal Links + backup codes (D3). Captures the rationale recovered from the Confluence comparison table.
-- **[ADR-0002](decisions/0002-mermaid-for-inline-diagrams.md)** — *forward*. Mermaid as the default for all inline diagrams in this sample (TA §2 / §7 diagram-tool decision rule). A methodology decision made while authoring the sample.
-
-A real engagement would add ADRs for D7 (SurveyJS choice), D15 (AWS HIPAA-eligible managed services adoption), D23 (FHIR-resource selection that preserves Class I CDSS — see below), D30 (recommendation as black-box library), D32 (per-clinic EPIC integration model).
+Further ADRs to author as the design firms up: D7 (SurveyJS choice), D15 (AWS HIPAA-eligible managed services adoption), D23 (FHIR-resource selection that preserves Class I CDSS — see below), D30 (recommendation library as black box), D32 (per-clinic EPIC integration model).
 
 ## Operations
 

@@ -1,6 +1,6 @@
 # Glossary
 
-Domain vocabulary used across this doc-set. Per TA §2 (DDD ubiquitous-language discipline), every term is defined once, and **every definition cites where the term first appears in the source corpus** — Confluence page ID, AVD section, or user-story ID. Agents and humans resolving a term land here and can hop to the source.
+Domain vocabulary used across this doc-set. Every term is defined once, and **every definition cites where the term first appears in the source corpus** — Confluence page ID, AVD section, or user-story ID. Agents and humans resolving a term land here and can hop to the source.
 
 ## Acronyms (sourced from AVD §1.3)
 
@@ -55,18 +55,18 @@ Terms inferred from the corpus but not in the AVD glossary. Each cites its prima
 **PGHD** — Patient-Generated Health Data. Flagging an EPIC FHIR resource (Observation, Condition, DocumentReference) as PGHD triggers the clinician In Basket notification — without this flag, the clinician is not notified that the report has been delivered. *Source:* AVD 4.4 EPIC EHR Integration View (page `420906849`).
 
 > [!warning]
-> The PGHD trigger has a hard dependency on Observation being part of the Bundle — sending Condition + DocumentReference alone does not notify. This is captured as BR-005 in the auth-authorization module but is technically a *report-generation* invariant, not an auth one. A future engagement would lift it into a dedicated `modules/clinical-report/business-rules.md`.
+> The PGHD trigger has a hard dependency on Observation being part of the Bundle — sending Condition + DocumentReference alone does not notify. This is captured as BR-005 in the auth-authorization module but is technically a *report-generation* invariant, not an auth one. A future iteration should lift it into a dedicated `modules/clinical-report/business-rules.md`.
 
 **SMART on FHIR** — the OAuth2-based framework Project H uses to embed in EPIC (Patient Mobile App, Clinic Web App invite plugin) and authenticate via MyChart with PKCE. *Source:* AVD 4.4 EPIC EHR Integration View (page `420906849`); Epic-1 Mobile US-1.5 Scope (page `425558367`).
 
 **Universal Link** — iOS deep-link mechanism. Used for invite-link delivery to a patient — the link, when tapped on a device with the Project H app installed, opens the app directly with the token in the URL; if the app is not installed, the link redirects to the App Store. *Source:* AVD §2.2 D3 Key Decision (page `420911663`); Epic-1 Mobile US-1.3 (page `425558356`).
 
-## Substrate-adaptation note
+## Citation convention
 
-Per [CONVENTIONS.md](CONVENTIONS.md), the substrate is pre-implementation. Where a real engagement glossary would cite a code occurrence (e.g., "`StripeWebhookHandler` in `src/billing/stripe.py:42`"), this glossary cites the source Confluence page. Both addresses are equally valid for re-validation.
+Code is not yet committed for the MVP. Where a glossary entry would normally cite a code occurrence (e.g., "`StripeWebhookHandler` in `src/billing/stripe.py:42`"), this glossary cites the source Confluence page until code lands. Both addresses are equally valid for re-validation.
 
 ## Open questions
 
-- The PGHD trigger lives in clinical-report territory but currently only surfaces in auth-module business rules. *Outcome:* author a dedicated `clinical-report` module in the next engagement increment; lift BR-005 over.
+- The PGHD trigger lives in clinical-report territory but currently only surfaces in auth-module business rules. *Outcome:* author a dedicated `clinical-report` module in the next iteration; lift BR-005 over.
 - Whether "Universal Link" should also cover the Android App Link analog when Android support ships (post-MVP). *Owner:* mobile lead. *Outcome:* update term definition in the second-release iteration.
-- Whether App Orchard certification status is binary (approved/not) or has staged states worth documenting. *Owner:* Architect / Compliance Engineer. *Outcome:* check EPIC Orchard portal documentation in week 1 of any real engagement.
+- Whether App Orchard certification status is binary (approved/not) or has staged states worth documenting. *Owner:* Architect / Compliance Engineer. *Outcome:* check EPIC Orchard portal documentation in week 1.

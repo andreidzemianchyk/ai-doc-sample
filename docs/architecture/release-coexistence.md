@@ -1,6 +1,6 @@
 # Release coexistence (MVP / 2nd / 3rd)
 
-Stand-in for TA §3 `architecture/legacy-2.0-coexistence.md`. Project H has no legacy stack — the cross-cutting coexistence story is between **MVP, 2nd release, and 3rd release**: features that ship in parallel during MVP+1 and MVP+2 while older patient cohorts stay on earlier feature sets. Same 4-question pattern from TA §5.3.
+How **MVP, 2nd-release, and 3rd-release feature sets coexist** on the same code base and data store: features ship in parallel during MVP+1 and MVP+2 while older patient cohorts stay on earlier feature sets. Walked in four questions — current state, where coexistence happens, known divergences, rollout trajectory.
 
 ## 1. What is the current planned state?
 

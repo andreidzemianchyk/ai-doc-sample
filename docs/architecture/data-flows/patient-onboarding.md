@@ -108,7 +108,7 @@ This narration cross-links each step to the source user-story IDs. For brevity, 
 - [Integration points](../integration-points.md) — EPIC EHR + MyChart contract.
 
 > [!warning]
-> Diagram complexity: this flowchart has 14 decision points and pushes Mermaid's readability limit. In a real engagement, escalating to PlantUML for this specific flow may improve clarity. The diagram-tool decision rule in [CONVENTIONS](../../CONVENTIONS.md) defines the threshold; this flow sits on the edge.
+> Diagram complexity: this flowchart has 14 decision points and pushes Mermaid's readability limit. Escalating to PlantUML for this specific flow may improve clarity. The diagram-tool decision rule in [CONVENTIONS](../../CONVENTIONS.md) defines the threshold; this flow sits on the edge.
 
 ## Open questions
 

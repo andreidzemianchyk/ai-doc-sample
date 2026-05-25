@@ -1,6 +1,6 @@
 # Auth & Authorization — business rules
 
-Catalogue of named business rules for the auth-authorization module. Each rule has a stable ID `BR-NNN`, a one-line statement, a source citation, variations (where the rule differs between EPIC and non-EPIC paths), and edge cases. Following TA §5.5 catalog-first / narrative-second pattern.
+Catalogue of named business rules for the auth-authorization module. Each rule has a stable ID `BR-NNN`, a one-line statement, a source citation, variations (where the rule differs between EPIC and non-EPIC paths), and edge cases. Catalog-first / narrative-second — narrative docs that touch these rules cite them by ID rather than restating them.
 
 ## Catalogue
 
