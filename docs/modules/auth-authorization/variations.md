@@ -22,6 +22,7 @@ The split is visible in the [patient-onboarding flowchart](../../architecture/da
 A diagram of the parallel paths:
 
 ```mermaid
+%%{init: {'themeCSS': '.nodeLabel p,.nodeLabel span,.nodeLabel b,.nodeLabel i{color:#f8fafc !important;} .edgeLabel,.edgeLabel p,.edgeLabel span,.edgeLabel foreignObject div{color:#0f172a !important;} .edgeLabel foreignObject div{background:#ffffff !important;border-radius:2px;padding:1px 3px;} .labelBkg{fill:#ffffff !important;}'}}%%
 flowchart TB
     subgraph EPIC["EPIC clinic flow"]
         E1[Invite via EPIC Custom Action] --> E2[Universal Link / backup code]

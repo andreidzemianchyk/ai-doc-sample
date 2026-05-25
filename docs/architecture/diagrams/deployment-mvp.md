@@ -5,6 +5,7 @@ AWS deployment for the MVP release. Region us-east-2 with Multi-AZ primary→rea
 <div class="diagram-frame" markdown>
 
 ```mermaid
+%%{init: {'themeCSS': '.nodeLabel p,.nodeLabel span,.nodeLabel b,.nodeLabel i{color:#f8fafc !important;} .edgeLabel,.edgeLabel p,.edgeLabel span,.edgeLabel foreignObject div{color:#0f172a !important;} .edgeLabel foreignObject div{background:#ffffff !important;border-radius:2px;padding:1px 3px;} .labelBkg{fill:#ffffff !important;}'}}%%
 flowchart TB
     U((User))
     APP[Mobile Application]

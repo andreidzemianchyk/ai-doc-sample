@@ -5,6 +5,7 @@ The single Project H box from the [System Context](c4-l1-system-context.md) open
 <div class="diagram-frame" markdown>
 
 ```mermaid
+%%{init: {'themeCSS': '.nodeLabel p,.nodeLabel span,.nodeLabel b,.nodeLabel i{color:#f8fafc !important;} .edgeLabel,.edgeLabel p,.edgeLabel span,.edgeLabel foreignObject div{color:#0f172a !important;} .edgeLabel foreignObject div{background:#ffffff !important;border-radius:2px;padding:1px 3px;} .labelBkg{fill:#ffffff !important;}'}}%%
 flowchart TB
     classDef person fill:#08427b,stroke:#073B6F,color:#fff
     classDef andersen fill:#1168bd,stroke:#0E5DAA,color:#fff

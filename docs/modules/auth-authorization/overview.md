@@ -36,6 +36,7 @@ Three workflows live in this module. The first (first-time onboarding) is the do
 The end-to-end onboarding flow. See [`../../architecture/data-flows/patient-onboarding.md`](../../architecture/data-flows/patient-onboarding.md) for the full step-by-step prose; the flowchart is reproduced inline below for navigability.
 
 ```mermaid
+%%{init: {'themeCSS': '.nodeLabel p,.nodeLabel span,.nodeLabel b,.nodeLabel i{color:#f8fafc !important;} .edgeLabel,.edgeLabel p,.edgeLabel span,.edgeLabel foreignObject div{color:#0f172a !important;} .edgeLabel foreignObject div{background:#ffffff !important;border-radius:2px;padding:1px 3px;} .labelBkg{fill:#ffffff !important;}'}}%%
 flowchart TD
     Start([Patient clicks link]) --> P4["4. Special public page<br/>in Clinic App"]
     Start -. "or opens installed app" .-> P6
@@ -79,6 +80,7 @@ Auto-logout fires after configured inactivity (threshold TBD per BR-010).
 The state machine that BR-005 through BR-010 collectively describe. Demonstrates TA §2 UML "State" coverage.
 
 ```mermaid
+%%{init: {'themeCSS': '.nodeLabel p,.nodeLabel span,.nodeLabel b,.nodeLabel i{color:#f8fafc !important;} .edgeLabel,.edgeLabel p,.edgeLabel span,.edgeLabel foreignObject div{color:#0f172a !important;} .edgeLabel foreignObject div{background:#ffffff !important;border-radius:2px;padding:1px 3px;} .labelBkg{fill:#ffffff !important;}'}}%%
 stateDiagram-v2
     [*] --> SignedOut
     SignedOut --> Active: full MyChart OAuth2 + PKCE

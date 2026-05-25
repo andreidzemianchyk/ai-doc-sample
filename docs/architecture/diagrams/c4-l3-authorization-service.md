@@ -5,6 +5,7 @@ Internal decomposition of the **Authorization Service** (AWS Cognito + Project H
 <div class="diagram-frame" markdown>
 
 ```mermaid
+%%{init: {'themeCSS': '.nodeLabel p,.nodeLabel span,.nodeLabel b,.nodeLabel i{color:#f8fafc !important;} .edgeLabel,.edgeLabel p,.edgeLabel span,.edgeLabel foreignObject div{color:#0f172a !important;} .edgeLabel foreignObject div{background:#ffffff !important;border-radius:2px;padding:1px 3px;} .labelBkg{fill:#ffffff !important;}'}}%%
 flowchart TB
     classDef component fill:#a7e1ad,stroke:#73B27B,color:#000
     classDef ext fill:#999,stroke:#6B6B6B,color:#fff

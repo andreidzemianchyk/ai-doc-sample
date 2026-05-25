@@ -9,6 +9,7 @@ Clinician generates an invite in EPIC via the Project H Custom Action button on 
 ## Flow
 
 ```mermaid
+%%{init: {'themeCSS': '.nodeLabel p,.nodeLabel span,.nodeLabel b,.nodeLabel i{color:#f8fafc !important;} .edgeLabel,.edgeLabel p,.edgeLabel span,.edgeLabel foreignObject div{color:#0f172a !important;} .edgeLabel foreignObject div{background:#ffffff !important;border-radius:2px;padding:1px 3px;} .labelBkg{fill:#ffffff !important;}'}}%%
 flowchart TD
     Start([Patient clicks link in chat/email/sms]) --> P4["4. Special public page<br/>in Clinic App"]
     Start -. "or opens installed app" .-> P6
