@@ -107,7 +107,7 @@ The mode dictates writing style: reference docs are scan-friendly; explanation d
 
 ## 8. Tooling expectations
 
-For this sample, **`mermaid-cli`** is used to render-check every diagram before delivery (self-review pass, see [_review/ai-readability-test.md](_review/ai-readability-test.md)).
+For this sample, **`mermaid-cli`** is used to render-check every diagram before delivery as part of the self-review pass.
 
 In a real engagement, CONVENTIONS.md additionally calls out the CI tooling:
 

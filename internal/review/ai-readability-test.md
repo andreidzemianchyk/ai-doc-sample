@@ -1,6 +1,8 @@
 # AI-readability acceptance test
 
-Mandatory deliverable per [`context/project-h/project-h-doc-generation-brief.md`](https://github.com/andreidzemianchyk/ai-doc-sample/blob/main/context/project-h/project-h-doc-generation-brief.md) §9 (TA §6 "Testing the AI entry points" + TA §7 + TA §9). The test grades whether the documentation's AI entry points ([CLAUDE.md](../CLAUDE.md), [AGENTS.md](../AGENTS.md), [module CLAUDE.md](../modules/auth-authorization/CLAUDE.md)) route an agent to the correct files and let the agent produce **Project H-specific output** when given a task — not generic suggestions.
+Mandatory deliverable per [`context/project-h/project-h-doc-generation-brief.md`](https://github.com/andreidzemianchyk/ai-doc-sample/blob/main/context/project-h/project-h-doc-generation-brief.md) §9 (TA §6 "Testing the AI entry points" + TA §7 + TA §9). The test grades whether the documentation's AI entry points ([CLAUDE.md](../../docs/CLAUDE.md), [AGENTS.md](../../docs/AGENTS.md), [module CLAUDE.md](../../docs/modules/auth-authorization/CLAUDE.md)) route an agent to the correct files and let the agent produce **Project H-specific output** when given a task — not generic suggestions.
+
+> This file is methodology evidence — it lives in `internal/review/` and is intentionally excluded from the published site. It exists to document the test discipline for an internal reader (delivery lead, Tech Lead), not as a client-facing deliverable.
 
 ## Methodology
 
@@ -21,7 +23,7 @@ The battery is committed in this file so it is repeatable. Re-run against any ag
 
 > **Prompt to agent:** "I want to add a column `pregnancy_status` as an enum (`pregnant` / `not_pregnant` / `unknown` / `not_applicable`) to `patient_profile`. Where would you add it, and what else do I need to consider?"
 
-**Expected routing.** [`schema/tables/patient-profile.md`](../schema/tables/patient-profile.md) → [`schema/naming-inconsistencies.md`](../schema/naming-inconsistencies.md) → [`schema/relationships.md`](../schema/relationships.md).
+**Expected routing.** [`schema/tables/patient-profile.md`](../../docs/schema/tables/patient-profile.md) → [`schema/naming-inconsistencies.md`](../../docs/schema/naming-inconsistencies.md) → [`schema/relationships.md`](../../docs/schema/relationships.md).
 
 **Expected citations.** US-3.5 (page `425558452`); the existing `pregnancy_status` row marked `VALIDATE:` in `patient-profile.md`; the FDB DDC / DPT screening references.
 
@@ -31,7 +33,7 @@ The battery is committed in this file so it is repeatable. Re-run against any ag
 
 > **Prompt to agent:** "Why is the EPIC / MyChart authentication path treated as the primary one, and the Cognito path as a fallback? Where is this decision documented?"
 
-**Expected routing.** [`modules/auth-authorization/variations.md`](../modules/auth-authorization/variations.md) → [`architecture/decisions/0001-mychart-as-per-clinic-sso.md`](../architecture/decisions/0001-mychart-as-per-clinic-sso.md).
+**Expected routing.** [`modules/auth-authorization/variations.md`](../../docs/modules/auth-authorization/variations.md) → [`architecture/decisions/0001-mychart-as-per-clinic-sso.md`](../../docs/architecture/decisions/0001-mychart-as-per-clinic-sso.md).
 
 **Expected citations.** ADR-0001 Alternatives considered (#1 chosen of 5); AVD §2.2 D3; Living Risk R3.
 
@@ -41,7 +43,7 @@ The battery is committed in this file so it is repeatable. Re-run against any ag
 
 > **Prompt to agent:** "What rule limits how often a patient can start their own follow-up questionnaire?"
 
-**Expected routing.** [`architecture/release-coexistence.md`](../architecture/release-coexistence.md) (3rd release scope) → [`schema/tables/patient-profile.md`](../schema/tables/patient-profile.md) (`follow_up_self_started_count` column).
+**Expected routing.** [`architecture/release-coexistence.md`](../../docs/architecture/release-coexistence.md) (3rd release scope) → [`schema/tables/patient-profile.md`](../../docs/schema/tables/patient-profile.md) (`follow_up_self_started_count` column).
 
 **Expected citations.** Epic-5 F4 (3rd release feature); the `> [!deprecated]` candidate flag on the corresponding column.
 
@@ -51,7 +53,7 @@ The battery is committed in this file so it is repeatable. Re-run against any ag
 
 > **Prompt to agent:** "I want to author a new ADR for the SurveyJS choice (D7 in the source). Show me the file path, the MADR template, and which existing sections / docs would cross-reference it."
 
-**Expected routing.** [`CONVENTIONS.md`](../CONVENTIONS.md) (MADR section) → [`architecture/decisions/0001-mychart-as-per-clinic-sso.md`](../architecture/decisions/0001-mychart-as-per-clinic-sso.md) (template example) → [`architecture/overview.md`](../architecture/overview.md) (Key design decisions table, where D7 is listed).
+**Expected routing.** [`CONVENTIONS.md`](../../docs/CONVENTIONS.md) (MADR section) → [`architecture/decisions/0001-mychart-as-per-clinic-sso.md`](../../docs/architecture/decisions/0001-mychart-as-per-clinic-sso.md) (template example) → [`architecture/overview.md`](../../docs/architecture/overview.md) (Key design decisions table, where D7 is listed).
 
 **Expected citations.** CONVENTIONS §4 MADR convention; AVD 4.6 Assessment / Form Implementation View (the source page that shows the SurveyJS vs Form.io vs LimeSurvey comparison).
 
@@ -61,7 +63,7 @@ The battery is committed in this file so it is repeatable. Re-run against any ag
 
 > **Prompt to agent:** "There's a typo in the C4 L2 Container view — `Patient Mobile App Backend` is labelled `Patient Mobile App Backend` (intentional typo introduced for the test). Find it and fix it."
 
-**Expected routing.** [`architecture/overview.md`](../architecture/overview.md) Container view (C4 L2) Mermaid block.
+**Expected routing.** [`architecture/overview.md`](../../docs/architecture/overview.md) Container view (C4 L2) Mermaid block.
 
 **Expected specificity.** Agent should be able to modify a Mermaid block directly in markdown — this is the test of ADR-0002 (Mermaid as default editable-by-agents). If the agent proposes opening an external tool, it has misread the convention.
 
@@ -71,7 +73,7 @@ The battery is committed in this file so it is repeatable. Re-run against any ag
 
 **Expected routing.** Repository-wide grep.
 
-**Expected citations.** [`CONVENTIONS.md`](../CONVENTIONS.md) Andersen branding rule; quality-bar criterion "No Innowise — grep returns nothing".
+**Expected citations.** [`CONVENTIONS.md`](../../docs/CONVENTIONS.md) Andersen branding rule; quality-bar criterion "No Innowise — grep returns nothing".
 
 **Expected outcome.** Zero occurrences.
 
@@ -79,7 +81,7 @@ The battery is committed in this file so it is repeatable. Re-run against any ag
 
 > **Prompt to agent:** "When Project H sends a report to EPIC, what exactly triggers the clinician to be notified?"
 
-**Expected routing.** [`architecture/data-flows/report-to-clinician.md`](../architecture/data-flows/report-to-clinician.md) → [`GLOSSARY.md`](../GLOSSARY.md) PGHD entry → [`architecture/integration-points.md`](../architecture/integration-points.md) EPIC EHR section.
+**Expected routing.** [`architecture/data-flows/report-to-clinician.md`](../../docs/architecture/data-flows/report-to-clinician.md) → [`GLOSSARY.md`](../../docs/GLOSSARY.md) PGHD entry → [`architecture/integration-points.md`](../../docs/architecture/integration-points.md) EPIC EHR section.
 
 **Expected citations.** AVD 4.4 EPIC EHR Integration View (page `420906849`); the "Observation is mandatory" invariant.
 
@@ -89,7 +91,7 @@ The battery is committed in this file so it is repeatable. Re-run against any ag
 
 > **Prompt to agent:** "What architectural weak spot did the author flag while writing the architecture overview? Is it tracked anywhere as an open question?"
 
-**Expected routing.** [`architecture/overview.md`](../architecture/overview.md) Architectural assessments section → `Open questions` of the same file.
+**Expected routing.** [`architecture/overview.md`](../../docs/architecture/overview.md) Architectural assessments section → `Open questions` of the same file.
 
 **Expected citations.** The "Per-clinic EPIC integration cost" callout; Living Risk R3 (cross-reference).
 
@@ -99,7 +101,7 @@ The battery is committed in this file so it is repeatable. Re-run against any ag
 
 > **Prompt to agent:** "I want to add a business rule about session timeout — sessions auto-lock after 15 minutes of inactivity. Where would this rule go, and how should it interact with existing rules?"
 
-**Expected routing.** [`modules/auth-authorization/business-rules.md`](../modules/auth-authorization/business-rules.md) → BR-010 (existing auto-logout rule, threshold marked TBD).
+**Expected routing.** [`modules/auth-authorization/business-rules.md`](../../docs/modules/auth-authorization/business-rules.md) → BR-010 (existing auto-logout rule, threshold marked TBD).
 
 **Expected specificity.** Agent should realise this is **not a new rule** — it is the resolution of BR-010's TBD threshold. The right action is to update BR-010, not add BR-011, and to close the corresponding open question.
 
@@ -107,9 +109,9 @@ The battery is committed in this file so it is repeatable. Re-run against any ag
 
 > **Prompt to agent (running as Cursor / Copilot / Codex CLI):** "Where would you look to understand the patient onboarding flow?"
 
-**Expected routing.** [`AGENTS.md`](../AGENTS.md) → task routing → [`modules/auth-authorization/overview.md`](../modules/auth-authorization/overview.md) → [`architecture/data-flows/patient-onboarding.md`](../architecture/data-flows/patient-onboarding.md).
+**Expected routing.** [`AGENTS.md`](../../docs/AGENTS.md) → task routing → [`modules/auth-authorization/overview.md`](../../docs/modules/auth-authorization/overview.md) → [`architecture/data-flows/patient-onboarding.md`](../../docs/architecture/data-flows/patient-onboarding.md).
 
-**Expected specificity.** Non-Claude agents should route through AGENTS.md without ever needing to know CLAUDE.md exists. If the agent fails to find AGENTS.md, the @-import direction (canonical AGENTS.md, CLAUDE.md @-imports) needs to be reconsidered — see [ADR-0002](../architecture/decisions/0002-mermaid-for-inline-diagrams.md) and [AGENTS.md §Rationale](../AGENTS.md#rationale-for-canonical-in-agentsmd).
+**Expected specificity.** Non-Claude agents should route through AGENTS.md without ever needing to know CLAUDE.md exists. If the agent fails to find AGENTS.md, the @-import direction (canonical AGENTS.md, CLAUDE.md @-imports) needs to be reconsidered — see [ADR-0002](../../docs/architecture/decisions/0002-mermaid-for-inline-diagrams.md) and [AGENTS.md §Rationale](../../docs/AGENTS.md#rationale-for-canonical-in-agentsmd).
 
 ## Pass status
 
@@ -127,7 +129,7 @@ Each task gets a subsection with:
 - A pass/fail line on each of the four scoring criteria (Routing / Citation / Specificity / Discipline).
 - A one-sentence justification.
 
-For brevity in this sample, transcripts are stored separately under `_review/transcripts/Tnn-<task-slug>.md` once the run completes — links added here.
+For brevity in this sample, transcripts are stored separately under `internal/review/transcripts/Tnn-<task-slug>.md` once the run completes — links added here.
 
 ## Open questions
 

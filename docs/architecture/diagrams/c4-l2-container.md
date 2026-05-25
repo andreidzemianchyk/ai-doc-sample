@@ -8,7 +8,7 @@ The single Project H box from the [System Context](c4-l1-system-context.md) open
 flowchart TB
     classDef person fill:#08427b,stroke:#073B6F,color:#fff
     classDef andersen fill:#1168bd,stroke:#0E5DAA,color:#fff
-    classDef kivira fill:#a855f7,stroke:#7C3AED,color:#fff
+    classDef partnerLib fill:#a855f7,stroke:#7C3AED,color:#fff
     classDef cloud fill:#a7e1ad,stroke:#73B27B,color:#000
     classDef ext fill:#999,stroke:#6B6B6B,color:#fff
 
@@ -24,9 +24,9 @@ flowchart TB
         KAW["Project H Admin Web App<br/>Python · Django Admin"]:::andersen
         CAW["Clinic Admin Web App<br/>Python · Django Admin"]:::andersen
 
-        KG["Project H Games<br/>React Native lib<br/>(cognitive games)"]:::kivira
-        KR["Project H Recommendation<br/>Python lib · Rules Engine"]:::kivira
-        KML["Project H ML Environment<br/>SageMaker"]:::kivira
+        KG["Project H Games<br/>React Native lib<br/>(cognitive games)"]:::partnerLib
+        KR["Project H Recommendation<br/>Python lib · Rules Engine"]:::partnerLib
+        KML["Project H ML Environment<br/>SageMaker"]:::partnerLib
 
         AUTH["Authorization Service<br/>AWS Cognito"]:::cloud
         LB["Load Balancing<br/>AWS ALB"]:::cloud

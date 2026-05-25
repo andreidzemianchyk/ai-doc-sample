@@ -1,8 +1,10 @@
 # Cross-LLM peer review log
 
-Mandatory deliverable per Prompt §10 and quality bar in [`context/project-h/project-h-doc-generation-brief.md`](https://github.com/andreidzemianchyk/ai-doc-sample/blob/main/context/project-h/project-h-doc-generation-brief.md) §9. Records the cross-LLM review pass on the three high-stakes documents (TA §2 scope): [architecture/overview.md](../architecture/overview.md), [schema/tables/patient-profile.md](../schema/tables/patient-profile.md), and [modules/auth-authorization/business-rules.md](../modules/auth-authorization/business-rules.md).
+Mandatory deliverable per Prompt §10 and quality bar in [`context/project-h/project-h-doc-generation-brief.md`](https://github.com/andreidzemianchyk/ai-doc-sample/blob/main/context/project-h/project-h-doc-generation-brief.md) §9. Records the cross-LLM review pass on the three high-stakes documents (TA §2 scope): [architecture/overview.md](../../docs/architecture/overview.md), [schema/tables/patient-profile.md](../../docs/schema/tables/patient-profile.md), and [modules/auth-authorization/business-rules.md](../../docs/modules/auth-authorization/business-rules.md).
 
 The log captures, per finding: original flag · was it accepted (doc updated) / rejected (with rationale) / converted to an open question.
+
+> This file is methodology evidence — it lives in `internal/review/` and is intentionally excluded from the published site. It exists to document the review process discipline for an internal reader (delivery lead, Tech Lead, auditor), not as a client-facing deliverable.
 
 ## Methodology
 
@@ -46,9 +48,9 @@ checklist items.
 
 Three documents under review:
 
-1. [`architecture/overview.md`](../architecture/overview.md) — 13 sections; two embedded `> [!note] Architectural assessment` callouts.
-2. [`schema/tables/patient-profile.md`](../schema/tables/patient-profile.md) — ~40 columns documented; 8 explicit `VALIDATE:` rows; multiple `> [!warning]` callouts.
-3. [`modules/auth-authorization/business-rules.md`](../modules/auth-authorization/business-rules.md) — 10 stable-ID rules; 3 `> [!warning]` callouts.
+1. [`architecture/overview.md`](../../docs/architecture/overview.md) — 13 sections; two embedded `> [!note] Architectural assessment` callouts.
+2. [`schema/tables/patient-profile.md`](../../docs/schema/tables/patient-profile.md) — ~40 columns documented; 8 explicit `VALIDATE:` rows; multiple `> [!warning]` callouts.
+3. [`modules/auth-authorization/business-rules.md`](../../docs/modules/auth-authorization/business-rules.md) — 10 stable-ID rules; 3 `> [!warning]` callouts.
 
 ## Pass status
 
@@ -90,7 +92,7 @@ To make this file useful as a methodology demonstration even before the live pas
 - **Original flag:** *(illustrative)* "The architectural-assessment callout on the CDSS Class I boundary asserts that pushing structured treatment data via `MedicationRequest` or `CarePlan` resources would cross the Class II line. The assertion is plausible but not substantiated by a citation. Reader cannot verify the boundary without consulting the FDA classification rules independently. Suggested action: cite the relevant FDA CDSS guidance section, or convert the assertion into an open question."
 - **Severity:** minor.
 - **Author response:** convert to open question.
-- **Resolution:** added to [`overview.md` Open questions](../architecture/overview.md#open-questions) as "Class I CDSS guardrail: what specific FHIR resource types are the failure modes? Owner: Compliance Engineer."
+- **Resolution:** added to [`overview.md` Open questions](../../docs/architecture/overview.md#open-questions) as "Class I CDSS guardrail: what specific FHIR resource types are the failure modes? Owner: Compliance Engineer."
 
 ## Open questions
 

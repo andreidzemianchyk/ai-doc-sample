@@ -6,9 +6,9 @@
 
 ## What this system is
 
-Project H is a precision-psychiatry SaaS platform targeting US primary-care providers. Three apps in delivery scope: a React Native iOS-only MVP **Patient Mobile App**; a Python/Django Admin **Clinic Web App** with an EPIC plugin for patient onboarding; and a **Clinician Report** assembled server-side and delivered into EPIC via three FHIR resources (Observation, Condition, DocumentReference). A fourth app — Kivira Admin App — is explicitly out of Andersen's delivery scope.
+Project H is a precision-psychiatry SaaS platform targeting US primary-care providers. Three apps in delivery scope: a React Native iOS-only MVP **Patient Mobile App**; a Python/Django Admin **Clinic Web App** with an EPIC plugin for patient onboarding; and a **Clinician Report** assembled server-side and delivered into EPIC via three FHIR resources (Observation, Condition, DocumentReference). A fourth app — the Project H Admin Web App — is explicitly out of Andersen's delivery scope.
 
-The substrate is **pre-implementation**. There is no committed code at the time of this documentation; the architecture and business rules are sourced from a discovery-phase Confluence corpus (Initial Phase Deliverables, KIV space — see `context/project-h/` in this repo). Citations through the docs point to Confluence page IDs and user-story IDs (e.g., `Epic-1 Mobile US-1.5 Scenario 2`) rather than to `file_path:line` — a documented substrate adaptation explained in [Conventions](CONVENTIONS.md).
+The substrate is **pre-implementation**. There is no committed code at the time of this documentation; the architecture and business rules are sourced from a discovery-phase Confluence corpus. Citations through the docs point to Confluence page IDs and user-story IDs (e.g., `Epic-1 Mobile US-1.5 Scenario 2`) rather than to `file_path:line` — a documented substrate adaptation explained in [Conventions](CONVENTIONS.md).
 
 ## Read these before doing anything substantive
 
@@ -45,5 +45,5 @@ The substrate is **pre-implementation**. There is no committed code at the time 
 
 ## Notes
 
-- **AGENTS.md @-import.** This file is short by design; the substantive entry-point content is in [AGENTS.md](AGENTS.md). Drift between the two files is a defect — the AI-readability acceptance test ([log](_review/ai-readability-test.md)) catches it.
+- **AGENTS.md @-import.** This file is short by design; the substantive entry-point content is in [AGENTS.md](AGENTS.md). Drift between the two files is a defect — a scripted AI-readability task battery is the discipline that catches it (process artefact, not part of the published site).
 - This is a presale-substrate sample. In a real engagement, this file gets refined in week 1 against the actual codebase and team-validated routing rules.

@@ -7,7 +7,7 @@ Authored using the AndersenLab standing architecture description template (legac
 This document covers the **architecture of the MVP delivery** for Project H:
 
 - **In scope.** Patient Mobile App (React Native, iOS-only), Clinic Web App (Python · Django Admin) with its EPIC plugin, Patient Mobile App Backend (Python · FastAPI), shared AWS HIPAA-eligible infrastructure, and integrations with EPIC (FHIR + MyChart SSO), FDB (medication knowledge), Stripe (clinic subscriptions), Intercom (frontend support), AWS managed services for notifications and observability.
-- **Out of scope.** Kivira Admin App (Project H product-owner's own work, not part of Andersen's delivery). ML training in MVP (SageMaker is present but not exercised). Android (deferred — RN codebase is cross-platform, but only iOS ships in MVP). Non-EPIC EHRs other than the Cognito fallback path (Cerner, Oracle, etc.). FDA Class II+ functionality (the entire system is designed to remain Class I CDSS — see Architectural assessment below).
+- **Out of scope.** Project H Admin Web App (Project H product-owner's own work, not part of Andersen's delivery). ML training in MVP (SageMaker is present but not exercised). Android (deferred — RN codebase is cross-platform, but only iOS ships in MVP). Non-EPIC EHRs other than the Cognito fallback path (Cerner, Oracle, etc.). FDA Class II+ functionality (the entire system is designed to remain Class I CDSS — see Architectural assessment below).
 
 ## Business context
 
@@ -30,7 +30,7 @@ Surfaced from the discovery-phase Confluence corpus (AVD §2.2 D1–D40, page `4
 | --- | --- | --- |
 | D1 | Clinic Web App is a Python + Django Admin monolith; Patient Mobile App is React Native, iOS-only at MVP. | Single stack for the team to support post-handoff. |
 | D3 | MyChart SSO **per clinic**, with Universal Link invite + 6-character backup code. | Avoids a Project H managed credential layer; clinician workflow stays inside EPIC. Full record in [ADR-0001](decisions/0001-mychart-as-per-clinic-sso.md). |
-| D7 | SurveyJS as the questionnaire engine; backend JSON schemas + Survey Creator on the Kivira Admin side. | MIT licence, AWS Lambda-compatible, offline-capable; comparison table in AVD 4.6. |
+| D7 | SurveyJS as the questionnaire engine; backend JSON schemas + Survey Creator on the Project H Admin side. | MIT licence, AWS Lambda-compatible, offline-capable; comparison table in AVD 4.6. |
 | D9 | Access and refresh tokens stored encrypted on device; biometric gate on offline mode. | OWASP ASVS token-handling alignment; HIPAA at-rest encryption. |
 | D15 | All cloud infrastructure on AWS HIPAA-eligible managed services. | BAA path via AWS reduces compliance perimeter. |
 | D19 | Offline mode for intake / screener / follow-ups; local SQLite with asynchronous sync queue. | Patients without connectivity must not lose answers; queue + UUIDs handle reconnect dedup. |

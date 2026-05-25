@@ -29,7 +29,7 @@ All diagrams embedded in the Project H sample are authored in **Mermaid**:
 - **UML State** — Mermaid `stateDiagram-v2`. Used for [session lifecycle](../../modules/auth-authorization/overview.md).
 - **UML Activity / flowchart** — Mermaid `flowchart`. Used for [patient onboarding](../data-flows/patient-onboarding.md).
 
-**Source-substrate draw.io PNGs are referenced** (in `context/project-h/project-h-diagrams-index.md` via direct download URLs to `wiki.andersenlab.com`) but **not embedded** in the sample. Instead, faithful Mermaid reconstructions from `context/project-h/project-h-diagrams-mermaid.md` are pasted into the sample documents.
+**Source-substrate draw.io PNGs are referenced** (in the `context/project-h/` bundle via direct download URLs into the source wiki) but **not embedded** in the sample. Instead, faithful Mermaid reconstructions from `context/project-h/project-h-diagrams-mermaid.md` are pasted into the sample documents.
 
 ## Alternatives considered
 
@@ -43,7 +43,7 @@ All diagrams embedded in the Project H sample are authored in **Mermaid**:
 
 - **Every diagram is editable by an agent in markdown.** No build step. No binary blobs. Claude Code, Cursor, Copilot can read, modify, regenerate diagrams without external tooling.
 - **Single render path.** MkDocs Material has Mermaid rendering wired in via `pymdownx.superfences`; GitHub renders Mermaid in markdown previews; VS Code's markdown preview renders Mermaid via extension. The sample looks the same on every reader's screen.
-- **The convention is uniformly testable.** The AI-readability acceptance test ([log](../../_review/ai-readability-test.md)) includes "modify this diagram to add a new state" as one of its tasks — an agent can do this in seconds in Mermaid, whereas in drawio it would require opening an external editor.
+- **The convention is uniformly testable.** The AI-readability task battery (process artefact, kept outside the published site) includes "modify this diagram to add a new state" as one of its tasks — an agent can do this in seconds in Mermaid, whereas in drawio it would require opening an external editor.
 
 ### Negative
 

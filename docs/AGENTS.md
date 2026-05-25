@@ -41,6 +41,6 @@ See [CLAUDE.md](CLAUDE.md) — same list applies to every agent.
 
 ## Acceptance test
 
-This file's correctness is validated by the [AI-readability acceptance test](_review/ai-readability-test.md). The test script issues a battery of tasks (e.g., "add a column to patient_profile", "explain the EPIC vs non-EPIC auth fork") to each supported agent in turn and grades whether the agent routes to the correct files and quotes the right US IDs / D-codes / BR-IDs. The test prompts and transcripts are committed alongside the docs so Informediate (or any team picking this sample up) can re-run the same battery any time.
+This file's correctness is validated against a scripted task battery (e.g., "add a column to `patient_profile`", "explain the EPIC vs non-EPIC auth fork") that grades whether each supported agent routes to the correct files and quotes the right US IDs / D-codes / BR-IDs. The battery itself is a process artefact and is not part of the published site.
 
-Drift between AGENTS.md and CLAUDE.md is a defect. If you are an agent and discover an inconsistency, surface it as an open question in [_review/ai-readability-test.md](_review/ai-readability-test.md) before silently picking one.
+Drift between AGENTS.md and CLAUDE.md is a defect. If you are an agent and discover an inconsistency, surface it as an open question in this file (or in the corresponding CLAUDE.md section) before silently picking one.

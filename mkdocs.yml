@@ -74,11 +74,17 @@ nav:
       - Root CLAUDE.md: CLAUDE.md
       - Root AGENTS.md: AGENTS.md
       - Module CLAUDE.md: modules/auth-authorization/CLAUDE.md
-  - Methodology evidence:
-      - Cross-LLM review log: _review/cross-llm-review.md
-      - AI-readability acceptance test: _review/ai-readability-test.md
   - Companion artifact:
       - ERPNext tabSales Invoice (legacy-substrate variant): companion/erpnext-tab-sales-invoice.md
+
+# Methodology-evidence logs (cross-LLM review template, AI-readability test
+# battery) live under internal/review/ in the repo. They are process artefacts
+# for an internal reader (delivery lead, Tech Lead, auditor) and intentionally
+# do NOT ship with the published site. exclude_docs below also keeps any
+# leftover files under docs/_review/ out of the build until they are removed
+# from the working tree.
+exclude_docs: |
+  _review/
 
 markdown_extensions:
   - admonition

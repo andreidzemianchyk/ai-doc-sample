@@ -104,7 +104,7 @@ Five reachable states; two `(TBD)` transitions whose thresholds are open questio
 
 ## Cross-references
 
-- [`../../architecture/overview.md` — §4.5 Patient Auth Flow](../../architecture/overview.md) — the architectural anchor.
+- [Authorization Service (C4 L3) in the architecture overview](../../architecture/overview.md#authorization-service-l3) — the architectural anchor.
 - [`../../architecture/data-flows/patient-onboarding.md`](../../architecture/data-flows/patient-onboarding.md) — full step-by-step narrative + flowchart.
 - [`../../architecture/decisions/0001-mychart-as-per-clinic-sso.md`](../../architecture/decisions/0001-mychart-as-per-clinic-sso.md) — the canonical decision.
 - [`../../schema/tables/patient-profile.md`](../../schema/tables/patient-profile.md) — token references, consent metadata, biometric flag.
