@@ -9,7 +9,8 @@
 // document.body catches every insertion without timing assumptions.
 
 (function () {
-  console.log("[project-h-docs] extra.js loaded");
+  var FULLSCREEN_THEME_CSS =
+    ".nodeLabel p,.nodeLabel span{color:#fff !important;font-weight:700;line-height:1.3;}";
 
   function escapeHtml(value) {
     return value
@@ -84,7 +85,8 @@
       "    startOnLoad: false," +
       "    securityLevel: 'loose'," +
       "    flowchart: { useMaxWidth: false }," +
-      "    themeCSS: '.nodeLabel p,.nodeLabel span{color:#fff !important;font-weight:700;line-height:1.3;}'" +
+      "    themeCSS: " +
+      JSON.stringify(FULLSCREEN_THEME_CSS) +
       "  });" +
       "  const { svg } = await mermaid.render('fullscreen-diagram', source);" +
       "  document.getElementById('diagram').innerHTML = svg;" +
@@ -109,9 +111,6 @@
     // The rendered SVG lives in a closed shadow root, so we attach the
     // button to the outer host once it appears.
     var containers = document.querySelectorAll("div.mermaid");
-    if (containers.length) {
-      console.log("[project-h-docs] scan: " + containers.length + " .mermaid containers");
-    }
     containers.forEach(function (c) {
       addFullscreenButton(c);
     });
@@ -136,12 +135,4 @@
   if (typeof document$ !== "undefined" && typeof document$.subscribe === "function") {
     document$.subscribe(scanAndAttach);
   }
-
-  // Belt-and-suspenders poll for 5 s in case the observer is late
-  var pollCount = 0;
-  var pollInterval = setInterval(function () {
-    pollCount++;
-    scanAndAttach();
-    if (pollCount > 20) clearInterval(pollInterval);
-  }, 250);
 })();
