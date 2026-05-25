@@ -10,10 +10,22 @@ const EXTRA_THEME_CSS = `
 
 .cluster .nodeLabel,
 .cluster .nodeLabel *,
+.cluster .nodeLabel p,
+.cluster .nodeLabel span,
+.cluster .nodeLabel b,
+.cluster .nodeLabel i,
 .cluster-label,
 .cluster-label *,
+.cluster-label p,
+.cluster-label span,
+.cluster-label b,
+.cluster-label i,
 .cluster-label .nodeLabel,
-.cluster-label .nodeLabel * {
+.cluster-label .nodeLabel *,
+.cluster-label .nodeLabel p,
+.cluster-label .nodeLabel span,
+.cluster-label .nodeLabel b,
+.cluster-label .nodeLabel i {
   color: #0f172a !important;
   fill: #0f172a !important;
   font-weight: 700 !important;
