@@ -9,6 +9,12 @@
 // document.body catches every insertion without timing assumptions.
 
 (function () {
+  var FULLSCREEN_THEME_CSS =
+    ".nodeLabel p,.nodeLabel span,.nodeLabel b,.nodeLabel i{color:#f8fafc !important;}" +
+    ".edgeLabel,.edgeLabel p,.edgeLabel span,.edgeLabel foreignObject div{color:#0f172a !important;}" +
+    ".edgeLabel foreignObject div{background:#ffffff !important;border-radius:2px;padding:1px 3px;}" +
+    ".labelBkg{fill:#ffffff !important;}";
+
   function escapeHtml(value) {
     return value
       .replace(/&/g, "&amp;")
@@ -127,7 +133,9 @@
       "  mermaid.initialize({" +
       "    startOnLoad: false," +
       "    securityLevel: 'loose'," +
-      "    flowchart: { useMaxWidth: false }" +
+      "    flowchart: { useMaxWidth: false }," +
+      "    themeCSS: " +
+      JSON.stringify(FULLSCREEN_THEME_CSS) +
       "  });" +
       "  const { svg } = await mermaid.render('fullscreen-diagram', source);" +
       "  document.getElementById('diagram').innerHTML = svg;" +
