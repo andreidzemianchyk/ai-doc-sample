@@ -8,6 +8,17 @@ const EXTRA_THEME_CSS = `
   color: #f8fafc !important;
 }
 
+.cluster .nodeLabel,
+.cluster .nodeLabel *,
+.cluster-label,
+.cluster-label *,
+.cluster-label .nodeLabel,
+.cluster-label .nodeLabel * {
+  color: #0f172a !important;
+  fill: #0f172a !important;
+  font-weight: 700 !important;
+}
+
 .edgeLabel,
 .edgeLabel p,
 .edgeLabel span,
