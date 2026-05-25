@@ -59,12 +59,22 @@
   color: #fff !important;
 }
 
-/* Mermaid cluster (subgraph) titles — Mermaid puts cluster titles inside
-   <span class="nodeLabel"> too, so any generic .nodeLabel color override
-   (e.g. white-on-dark for node fills) also paints cluster titles white,
-   which is unreadable on the light cluster background. Force cluster
-   titles dark via a more specific selector. Applies to every Mermaid
-   diagram on the site. The full-screen new-tab viewer applies the same
+/* Mermaid node label colour overrides — pulled out of the inline
+   %%{init}%% themeCSS strings (the long CSS with many { } pairs
+   confused Mermaid 11's directive-block parser and broke renders
+   on pages that carried the directive). Page-level CSS gets the
+   same effect without the brittle inline JSON. */
+.md-typeset .mermaid .nodeLabel p,
+.md-typeset .mermaid .nodeLabel span,
+.md-typeset .mermaid .nodeLabel b,
+.md-typeset .mermaid .nodeLabel i {
+  color: #f8fafc !important;
+}
+
+/* Mermaid cluster (subgraph) titles live inside <span class="nodeLabel">
+   too, so the white-on-dark rule above would paint them white over a
+   light cluster background. Force cluster titles dark via a more
+   specific selector. The full-screen new-tab viewer applies the same
    rule via FULLSCREEN_THEME_CSS in extra.js. */
 .md-typeset .mermaid .cluster .nodeLabel,
 .md-typeset .mermaid .cluster .nodeLabel *,
@@ -75,6 +85,26 @@
   color: #0f172a !important;
   fill: #0f172a !important;
   font-weight: 700 !important;
+}
+
+/* Edge labels — dark text on a white pill so they read against any
+   line/background mix. Pulled out of the inline themeCSS for the
+   same reason. */
+.md-typeset .mermaid .edgeLabel,
+.md-typeset .mermaid .edgeLabel p,
+.md-typeset .mermaid .edgeLabel span,
+.md-typeset .mermaid .edgeLabel foreignObject div {
+  color: #0f172a !important;
+}
+
+.md-typeset .mermaid .edgeLabel foreignObject div {
+  background: #ffffff !important;
+  border-radius: 2px;
+  padding: 1px 3px;
+}
+
+.md-typeset .mermaid .labelBkg {
+  fill: #ffffff !important;
 }
 
 /* Diagram link cards — used in overview.md in place of inline diagrams */

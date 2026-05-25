@@ -22,27 +22,27 @@ The split is visible in the [patient-onboarding flowchart](../../architecture/da
 A diagram of the parallel paths:
 
 ```mermaid
-%%{init: {"theme":"base","themeVariables":{"primaryColor":"#5b9bd5","primaryBorderColor":"#4a86b8","primaryTextColor":"#f8fafc","secondaryColor":"#d6e2f0","secondaryBorderColor":"#9fb3c8","secondaryTextColor":"#0f172a","tertiaryColor":"#d6e2f0","tertiaryBorderColor":"#9fb3c8","tertiaryTextColor":"#0f172a","clusterBkg":"#d6e2f0","clusterBorder":"#9fb3c8","lineColor":"#475569","textColor":"#0f172a","background":"#ffffff","mainBkg":"#5b9bd5","secondBkg":"#d6e2f0","tertiaryBkg":"#d6e2f0","edgeLabelBackground":"#ffffff"},"themeCSS":".nodeLabel p,.nodeLabel span,.nodeLabel b,.nodeLabel i{color:#f8fafc !important;} .cluster .nodeLabel,.cluster .nodeLabel *,.cluster .nodeLabel p,.cluster .nodeLabel span,.cluster .nodeLabel b,.cluster .nodeLabel i,.cluster-label,.cluster-label *,.cluster-label p,.cluster-label span,.cluster-label b,.cluster-label i,.cluster-label .nodeLabel,.cluster-label .nodeLabel *,.cluster-label .nodeLabel p,.cluster-label .nodeLabel span,.cluster-label .nodeLabel b,.cluster-label .nodeLabel i{color:#0f172a !important;fill:#0f172a !important;font-weight:700 !important;} .edgeLabel,.edgeLabel p,.edgeLabel span,.edgeLabel foreignObject div{color:#0f172a !important;} .edgeLabel foreignObject div{background:#ffffff !important;border-radius:2px;padding:1px 3px;} .labelBkg{fill:#ffffff !important;}"}}%%
+%%{init: {"theme":"base","themeVariables":{"primaryColor":"#5b9bd5","primaryBorderColor":"#4a86b8","primaryTextColor":"#f8fafc","secondaryColor":"#d6e2f0","secondaryBorderColor":"#9fb3c8","secondaryTextColor":"#0f172a","tertiaryColor":"#d6e2f0","tertiaryBorderColor":"#9fb3c8","tertiaryTextColor":"#0f172a","clusterBkg":"#d6e2f0","clusterBorder":"#9fb3c8","lineColor":"#475569","textColor":"#0f172a","background":"#ffffff","mainBkg":"#5b9bd5","secondBkg":"#d6e2f0","tertiaryBkg":"#d6e2f0","edgeLabelBackground":"#ffffff"}}}%%
 flowchart TB
     subgraph EPIC["EPIC clinic flow"]
-        E1[Invite via EPIC Custom Action] --> E2[Universal Link / backup code]
-        E2 --> E3[Backend validates code,<br/>resolves clinic]
-        E3 --> E4[MyChart login page<br/>per-clinic URL]
-        E4 --> E5[MyChart MFA / consent]
-        E5 --> E6[Backend gets tokens<br/>+ fetches Patient profile from EPIC]
+        E1["Invite via EPIC Custom Action"] --> E2["Universal Link / backup code"]
+        E2 --> E3["Backend validates code,<br/>resolves clinic"]
+        E3 --> E4["MyChart login page<br/>per-clinic URL"]
+        E4 --> E5["MyChart MFA / consent"]
+        E5 --> E6["Backend gets tokens<br/>+ fetches Patient profile from EPIC"]
         E6 --> Convergence
     end
 
     subgraph NEPIC["Non-EPIC clinic flow"]
-        N1[Invite via Clinic Web App admin] --> N2[Link / backup code]
-        N2 --> N3[Backend validates code,<br/>creates Cognito user via Admin API]
-        N3 --> N4[Amplify Cognito Login]
-        N4 --> N5[Cognito MFA]
-        N5 --> N6[Backend gets tokens<br/>(no EPIC fetch)]
+        N1["Invite via Clinic Web App admin"] --> N2["Link / backup code"]
+        N2 --> N3["Backend validates code,<br/>creates Cognito user via Admin API"]
+        N3 --> N4["Amplify Cognito Login"]
+        N4 --> N5["Cognito MFA"]
+        N5 --> N6["Backend gets tokens<br/>(no EPIC fetch)"]
         N6 --> Convergence
     end
 
-    Convergence[15. Post Login component<br/>biometric → dashboard]
+    Convergence["15. Post Login component<br/>biometric → dashboard"]
 ```
 
 ## 2. Where does coexistence happen?
