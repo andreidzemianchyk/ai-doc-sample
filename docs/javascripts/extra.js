@@ -11,6 +11,7 @@
 (function () {
   var FULLSCREEN_THEME_CSS =
     ".nodeLabel p,.nodeLabel span,.nodeLabel b,.nodeLabel i{color:#f8fafc !important;}" +
+    ".cluster .nodeLabel,.cluster .nodeLabel *,.cluster-label,.cluster-label *,.cluster-label .nodeLabel,.cluster-label .nodeLabel *{color:#0f172a !important;fill:#0f172a !important;font-weight:700 !important;}" +
     ".edgeLabel,.edgeLabel p,.edgeLabel span,.edgeLabel foreignObject div{color:#0f172a !important;}" +
     ".edgeLabel foreignObject div{background:#ffffff !important;border-radius:2px;padding:1px 3px;}" +
     ".labelBkg{fill:#ffffff !important;}";

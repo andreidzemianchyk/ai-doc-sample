@@ -59,6 +59,24 @@
   color: #fff !important;
 }
 
+/* Mermaid cluster (subgraph) titles — Mermaid puts cluster titles inside
+   <span class="nodeLabel"> too, so any generic .nodeLabel color override
+   (e.g. white-on-dark for node fills) also paints cluster titles white,
+   which is unreadable on the light cluster background. Force cluster
+   titles dark via a more specific selector. Applies to every Mermaid
+   diagram on the site. The full-screen new-tab viewer applies the same
+   rule via FULLSCREEN_THEME_CSS in extra.js. */
+.md-typeset .mermaid .cluster .nodeLabel,
+.md-typeset .mermaid .cluster .nodeLabel *,
+.md-typeset .mermaid .cluster-label,
+.md-typeset .mermaid .cluster-label *,
+.md-typeset .mermaid .cluster-label .nodeLabel,
+.md-typeset .mermaid .cluster-label .nodeLabel * {
+  color: #0f172a !important;
+  fill: #0f172a !important;
+  font-weight: 700 !important;
+}
+
 /* Diagram link cards — used in overview.md in place of inline diagrams */
 .md-typeset .diagram-card {
   display: block;
