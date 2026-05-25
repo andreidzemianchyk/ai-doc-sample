@@ -9,45 +9,6 @@
 // document.body catches every insertion without timing assumptions.
 
 (function () {
-  var FULLSCREEN_THEME_CSS =
-    ".nodeLabel p,.nodeLabel span,.label text,.cluster-label text,.stateLabel text{color:#f8fafc !important;fill:#f8fafc !important;font-weight:700;line-height:1.3;}" +
-    ".edgeLabel,.labelBkg{background:#0f172a !important;fill:#0f172a !important;color:#f8fafc !important;}" +
-    ".edgeLabel p{color:#f8fafc !important;}";
-
-  var FULLSCREEN_THEME_VARIABLES = {
-    theme: "base",
-    themeVariables: {
-      primaryColor: "#334155",
-      primaryTextColor: "#f8fafc",
-      primaryBorderColor: "#0f172a",
-      lineColor: "#334155",
-      secondaryColor: "#1e293b",
-      tertiaryColor: "#475569",
-      clusterBkg: "#1e293b",
-      clusterBorder: "#0f172a",
-      mainBkg: "#334155",
-      secondBkg: "#1e293b",
-      tertiaryBkg: "#475569",
-      background: "#f8fafc",
-      edgeLabelBackground: "#0f172a",
-      actorBkg: "#334155",
-      actorBorder: "#0f172a",
-      actorTextColor: "#f8fafc",
-      labelBoxBkgColor: "#334155",
-      labelBoxBorderColor: "#0f172a",
-      labelTextColor: "#f8fafc",
-      nodeBorder: "#0f172a",
-      nodeTextColor: "#f8fafc",
-      textColor: "#0f172a",
-      cScale0: "#334155",
-      cScale1: "#1e293b",
-      cScale2: "#475569",
-      cScaleLabel0: "#f8fafc",
-      cScaleLabel1: "#f8fafc",
-      cScaleLabel2: "#f8fafc"
-    }
-  };
-
   function escapeHtml(value) {
     return value
       .replace(/&/g, "&amp;")
@@ -160,19 +121,13 @@
       "<pre id='source' hidden>" +
       escapedSource +
       "</pre>" +
-      "<script id='mermaid-config' type='application/json'>" +
-      escapeHtml(JSON.stringify(FULLSCREEN_THEME_VARIABLES)) +
-      "<\/script>" +
       "<script type='module'>" +
       "  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';" +
       "  const source = document.getElementById('source').textContent;" +
       "  mermaid.initialize({" +
-      "    ...JSON.parse(document.getElementById('mermaid-config').textContent)," +
       "    startOnLoad: false," +
       "    securityLevel: 'loose'," +
-      "    flowchart: { useMaxWidth: false }," +
-      "    themeCSS: " +
-      JSON.stringify(FULLSCREEN_THEME_CSS) +
+      "    flowchart: { useMaxWidth: false }" +
       "  });" +
       "  const { svg } = await mermaid.render('fullscreen-diagram', source);" +
       "  document.getElementById('diagram').innerHTML = svg;" +
