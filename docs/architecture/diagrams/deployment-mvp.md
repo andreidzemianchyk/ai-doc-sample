@@ -5,70 +5,96 @@ AWS deployment for the MVP release. Region us-east-2 with Multi-AZ primary→rea
 <div class="diagram-frame" markdown>
 
 ```mermaid
-%%{init: {"theme":"base","themeVariables":{"primaryColor":"#5b9bd5","primaryBorderColor":"#4a86b8","primaryTextColor":"#f8fafc","secondaryColor":"#d6e2f0","secondaryBorderColor":"#9fb3c8","secondaryTextColor":"#0f172a","tertiaryColor":"#d6e2f0","tertiaryBorderColor":"#9fb3c8","tertiaryTextColor":"#0f172a","clusterBkg":"#d6e2f0","clusterBorder":"#9fb3c8","lineColor":"#475569","textColor":"#0f172a","background":"#ffffff","mainBkg":"#5b9bd5","secondBkg":"#d6e2f0","tertiaryBkg":"#d6e2f0","edgeLabelBackground":"#ffffff"},"themeCSS":".nodeLabel p,.nodeLabel span,.nodeLabel b,.nodeLabel i{color:#f8fafc !important;} .cluster .nodeLabel,.cluster .nodeLabel *,.cluster .nodeLabel p,.cluster .nodeLabel span,.cluster .nodeLabel b,.cluster .nodeLabel i,.cluster-label,.cluster-label *,.cluster-label p,.cluster-label span,.cluster-label b,.cluster-label i,.cluster-label .nodeLabel,.cluster-label .nodeLabel *,.cluster-label .nodeLabel p,.cluster-label .nodeLabel span,.cluster-label .nodeLabel b,.cluster-label .nodeLabel i{color:#0f172a !important;fill:#0f172a !important;font-weight:700 !important;} .edgeLabel,.edgeLabel p,.edgeLabel span,.edgeLabel foreignObject div{color:#0f172a !important;} .edgeLabel foreignObject div{background:#ffffff !important;border-radius:2px;padding:1px 3px;} .labelBkg{fill:#ffffff !important;}"}}%%
+%%{init: {"theme":"base","themeVariables":{"primaryColor":"#5b9bd5","primaryBorderColor":"#4a86b8","primaryTextColor":"#f8fafc","secondaryColor":"#d6e2f0","secondaryBorderColor":"#9fb3c8","secondaryTextColor":"#0f172a","tertiaryColor":"#d6e2f0","tertiaryBorderColor":"#9fb3c8","tertiaryTextColor":"#0f172a","clusterBkg":"#d6e2f0","clusterBorder":"#9fb3c8","lineColor":"#475569","textColor":"#0f172a","background":"#ffffff","mainBkg":"#5b9bd5","secondBkg":"#d6e2f0","tertiaryBkg":"#d6e2f0","edgeLabelBackground":"#ffffff"}}}%%
 flowchart TB
     U((User))
-    APP[Mobile Application]
-    BR[Web Browser]
-    AS[App Store]
-    TF[TestFlight]
-    GH[GitHub]
+    APP["Mobile App"]
+    BR["Web Browser"]
+    AS["App Store"]
+    TF["TestFlight"]
+    GH["GitHub"]
     INT((Internet))
 
     U --> APP
     U --> BR
     APP -- install --> AS
     AS -- publish --> TF
-    TF -- GitHub actions --> GH
+    TF -- "GitHub Actions" --> GH
     APP --> INT
     BR --> INT
 
-    subgraph AWS["AWS Cloud · Region us-east-2"]
-        R53[AWS Route 53]
+    subgraph AWS["AWS Cloud · us-east-2"]
+        direction TB
+        R53["Route 53"]
 
         subgraph VPC["VPC"]
-            subgraph PUB["Public subnet · Load balancing"]
-                ALB[Application Load Balancer]
-                NAT[NAT Gateway]
+            direction TB
+            subgraph PUB["Public subnet"]
+                direction LR
+                ALB["Application Load Balancer"]
+                NAT["NAT Gateway"]
             end
 
             subgraph PRIV["Private subnet · Compute + autoscaling"]
+                direction LR
                 subgraph ECS["ECS Cluster"]
-                    N1[Node<br/>us-east-2a]
-                    N2[Node<br/>us-east-2b]
-                    N3[Node<br/>us-east-2c]
+                    direction TB
+                    N1["Node<br/>us-east-2a"]
+                    N2["Node<br/>us-east-2b"]
+                    N3["Node<br/>us-east-2c"]
                 end
-                RDSP[("RDS PostgreSQL<br/>Primary · us-east-2a")]
-                RDSR[("RDS PostgreSQL<br/>Read Replica · us-east-2b")]
-                RDSP -- replication --> RDSR
+                subgraph RDS["RDS PostgreSQL · Multi-AZ"]
+                    direction TB
+                    RDSP[("Primary<br/>us-east-2a")]
+                    RDSR[("Read Replica<br/>us-east-2b")]
+                    RDSP -- replication --> RDSR
+                end
             end
         end
 
         subgraph SVC["AWS managed services"]
-            AMP[Amplify]
-            COG[Cognito]
-            EB[EventBridge]
-            CW[CloudWatch]
-            KMS[KMS]
-            EC[(ElastiCache)]
-            SH[Shield]
-            WAF[WAF]
-            ACM[Certificate Manager]
-            S3[(S3 File Storage)]
-            SAGE[Sagemaker]
-            SM[Secrets Manager]
-            SES[Simple Email Service]
-            SNS[Simple Notification Service]
+            direction TB
+            subgraph SVC_AUTH["Identity & auth"]
+                direction LR
+                AMP["Amplify"]
+                COG["Cognito"]
+            end
+            subgraph SVC_SEC["Security & secrets"]
+                direction LR
+                KMS["KMS"]
+                SM["Secrets Mgr"]
+                WAF["WAF"]
+                SH["Shield"]
+                ACM["Cert Manager"]
+            end
+            subgraph SVC_OBS["Observability"]
+                direction LR
+                CW["CloudWatch"]
+                EB["EventBridge"]
+            end
+            subgraph SVC_DATA["Storage & cache"]
+                direction LR
+                S3[("S3")]
+                EC[("ElastiCache")]
+            end
+            subgraph SVC_ML["Machine learning"]
+                SAGE["SageMaker"]
+            end
+            subgraph SVC_NOTIF["Notifications"]
+                direction LR
+                SES["SES email"]
+                SNS["SNS push"]
+            end
         end
     end
 
     INT --> R53
     R53 --> ALB
-    ALB --> N1 & N2 & N3
-    N1 & N2 & N3 --> RDSP
-    N1 & N2 & N3 -.-> NAT
+    ALB --> ECS
+    ECS --> RDSP
+    ECS -.-> NAT
     NAT -.-> INT
-    GH -. GitHub actions .-> AMP
+    GH -. CI/CD .-> AMP
     SAGE -- load --> S3
 ```
 
